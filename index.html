@@ -1,372 +1,205 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>LINK FLOW</title>
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family: system-ui, sans-serif; background: linear-gradient(135deg, #0f172a, #1e293b); min-height: 100vh; color: #f1f5f9; padding: 1rem; }
-    .container { max-width: 800px; margin: 0 auto; }
-    .auth-card, .dashboard-card { background: rgba(30,41,59,0.9); backdrop-filter: blur(10px); border-radius: 2rem; padding: 2rem; margin-top: 2rem; border: 1px solid rgba(255,255,255,0.1); }
-    .input-group { margin-bottom: 1rem; }
-    .input-group input { width: 100%; padding: 0.85rem 1rem; border-radius: 1rem; border: none; font-size: 1rem; background: #1e293b; color: #f1f5f9; border: 1px solid #334155; outline: none; }
-    .input-group input:focus { border-color: #3b82f6; }
-    button, input { width: 100%; padding: 0.85rem 1rem; border-radius: 1rem; border: none; font-size: 1rem; }
-    button { background: #3b82f6; color: white; font-weight: 600; cursor: pointer; }
-    button:hover { background: #2563eb; }
-    .danger-btn { background: #ef4444; }
-    .lang-switch { display: flex; gap: 0.5rem; justify-content: flex-end; margin-bottom: 1rem; }
-    .lang-btn { width: auto; padding: 0.4rem 0.8rem; background: #334155; margin-bottom: 0; }
-    .lang-btn.active { background: #3b82f6; }
-    .step { background: #0f172a; padding: 1rem; border-radius: 1.5rem; margin-bottom: 1rem; border-left: 5px solid #3b82f6; }
-    .step.completed { border-left-color: #22c55e; background: #0f172a80; }
-    .timer { font-family: monospace; font-size: 1.2rem; font-weight: bold; color: #facc15; text-align: center; margin: 1rem 0; }
-    .info-text { font-size: 0.85rem; color: #94a3b8; margin-top: 0.5rem; }
-    .link-box { background: #1e293b; padding: 0.5rem; border-radius: 1rem; font-family: monospace; word-break: break-all; margin: 0.5rem 0; }
-    .copy-btn { background: #334155; width: auto; padding: 0.3rem 0.8rem; margin-left: 0.5rem; }
-    .hidden { display: none; }
-    .opportunity-card { background: #1e293b; border-radius: 1.5rem; padding: 1rem; margin-bottom: 1rem; border: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
-    .join-btn { width: auto; padding: 0.5rem 1rem; }
-    .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
-    .logo { height: 40px; width: auto; margin-right: 0.75rem; }
-    .header-logo { display: flex; align-items: center; gap: 0.5rem; }
-    .auth-logo { display: flex; justify-content: center; margin-bottom: 1rem; }
-    .auth-logo img { height: 60px; }
-    .message { margin: 1rem 0; padding: 0.5rem; border-radius: 1rem; background: #1e293b; text-align: center; }
-    .error { color: #f87171; }
-    .success { color: #4ade80; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>LINK FLOW - Accès vidéo YouTube</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(145deg, #0a0f1e 0%, #0c1222 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+        }
+
+        .card {
+            background: rgba(18, 25, 45, 0.85);
+            backdrop-filter: blur(12px);
+            border-radius: 2.5rem;
+            padding: 2rem 1.8rem 2.2rem;
+            max-width: 680px;
+            width: 100%;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(71, 85, 125, 0.3);
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #94a3f8);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.75rem;
+        }
+
+        .badge {
+            background: #1e2a4a;
+            color: #b9c7ff;
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 1.8rem;
+            border: 1px solid #2d3a60;
+        }
+
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 0.75rem;
+        }
+
+        .description {
+            color: #9aa9c7;
+            line-height: 1.5;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+
+        .video-preview {
+            background: #0f1422;
+            border-radius: 28px;
+            padding: 1.2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #293455;
+        }
+
+        .thumbnail-placeholder {
+            background: #101624;
+            border-radius: 20px;
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .yt-icon {
+            font-size: 3.8rem;
+        }
+
+        .video-id {
+            background: #00000030;
+            font-family: monospace;
+            font-size: 0.9rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            color: #cbd5ff;
+        }
+
+        .btn-youtube {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: #ff0000;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(255, 0, 0, 0.25);
+        }
+
+        .btn-youtube:hover {
+            background: #cc0000;
+            transform: scale(1.02);
+            box-shadow: 0 12px 24px rgba(255, 0, 0, 0.35);
+        }
+
+        .btn-youtube:active {
+            transform: scale(0.98);
+        }
+
+        .note {
+            margin-top: 1.8rem;
+            font-size: 0.75rem;
+            color: #5f6e93;
+            border-top: 1px solid #1f2a44;
+            padding-top: 1.2rem;
+        }
+
+        @media (max-width: 500px) {
+            .card {
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 1.4rem;
+            }
+            .btn-youtube {
+                font-size: 1rem;
+                padding: 0.85rem 1.2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-  <div class="lang-switch">
-    <button data-lang="fr" class="lang-btn active">🇫🇷 FR</button>
-    <button data-lang="en" class="lang-btn">🇬🇧 EN</button>
-    <button data-lang="es" class="lang-btn">🇪🇸 ES</button>
-    <button data-lang="pt" class="lang-btn">🇵🇹 PT</button>
-  </div>
-
-  <div id="authSection">
-    <div class="auth-card" id="loginForm">
-      <div class="auth-logo"><img src="logo.png" alt="LINK FLOW Logo" onerror="this.src='https://placehold.co/60x60?text=LF'"></div>
-      <h2 id="loginTitle">Connexion</h2>
-      <div id="loginMessage" class="message hidden"></div>
-      <div class="input-group"><input type="email" id="loginEmail" placeholder="Email"></div>
-      <div class="input-group"><input type="password" id="loginPassword" placeholder="Mot de passe"></div>
-      <button id="loginBtn">Se connecter</button>
-      <p><a href="#" id="showRegister">Pas de compte ? Inscrivez-vous</a></p>
-      <p><a href="#" id="showForgot">Mot de passe oublié ?</a></p>
-    </div>
-    <div class="auth-card hidden" id="registerForm">
-      <div class="auth-logo"><img src="logo.png" alt="LINK FLOW Logo" onerror="this.src='https://placehold.co/60x60?text=LF'"></div>
-      <h2 id="registerTitle">Inscription</h2>
-      <div id="registerMessage" class="message hidden"></div>
-      <div class="input-group"><input type="email" id="regEmail" placeholder="Email"></div>
-      <div class="input-group"><input type="password" id="regPassword" placeholder="Mot de passe"></div>
-      <div class="input-group"><input type="password" id="regConfirm" placeholder="Confirmer mot de passe"></div>
-      <div class="input-group"><input type="text" id="sponsorCode" placeholder="Code parrain (obligatoire)"></div>
-      <button id="registerBtn">S'inscrire</button>
-      <p><a href="#" id="showLogin">Déjà un compte ? Connectez-vous</a></p>
-    </div>
-    <div class="auth-card hidden" id="forgotForm">
-      <div class="auth-logo"><img src="logo.png" alt="LINK FLOW Logo" onerror="this.src='https://placehold.co/60x60?text=LF'"></div>
-      <h2 id="forgotTitle">Récupération</h2>
-      <div id="resetMessage" class="message hidden"></div>
-      <div class="input-group"><input type="email" id="resetEmail" placeholder="Email"></div>
-      <button id="resetBtn">Envoyer un lien</button>
-      <p><a href="#" id="backToLogin">Retour</a></p>
-    </div>
-  </div>
-
-  <div id="dashboard" class="hidden">
-    <div class="dashboard-card">
-      <div class="flex-between">
-        <div class="header-logo"><img src="logo.png" alt="LINK FLOW Logo" class="logo" onerror="this.src='https://placehold.co/40x40?text=LF'"><h2>LINK FLOW</h2></div>
-        <button id="logoutBtn" class="danger-btn" style="width: auto;">Déconnexion</button>
-      </div>
-      <p><span id="emailLabel">Email :</span> <span id="userEmail"></span></p>
-      <div id="timerGlobal" class="timer"></div>
-
-      <div class="step" id="stepVideo">
-        <h3>📹 <span id="stepVideoText">Étape 1 : Vidéo (180s)</span></h3>
-        <video id="vid" width="100%" controls src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"></video>
-        <button id="validateVideoBtn">Valider la vidéo</button>
-        <div id="sponsorLinkContainer" class="hidden" style="margin-top:1rem;">
-          <div class="info-text" id="sponsorLinkLabel">🔗 Lien de votre parrain :</div>
-          <div class="link-box" id="sponsorLink"></div>
-          <button id="copySponsorLinkBtn" class="copy-btn">📋 Copier</button>
+    <div class="card">
+        <div class="logo">⚡ LINK FLOW</div>
+        <div class="badge">🔗 lecture externe YouTube</div>
+        
+        <h1>Vidéo prête à être regardée</h1>
+        <div class="description">
+            Pour une expérience complète (likes, commentaires, partage)<br>
+            la vidéo s'ouvre directement sur YouTube.
         </div>
-      </div>
 
-      <div class="step" id="stepLinkFlow">
-        <h3>🔗 <span id="stepLinkFlowText">Étape 2 : Utiliser le lien</span></h3>
-        <button id="clickLinkFlowBtn">Ouvrir le lien Victory Automatic</button>
-        <div class="info-text" id="clickInfo">Après inscription sur Victory, vous aurez 3h pour coller l'adresse bénéficiaire.</div>
-      </div>
+        <div class="video-preview">
+            <div class="thumbnail-placeholder">
+                <div class="yt-icon">📺 ▶️</div>
+                <div class="video-id">ID : 9uPybhkqYw4</div>
+                <div style="font-size: 0.85rem; color:#7e8bb6;">"Lien direct vers YouTube"</div>
+            </div>
+        </div>
 
-      <div class="step" id="stepBeneficiary">
-        <h3>📬 <span id="stepBeneficiaryText">Étape 3 : Adresse bénéficiaire</span></h3>
-        <input type="text" id="beneficiaryAddress" placeholder="Adresse bénéficiaire">
-        <button id="submitBeneficiaryBtn">Soumettre l'adresse</button>
-      </div>
+        <!-- 
+          LIEN YOUTUBE DIRECT : remplace l'ancienne balise <video> ou <iframe>
+          L'utilisateur clique et interagit avec YouTube (pas de lecteur intégré)
+        -->
+        <a href="https://www.youtube.com/watch?v=9uPybhkqYw4" 
+           class="btn-youtube" 
+           target="_blank" 
+           rel="noopener noreferrer">
+            🎬 Regarder sur YouTube
+            <span style="font-size: 1.3rem;">↗️</span>
+        </a>
 
-      <div class="step" id="stepTxid">
-        <h3>💰 <span id="stepTxidText">Étape 4 : Preuve de paiement (TXID)</span></h3>
-        <input type="text" id="donationTxid" placeholder="TXID">
-        <button id="submitTxidBtn">Soumettre TXID</button>
-      </div>
-
-      <div class="step" id="stepVictory">
-        <h3>🏁 <span id="stepVictoryText">Étape 5 : Validation finale</span></h3>
-        <input type="text" id="victoryCode" placeholder="Code de validation Victory Automatic">
-        <button id="submitVictoryBtn">Valider mon parcours</button>
-        <div class="info-text" id="victoryInfo">Après validation, vous obtiendrez votre lien LINK FLOW et votre code d'invitation.</div>
-      </div>
-
-      <div id="finalResult" class="hidden" style="margin-top:1rem; padding:1rem; background:#0f172a; border-radius:1rem;">
-        <p>✅ <span id="finalSuccess">Félicitations ! Parcours terminé.</span></p>
-        <p><span id="yourLinkflow">Votre lien LINK FLOW :</span> <strong id="finalLinkFlow"></strong></p>
-        <p><span id="yourInviteCode">Votre code d'invitation :</span> <strong id="finalSponsorCode"></strong></p>
-        <button id="copyFinalInviteBtn" class="copy-btn">📋 Copier mon lien de parrainage</button>
-      </div>
-
-      <div class="step" id="stepFollowMe">
-        <h3>🚀 <span id="followMeTitle">Opportunités Follow Me</span></h3>
-        <div id="opportunitiesList"></div>
-        <div class="info-text" id="followMeInfo">Cliquez sur "Rejoindre" pour accéder à l'opportunité.</div>
-      </div>
+        <div class="note">
+            ✅ Plus d'erreur "No video with supported format" —<br>
+            Le projet LINK FLOW redirige l’interaction vers YouTube.
+        </div>
     </div>
-  </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  // === CONFIGURATION ===
-  const SUPABASE_URL = 'https://xyfnhxxgvqjinfmlgduz.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_lt7g7MVXBUSpDUvYtifwDw_a4us-Yiq';
-  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  // === TRADUCTIONS ===
-  const translations = {
-    fr: {
-      login_title: "Connexion", login_btn: "Se connecter", no_account: "Pas de compte ? Inscrivez-vous",
-      forgot_pwd: "Mot de passe oublié ?", register_title: "Inscription", register_btn: "S'inscrire",
-      have_account: "Déjà un compte ? Connectez-vous", forgot_title: "Récupération", reset_btn: "Envoyer un lien",
-      back_login: "Retour", logout: "Déconnexion", email_label: "Email",
-      step_video: "Étape 1 : Vidéo (180s)", validate_video: "Valider la vidéo", sponsor_link_label: "🔗 Lien de votre parrain :",
-      step_linkflow: "Étape 2 : Utiliser le lien", click_linkflow: "Ouvrir le lien Victory Automatic",
-      click_info: "Après inscription sur Victory, vous aurez 3h pour coller l'adresse bénéficiaire.",
-      step_beneficiary: "Étape 3 : Adresse bénéficiaire", submit_beneficiary: "Soumettre l'adresse",
-      step_txid: "Étape 4 : Preuve de paiement (TXID)", submit_txid: "Soumettre TXID",
-      step_victory: "Étape 5 : Validation finale", submit_victory: "Valider mon parcours",
-      victory_info: "Après validation, vous obtiendrez votre lien LINK FLOW et votre code d'invitation.",
-      final_success: "Félicitations ! Parcours terminé.", your_linkflow: "Votre lien LINK FLOW :",
-      your_invite_code: "Votre code d'invitation :", follow_me_title: "Opportunités Follow Me",
-      follow_me_info: "Cliquez sur \"Rejoindre\" pour accéder à l'opportunité."
-    },
-    en: {
-      login_title: "Login", login_btn: "Log in", no_account: "No account? Sign up",
-      forgot_pwd: "Forgot password?", register_title: "Sign up", register_btn: "Sign up",
-      have_account: "Already have an account? Log in", forgot_title: "Reset password", reset_btn: "Send link",
-      back_login: "Back", logout: "Logout", email_label: "Email",
-      step_video: "Step 1: Video (180s)", validate_video: "Validate video", sponsor_link_label: "🔗 Your sponsor link:",
-      step_linkflow: "Step 2: Use the link", click_linkflow: "Open Victory Automatic link",
-      click_info: "After signing up on Victory, you have 3 hours to paste the beneficiary address.",
-      step_beneficiary: "Step 3: Beneficiary address", submit_beneficiary: "Submit address",
-      step_txid: "Step 4: Payment proof (TXID)", submit_txid: "Submit TXID",
-      step_victory: "Step 5: Final validation", submit_victory: "Validate my journey",
-      victory_info: "After validation, you will get your LINK FLOW link and invitation code.",
-      final_success: "Congratulations! Journey completed.", your_linkflow: "Your LINK FLOW link:",
-      your_invite_code: "Your invitation code:", follow_me_title: "Follow Me Opportunities",
-      follow_me_info: "Click \"Join\" to access the opportunity."
-    },
-    es: {
-      login_title: "Iniciar sesión", login_btn: "Iniciar", no_account: "¿Sin cuenta? Regístrate",
-      forgot_pwd: "¿Olvidaste contraseña?", register_title: "Registro", register_btn: "Registrarse",
-      have_account: "¿Ya tienes cuenta? Inicia sesión", forgot_title: "Recuperar", reset_btn: "Enviar enlace",
-      back_login: "Volver", logout: "Cerrar sesión", email_label: "Correo",
-      step_video: "Paso 1: Video (180s)", validate_video: "Validar video", sponsor_link_label: "🔗 Enlace de tu patrocinador:",
-      step_linkflow: "Paso 2: Usar el enlace", click_linkflow: "Abrir enlace Victory Automatic",
-      click_info: "Después de registrarte en Victory, tienes 3h para pegar la dirección beneficiaria.",
-      step_beneficiary: "Paso 3: Dirección beneficiaria", submit_beneficiary: "Enviar dirección",
-      step_txid: "Paso 4: Prueba de pago (TXID)", submit_txid: "Enviar TXID",
-      step_victory: "Paso 5: Validación final", submit_victory: "Validar mi recorrido",
-      victory_info: "Después de la validación, obtendrás tu enlace LINK FLOW y código de invitación.",
-      final_success: "¡Felicidades! Recorrido completado.", your_linkflow: "Tu enlace LINK FLOW:",
-      your_invite_code: "Tu código de invitación:", follow_me_title: "Oportunidades Follow Me",
-      follow_me_info: "Haz clic en \"Unirse\" para acceder a la oportunidad."
-    },
-    pt: {
-      login_title: "Entrar", login_btn: "Entrar", no_account: "Sem conta? Registre-se",
-      forgot_pwd: "Esqueceu a senha?", register_title: "Registrar", register_btn: "Registrar",
-      have_account: "Já tem conta? Entre", forgot_title: "Recuperar senha", reset_btn: "Enviar link",
-      back_login: "Voltar", logout: "Sair", email_label: "Email",
-      step_video: "Passo 1: Vídeo (180s)", validate_video: "Validar vídeo", sponsor_link_label: "🔗 Link do seu patrocinador:",
-      step_linkflow: "Passo 2: Usar o link", click_linkflow: "Abrir link Victory Automatic",
-      click_info: "Após registrar-se na Victory, você tem 3h para colar o endereço beneficiário.",
-      step_beneficiary: "Passo 3: Endereço beneficiário", submit_beneficiary: "Enviar endereço",
-      step_txid: "Passo 4: Comprovante de pagamento (TXID)", submit_txid: "Enviar TXID",
-      step_victory: "Passo 5: Validação final", submit_victory: "Validar meu percurso",
-      victory_info: "Após validação, você receberá seu link LINK FLOW e código de convite.",
-      final_success: "Parabéns! Percurso concluído.", your_linkflow: "Seu link LINK FLOW:",
-      your_invite_code: "Seu código de convite:", follow_me_title: "Oportunidades Follow Me",
-      follow_me_info: "Clique em \"Participar\" para acessar a oportunidade."
-    }
-  };
-
-  let currentLang = 'fr';
-  function applyTranslations() {
-    const t = translations[currentLang];
-    document.getElementById('loginTitle').innerText = t.login_title;
-    document.getElementById('loginBtn').innerText = t.login_btn;
-    document.querySelector('#loginForm a[data-i18n="no_account"]').innerText = t.no_account;
-    document.querySelector('#loginForm a[data-i18n="forgot_pwd"]').innerText = t.forgot_pwd;
-    document.getElementById('registerTitle').innerText = t.register_title;
-    document.getElementById('registerBtn').innerText = t.register_btn;
-    document.querySelector('#registerForm a[data-i18n="have_account"]').innerText = t.have_account;
-    document.getElementById('forgotTitle').innerText = t.forgot_title;
-    document.getElementById('resetBtn').innerText = t.reset_btn;
-    document.getElementById('backToLogin').innerText = t.back_login;
-    document.getElementById('logoutBtn').innerText = t.logout;
-    document.getElementById('emailLabel').innerText = t.email_label + ' :';
-    document.getElementById('stepVideoText').innerText = t.step_video;
-    document.getElementById('validateVideoBtn').innerText = t.validate_video;
-    document.getElementById('sponsorLinkLabel').innerText = t.sponsor_link_label;
-    document.getElementById('stepLinkFlowText').innerText = t.step_linkflow;
-    document.getElementById('clickLinkFlowBtn').innerText = t.click_linkflow;
-    document.getElementById('clickInfo').innerText = t.click_info;
-    document.getElementById('stepBeneficiaryText').innerText = t.step_beneficiary;
-    document.getElementById('submitBeneficiaryBtn').innerText = t.submit_beneficiary;
-    document.getElementById('stepTxidText').innerText = t.step_txid;
-    document.getElementById('submitTxidBtn').innerText = t.submit_txid;
-    document.getElementById('stepVictoryText').innerText = t.step_victory;
-    document.getElementById('submitVictoryBtn').innerText = t.submit_victory;
-    document.getElementById('victoryInfo').innerText = t.victory_info;
-    document.getElementById('finalSuccess').innerText = t.final_success;
-    document.getElementById('yourLinkflow').innerText = t.your_linkflow + ' ';
-    document.getElementById('yourInviteCode').innerText = t.your_invite_code + ' ';
-    document.getElementById('followMeTitle').innerText = t.follow_me_title;
-    document.getElementById('followMeInfo').innerText = t.follow_me_info;
-  }
-
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      currentLang = btn.dataset.lang;
-      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      applyTranslations();
-    });
-  });
-
-  function showMessage(element, text, isError = true) {
-    const msgDiv = document.getElementById(element);
-    if(msgDiv) { msgDiv.innerText = text; msgDiv.className = `message ${isError ? 'error' : 'success'}`; msgDiv.classList.remove('hidden'); setTimeout(() => msgDiv.classList.add('hidden'), 5000); }
-  }
-
-  function showAuth() { document.getElementById('authSection').classList.remove('hidden'); document.getElementById('dashboard').classList.add('hidden'); }
-  function showDashboard() { document.getElementById('authSection').classList.add('hidden'); document.getElementById('dashboard').classList.remove('hidden'); }
-
-  document.getElementById('showRegister').addEventListener('click', (e) => { e.preventDefault(); document.getElementById('loginForm').classList.add('hidden'); document.getElementById('registerForm').classList.remove('hidden'); document.getElementById('forgotForm').classList.add('hidden'); });
-  document.getElementById('showLogin').addEventListener('click', (e) => { e.preventDefault(); document.getElementById('registerForm').classList.add('hidden'); document.getElementById('loginForm').classList.remove('hidden'); document.getElementById('forgotForm').classList.add('hidden'); });
-  document.getElementById('showForgot').addEventListener('click', (e) => { e.preventDefault(); document.getElementById('loginForm').classList.add('hidden'); document.getElementById('forgotForm').classList.remove('hidden'); });
-  document.getElementById('backToLogin').addEventListener('click', (e) => { e.preventDefault(); document.getElementById('forgotForm').classList.add('hidden'); document.getElementById('loginForm').classList.remove('hidden'); });
-
-  // ========== INSCRIPTION AVEC EMAILREDIRECTO ==========
-  document.getElementById('registerBtn').addEventListener('click', async () => {
-    const email = document.getElementById('regEmail').value;
-    const password = document.getElementById('regPassword').value;
-    const confirm = document.getElementById('regConfirm').value;
-    const sponsor = document.getElementById('sponsorCode').value;
-    if (!email || !password || !confirm || !sponsor) { showMessage('registerMessage', 'Tous les champs sont obligatoires'); return; }
-    if (password !== confirm) { showMessage('registerMessage', 'Les mots de passe ne correspondent pas'); return; }
-    const validSponsorCodes = ['LINK2024', 'FLOW2025'];
-    if (!validSponsorCodes.includes(sponsor)) { showMessage('registerMessage', 'Code parrain invalide'); return; }
-
-    // AJOUT DE emailRedirectTo :
-    const { data, error } = await supabaseClient.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { sponsor_code: sponsor },
-        emailRedirectTo: 'https://eldamama.github.io/LINKFLOW-_COULEUR/'
-      }
-    });
-
-    if (error) { showMessage('registerMessage', error.message); }
-    else {
-      showMessage('registerMessage', 'Inscription réussie ! Vérifiez vos emails pour confirmer votre compte.', false);
-      setTimeout(() => { document.getElementById('showLogin').click(); }, 3000);
-    }
-  });
-
-  document.getElementById('loginBtn').addEventListener('click', async () => {
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
-    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-    if (error) { showMessage('loginMessage', error.message); } else { showMessage('loginMessage', 'Connexion réussie', false); loadDashboard(data.user); }
-  });
-
-  document.getElementById('resetBtn').addEventListener('click', async () => {
-    const email = document.getElementById('resetEmail').value;
-    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + window.location.pathname });
-    if (error) { showMessage('resetMessage', error.message); } else { showMessage('resetMessage', 'Email de réinitialisation envoyé !', false); }
-  });
-
-  document.getElementById('logoutBtn').addEventListener('click', async () => { await supabaseClient.auth.signOut(); showAuth(); });
-
-  supabaseClient.auth.getSession().then(({ data: { session } }) => { if (session) loadDashboard(session.user); });
-  supabaseClient.auth.onAuthStateChange((event, session) => { if (event === 'SIGNED_IN' && session) loadDashboard(session.user); if (event === 'SIGNED_OUT') showAuth(); });
-
-  let currentUser = null;
-  async function loadDashboard(user) {
-    currentUser = user;
-    document.getElementById('userEmail').innerText = user.email;
-    showDashboard();
-    const { data: progress, error } = await supabaseClient.from('user_progress').select('*').eq('user_id', user.id).single();
-    const prog = (progress && !error) ? progress : { video_validated: false, linkflow_used: false, beneficiary: null, txid: null, victory_code: null, final_validated: false };
-    if (prog.video_validated) document.getElementById('stepVideo').classList.add('completed');
-    if (prog.linkflow_used) document.getElementById('stepLinkFlow').classList.add('completed');
-    if (prog.beneficiary) document.getElementById('stepBeneficiary').classList.add('completed');
-    if (prog.txid) document.getElementById('stepTxid').classList.add('completed');
-    if (prog.victory_code) document.getElementById('stepVictory').classList.add('completed');
-    if (prog.final_validated) document.getElementById('finalResult').classList.remove('hidden');
-
-    document.getElementById('validateVideoBtn').onclick = async () => {
-      await supabaseClient.from('user_progress').upsert({ user_id: user.id, video_validated: true }, { onConflict: 'user_id' });
-      document.getElementById('stepVideo').classList.add('completed');
-      const sponsorLink = `${window.location.origin}?ref=${user.id}`;
-      document.getElementById('sponsorLink').innerText = sponsorLink;
-      document.getElementById('sponsorLinkContainer').classList.remove('hidden');
-    };
-    document.getElementById('copySponsorLinkBtn').onclick = () => { navigator.clipboard.writeText(document.getElementById('sponsorLink').innerText); alert('Lien copié !'); };
-    document.getElementById('clickLinkFlowBtn').onclick = () => { window.open('https://victoryautomatic.com', '_blank'); };
-    document.getElementById('submitBeneficiaryBtn').onclick = async () => {
-      const addr = document.getElementById('beneficiaryAddress').value;
-      if (!addr) return;
-      await supabaseClient.from('user_progress').upsert({ user_id: user.id, beneficiary: addr }, { onConflict: 'user_id' });
-      document.getElementById('stepBeneficiary').classList.add('completed');
-    };
-    document.getElementById('submitTxidBtn').onclick = async () => {
-      const txid = document.getElementById('donationTxid').value;
-      if (!txid) return;
-      await supabaseClient.from('user_progress').upsert({ user_id: user.id, txid: txid }, { onConflict: 'user_id' });
-      document.getElementById('stepTxid').classList.add('completed');
-    };
-    document.getElementById('submitVictoryBtn').onclick = async () => {
-      const code = document.getElementById('victoryCode').value;
-      if (!code) return;
-      await supabaseClient.from('user_progress').upsert({ user_id: user.id, victory_code: code, final_validated: true }, { onConflict: 'user_id' });
-      document.getElementById('stepVictory').classList.add('completed');
-      document.getElementById('finalResult').classList.remove('hidden');
-      document.getElementById('finalLinkFlow').innerText = `${window.location.origin}?invite=${user.id}`;
-      document.getElementById('finalSponsorCode').innerText = user.id.slice(0, 8);
-    };
-    document.getElementById('copyFinalInviteBtn').onclick = () => { navigator.clipboard.writeText(document.getElementById('finalLinkFlow').innerText); alert('Lien copié !'); };
-    const opps = [{ name: "Victory Boost", link: "#" }, { name: "LINK FLOW Elite", link: "#" }];
-    const container = document.getElementById('opportunitiesList');
-    if(container) { container.innerHTML = ''; opps.forEach(opp => { const div = document.createElement('div'); div.className = 'opportunity-card'; div.innerHTML = `<span>${opp.name}</span><button class="join-btn" data-link="${opp.link}">Rejoindre</button>`; div.querySelector('.join-btn').onclick = () => window.open(opp.link, '_blank'); container.appendChild(div); }); }
-  }
-</script>
+    <!-- Petit script pour confirmer qu'aucun lecteur vidéo natif n'est utilisé -->
+    <script>
+        (function() {
+            // Vérification silencieuse : aucun élément <video> ou <iframe> vidéo parasite
+            const videos = document.querySelectorAll('video, iframe[src*="youtube.com/embed"]');
+            if (videos.length > 0) {
+                console.warn("⚠️ Nettoyage automatique : suppression des balises vidéo indésirables");
+                videos.forEach(el => el.remove());
+            }
+            console.log("✅ LINK FLOW - Redirection YouTube active. Lien : https://www.youtube.com/watch?v=9uPybhkqYw4");
+        })();
+    </script>
 </body>
 </html>
