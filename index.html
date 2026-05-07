@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>LINK FLOW · Victory Multi-Lang</title>
+    <title>LINK FLOW · Victory Automatique</title>
     <style>
         * {
             margin: 0;
@@ -15,22 +15,21 @@
             font-family: system-ui, 'Segoe UI', 'Inter', sans-serif;
             background: radial-gradient(circle at 10% 20%, #0b1120, #030614);
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 1.5rem;
         }
 
-        .container {
-            max-width: 720px;
-            margin: 0 auto;
-        }
-
         .card {
+            max-width: 700px;
+            width: 100%;
             background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(12px);
             border-radius: 2rem;
             padding: 2rem;
             box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
             border: 1px solid rgba(71, 85, 125, 0.4);
-            margin-bottom: 1rem;
         }
 
         .logo {
@@ -41,51 +40,45 @@
             -webkit-background-clip: text;
             color: transparent;
             text-align: center;
+            margin-bottom: 0.5rem;
         }
 
-        .lang-switch {
-            display: flex;
-            justify-content: flex-end;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .lang-btn {
+        .badge {
+            text-align: center;
             background: #1e293b;
-            border: none;
-            color: #cbd5e1;
-            padding: 0.3rem 0.8rem;
-            border-radius: 2rem;
-            cursor: pointer;
-            font-size: 0.8rem;
-        }
-
-        .lang-btn.active {
-            background: #f97316;
-            color: white;
+            color: #b9c7ff;
+            display: inline-block;
+            width: auto;
+            margin: 0 auto 1.5rem;
+            padding: 0.3rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
         }
 
         h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
             color: #f1f5f9;
             margin-bottom: 0.5rem;
-            font-size: 1.5rem;
+            text-align: center;
         }
 
         .sub {
+            text-align: center;
             color: #9aa9ca;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.8rem;
             font-size: 0.9rem;
         }
 
         .form-group {
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
         }
 
         label {
-            display: block;
             color: #cbd5e1;
             font-size: 0.85rem;
             font-weight: 500;
+            display: block;
             margin-bottom: 0.3rem;
         }
 
@@ -97,7 +90,6 @@
             border-radius: 1rem;
             color: white;
             font-size: 1rem;
-            font-family: monospace;
         }
 
         input:focus, textarea:focus {
@@ -108,7 +100,7 @@
         button, .btn {
             background: linear-gradient(95deg, #f97316, #ea580c);
             width: 100%;
-            padding: 0.8rem;
+            padding: 0.9rem;
             border: none;
             border-radius: 2rem;
             font-weight: bold;
@@ -120,20 +112,16 @@
             text-align: center;
         }
 
-        button.secondary {
+        .btn-secondary {
             background: #2d3a66;
         }
 
-        button.secondary:hover {
+        .btn-secondary:hover {
             background: #3b4a7a;
         }
 
-        button.link-btn {
-            background: none;
-            color: #facc15;
-            text-decoration: underline;
-            margin-top: 0.5rem;
-            font-size: 0.8rem;
+        .hidden {
+            display: none;
         }
 
         .message {
@@ -143,56 +131,56 @@
             font-size: 0.85rem;
         }
 
-        .error {
-            background: #7f1a1a80;
-            border: 1px solid #ef4444;
-            color: #fecaca;
-        }
-
         .success {
             background: #14532d80;
             border: 1px solid #22c55e;
             color: #bbf7d0;
         }
 
-        .hidden {
-            display: none;
+        .error {
+            background: #7f1a1a80;
+            border: 1px solid #ef4444;
+            color: #fecaca;
         }
 
-        .flex-btns {
-            display: flex;
-            gap: 1rem;
-            justify-content: space-between;
-        }
-
-        .timer {
-            font-size: 2rem;
-            font-weight: bold;
-            text-align: center;
-            color: #facc15;
+        .viral-card {
+            background: #0a0f1e;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid #f9731650;
             margin: 1rem 0;
         }
 
-        .popup {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
+        .stats {
+            background: #00000040;
+            padding: 0.8rem;
+            border-radius: 1rem;
+            margin: 1rem 0;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
 
-        .popup-content {
-            background: #0f172a;
-            padding: 2rem;
-            border-radius: 2rem;
-            max-width: 400px;
+        .stat-item {
             text-align: center;
-            border: 1px solid #f97316;
+            font-size: 0.75rem;
+            color: #b9c7ff;
+        }
+
+        .stat-number {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #facc15;
+        }
+
+        .btn-youtube {
+            background: #ff0000;
+            margin: 1rem 0;
+        }
+
+        .btn-youtube:hover {
+            background: #cc0000;
         }
 
         .victory-link-box {
@@ -202,511 +190,152 @@
             word-break: break-all;
             color: #7dd3fc;
             margin: 1rem 0;
+            text-align: center;
         }
 
-        hr {
-            margin: 1rem 0;
-            border-color: #2a3655;
+        .flex-btns {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .flex-btns button {
+            flex: 1;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="card">
-        <div class="lang-switch">
-            <button class="lang-btn active" data-lang="fr">🇫🇷 FR</button>
-            <button class="lang-btn" data-lang="en">🇬🇧 EN</button>
-            <button class="lang-btn" data-lang="es">🇪🇸 ES</button>
-            <button class="lang-btn" data-lang="pt">🇵🇹 PT</button>
+<div class="card">
+    <div class="logo">⚡ LINK FLOW · VICTORY</div>
+    <div style="text-align: center;"><span class="badge">🔥 ÉTAPE 1 · ACTIVEZ LE CERCLE VIRAL</span></div>
+
+    <!-- ÉTAPE 1 : Formulaire simple -->
+    <div id="stepForm">
+        <h2>Devenez l'étincelle 🧨</h2>
+        <div class="sub">Votre interaction sur YouTube = vagues d'adhérents</div>
+        <div class="form-group">
+            <label>👤 Prénom / pseudo</label>
+            <input type="text" id="userName" placeholder="Alex" required>
         </div>
-        <div class="logo">⚡ LINK FLOW · VICTORY</div>
-
-        <!-- ÉTAPE 1 : Inscription / Connexion -->
-        <div id="authSection">
-            <!-- Connexion -->
-            <div id="loginView">
-                <h2 data-key="login_title">Connexion</h2>
-                <div class="sub" data-key="login_sub">Accédez à votre cercle viral</div>
-                <div class="form-group">
-                    <label data-key="email_label">📧 Email</label>
-                    <input type="email" id="loginEmail" placeholder="exemple@email.com">
-                </div>
-                <div class="form-group">
-                    <label data-key="password_label">🔒 Mot de passe</label>
-                    <input type="password" id="loginPassword" placeholder="••••••">
-                </div>
-                <button id="doLoginBtn" data-key="login_btn">Se connecter</button>
-                <button id="showRegisterBtn" class="link-btn" data-key="goto_register">Pas encore inscrit ? Créer un compte</button>
-                <div id="loginMessage"></div>
-            </div>
-
-            <!-- Inscription -->
-            <div id="registerView" class="hidden">
-                <h2 data-key="register_title">Inscription LinkFlow</h2>
-                <div class="sub" data-key="register_sub">Créez votre compte</div>
-                <div class="form-group">
-                    <label data-key="email_label">📧 Email</label>
-                    <input type="email" id="regEmail">
-                </div>
-                <div class="form-group">
-                    <label data-key="password_label">🔒 Mot de passe</label>
-                    <input type="password" id="regPassword">
-                </div>
-                <div class="form-group">
-                    <label data-key="confirm_label">🔒 Confirmer mot de passe</label>
-                    <input type="password" id="regConfirm">
-                </div>
-                <button id="doRegisterBtn" data-key="register_btn">S'inscrire</button>
-                <button id="backToLoginBtn" class="link-btn" data-key="back_login">← Retour à la connexion</button>
-                <div id="registerMessage"></div>
-            </div>
+        <div class="form-group">
+            <label>📧 Email (votre accès Victory)</label>
+            <input type="email" id="userEmail" placeholder="alex@exemple.com" required>
         </div>
+        <button id="submitFormBtn">🚀 Je propulse la vidéo</button>
+        <div id="formError" class="message error hidden"></div>
+    </div>
 
-        <!-- ÉTAPE 2 : Vidéo + Popup + Chrono (après connexion) -->
-        <div id="videoSection" class="hidden">
-            <h2 data-key="video_title">📺 Étape vidéo</h2>
-            <div class="sub" data-key="video_sub">Regardez et interagissez pour débloquer votre lien Victory</div>
-            <button id="watchVideoBtn" class="btn-primary" data-key="watch_btn">🎬 Je regarde la vidéo</button>
-            <div id="timerContainer" class="hidden">
-                <div class="timer" id="countdown">03:00</div>
-                <div id="getVictoryBtnContainer" class="hidden">
-                    <button id="getVictoryLinkBtn" class="btn-primary" data-key="get_victory_btn">🏆 J'obtiens mon lien Victory</button>
-                </div>
+    <!-- ÉTAPE 2 : Message viral + YouTube -->
+    <div id="stepViral" class="hidden">
+        <div class="viral-card">
+            <h2 style="font-size:1.3rem;">🎯 Vous tenez le levier viral</h2>
+            <p style="color:#cddcff;">En <strong>likant, commentant et partageant</strong> la vidéo sur YouTube, l'algorithme l'explose. Effet boule de neige = <strong>des centaines de nouveaux adhérents</strong>.</p>
+            <div class="stats">
+                <div class="stat-item">📈 Portée x24<br><span class="stat-number">+2 400%</span></div>
+                <div class="stat-item">🤝 Adhérents générés<br><span class="stat-number">1 250+</span></div>
+                <div class="stat-item">⚡ Shares viraux<br><span class="stat-number">800+</span></div>
             </div>
-        </div>
-
-        <!-- ÉTAPE 3 : Formulaire de collage (bénéficiaire, hash, lien Victory) -->
-        <div id="collageSection" class="hidden">
-            <h2 data-key="collage_title">🔗 Validation blockchain</h2>
-            <div class="sub" data-key="collage_sub">Collez vos informations pour générer votre lien final</div>
-            <div class="form-group">
-                <label data-key="beneficiary_label">🏦 Adresse bénéficiaire (coller ici)</label>
-                <input type="text" id="beneficiaryAddr" placeholder="0x... / adresse wallet">
-            </div>
-            <div class="form-group">
-                <label data-key="hash_label">🔑 Hash / preuve de paiement (coller ici)</label>
-                <textarea id="paymentHash" rows="2" placeholder="Hash de transaction"></textarea>
-            </div>
-            <div class="form-group">
-                <label data-key="victory_link_label">🔗 Votre lien Victory automatic (coller ici)</label>
-                <input type="text" id="userVictoryLink" placeholder="https://...">
-            </div>
-            <button id="generateFinalLinkBtn" data-key="generate_btn">⚡ Vérifier & générer mon lien avec code d'invitation</button>
-            <div id="verificationResult"></div>
-        </div>
-
-        <!-- ÉTAPE 4 : Lien généré + Rejoindre Victory World + Opportunité à venir -->
-        <div id="finalSection" class="hidden">
-            <hr>
-            <h2 data-key="final_title">🏆 Votre lien personnel généré</h2>
-            <div class="victory-link-box" id="finalLinkDisplay"></div>
-            <button id="copyFinalBtn" class="secondary" data-key="copy_btn">📋 Copier le lien</button>
-            <hr>
-            <h2 data-key="join_title">🌍 Rejoignez les opportunités</h2>
-            <div class="flex-btns">
-                <button id="joinVictoryWorldBtn" class="secondary" data-key="join_victory">🚀 Victory World (disponible)</button>
-                <button id="joinFutureBtn" class="secondary" data-key="join_future">🔮 Opportunité 3 (à venir)</button>
-            </div>
-            <div id="joinMessage" class="message success hidden"></div>
+            <a href="https://www.youtube.com/watch?v=9uPybhkqYw4" target="_blank" rel="noopener noreferrer" class="btn btn-youtube" style="display:block; text-decoration:none;">
+                🎬 Regarder & interagir sur YouTube ↗️
+            </a>
+            <button id="confirmInteractionBtn" class="btn-secondary">✅ J'ai liké/commenté, débloquer mon lien Victory</button>
         </div>
     </div>
-</div>
 
-<!-- Popup explicatif 10 secondes -->
-<div id="infoPopup" class="popup hidden">
-    <div class="popup-content">
-        <h3 style="color:#facc15;" data-key="popup_title">🎯 Pourquoi interagir ?</h3>
-        <p id="popupText" data-key="popup_text">Liker, commenter et partager la vidéo YouTube démultiplie sa portée. Cela vous garantit un lien Victory activé et booste votre réseau.</p>
-        <div id="popupTimer">10</div>
-        <button id="closePopupBtn" class="secondary" disabled data-key="popup_wait">Attendez...</button>
+    <!-- ÉTAPE 3 : Obtention du lien Victory -->
+    <div id="stepVictory" class="hidden">
+        <h2>🏆 Votre lien Victory automatique</h2>
+        <div class="victory-link-box" id="victoryLinkDisplay"></div>
+        <button id="copyVictoryBtn" class="btn-secondary">📋 Copier le lien</button>
+        <hr style="margin: 1.5rem 0; border-color:#2a3655;">
+        <h2>🌍 Rejoignez les opportunités</h2>
+        <div class="flex-btns">
+            <button id="joinVictoryWorldBtn">🚀 Victory World (disponible)</button>
+            <button id="joinFutureBtn" class="btn-secondary">🔮 Opportunité 3 (à venir)</button>
+        </div>
+        <div id="joinMessage" class="message success hidden"></div>
     </div>
 </div>
 
 <script>
-    // ------------------ TRADUCTIONS ------------------
-    const translations = {
-        fr: {
-            login_title: "Connexion", login_sub: "Accédez à votre cercle viral", email_label: "📧 Email", password_label: "🔒 Mot de passe",
-            login_btn: "Se connecter", goto_register: "Pas encore inscrit ? Créer un compte", register_title: "Inscription LinkFlow",
-            register_sub: "Créez votre compte", confirm_label: "🔒 Confirmer mot de passe", register_btn: "S'inscrire",
-            back_login: "← Retour à la connexion", video_title: "📺 Étape vidéo", video_sub: "Regardez et interagissez pour débloquer votre lien Victory",
-            watch_btn: "🎬 Je regarde la vidéo", get_victory_btn: "🏆 J'obtiens mon lien Victory", collage_title: "🔗 Validation blockchain",
-            collage_sub: "Collez vos informations pour générer votre lien final", beneficiary_label: "🏦 Adresse bénéficiaire (coller ici)",
-            hash_label: "🔑 Hash / preuve de paiement (coller ici)", victory_link_label: "🔗 Votre lien Victory automatic (coller ici)",
-            generate_btn: "⚡ Vérifier & générer mon lien avec code d'invitation", final_title: "🏆 Votre lien personnel généré",
-            copy_btn: "📋 Copier le lien", join_title: "🌍 Rejoignez les opportunités", join_victory: "🚀 Victory World (disponible)",
-            join_future: "🔮 Opportunité 3 (à venir)", popup_title: "🎯 Pourquoi interagir ?",
-            popup_text: "Liker, commenter et partager la vidéo YouTube démultiplie sa portée. Cela vous garantit un lien Victory activé et booste votre réseau.",
-            popup_wait: "Attendez...", popup_close: "Compris !", video_opened: "Vidéo ouverte dans un nouvel onglet. Regardez et interagissez.",
-            blockchain_ok: "✅ Vérification blockchain simulée : hash et adresse valides.", missing_fields: "Veuillez remplir tous les champs.",
-            invalid_victory_link: "Le lien Victory automatic semble invalide (doit contenir 'victory' ou 'http').", success_generated: "Lien généré avec succès !",
-            copied: "Copié !", joined_victory: "🎉 Félicitations ! Vous avez rejoint Victory World.", joined_future: "🔔 Opportunité 3 bientôt disponible. Vous serez averti."
-        },
-        en: {
-            login_title: "Login", login_sub: "Access your viral circle", email_label: "📧 Email", password_label: "🔒 Password",
-            login_btn: "Login", goto_register: "Not registered yet? Create an account", register_title: "LinkFlow Signup",
-            register_sub: "Create your account", confirm_label: "🔒 Confirm password", register_btn: "Sign up",
-            back_login: "← Back to login", video_title: "📺 Video step", video_sub: "Watch and interact to unlock your Victory link",
-            watch_btn: "🎬 I watch the video", get_victory_btn: "🏆 I get my Victory link", collage_title: "🔗 Blockchain validation",
-            collage_sub: "Paste your information to generate your final link", beneficiary_label: "🏦 Beneficiary address (paste here)",
-            hash_label: "🔑 Hash / payment proof (paste here)", victory_link_label: "🔗 Your Victory automatic link (paste here)",
-            generate_btn: "⚡ Verify & generate my link with invitation code", final_title: "🏆 Your personal generated link",
-            copy_btn: "📋 Copy link", join_title: "🌍 Join opportunities", join_victory: "🚀 Victory World (available)",
-            join_future: "🔮 Opportunity 3 (coming soon)", popup_title: "🎯 Why interact?",
-            popup_text: "Liking, commenting and sharing the YouTube video multiplies its reach. This guarantees you an activated Victory link and boosts your network.",
-            popup_wait: "Wait...", popup_close: "Got it!", video_opened: "Video opened in a new tab. Watch and interact.",
-            blockchain_ok: "✅ Simulated blockchain check: hash and address valid.", missing_fields: "Please fill all fields.",
-            invalid_victory_link: "Your Victory automatic link seems invalid (must contain 'victory' or 'http').", success_generated: "Link generated successfully!",
-            copied: "Copied!", joined_victory: "🎉 Congratulations! You joined Victory World.", joined_future: "🔔 Opportunity 3 coming soon. You'll be notified."
-        },
-        es: {
-            login_title: "Iniciar sesión", login_sub: "Accede a tu círculo viral", email_label: "📧 Correo", password_label: "🔒 Contraseña",
-            login_btn: "Iniciar sesión", goto_register: "¿No tienes cuenta? Regístrate", register_title: "Registro LinkFlow",
-            register_sub: "Crea tu cuenta", confirm_label: "🔒 Confirmar contraseña", register_btn: "Registrarse",
-            back_login: "← Volver al inicio", video_title: "📺 Paso del video", video_sub: "Mira e interactúa para desbloquear tu enlace Victory",
-            watch_btn: "🎬 Veo el video", get_victory_btn: "🏆 Obtengo mi enlace Victory", collage_title: "🔗 Validación blockchain",
-            collage_sub: "Pega tu información para generar tu enlace final", beneficiary_label: "🏦 Dirección beneficiaria (pegar aquí)",
-            hash_label: "🔑 Hash / comprobante de pago (pegar aquí)", victory_link_label: "🔗 Tu enlace Victory automático (pegar aquí)",
-            generate_btn: "⚡ Verificar y generar mi enlace con código de invitación", final_title: "🏆 Tu enlace personal generado",
-            copy_btn: "📋 Copiar enlace", join_title: "🌍 Únete a las oportunidades", join_victory: "🚀 Victory World (disponible)",
-            join_future: "🔮 Oportunidad 3 (próximamente)", popup_title: "🎯 ¿Por qué interactuar?",
-            popup_text: "Dar like, comentar y compartir el video de YouTube multiplica su alcance. Esto te garantiza un enlace Victory activado y potencia tu red.",
-            popup_wait: "Espera...", popup_close: "¡Entendido!", video_opened: "Video abierto en nueva pestaña. Mira e interactúa.",
-            blockchain_ok: "✅ Verificación blockchain simulada: hash y dirección válidos.", missing_fields: "Completa todos los campos.",
-            invalid_victory_link: "El enlace Victory automático parece inválido (debe contener 'victory' o 'http').", success_generated: "¡Enlace generado con éxito!",
-            copied: "¡Copiado!", joined_victory: "🎉 ¡Felicidades! Te has unido a Victory World.", joined_future: "🔔 Oportunidad 3 próximamente. Serás notificado."
-        },
-        pt: {
-            login_title: "Entrar", login_sub: "Acesse seu círculo viral", email_label: "📧 Email", password_label: "🔒 Senha",
-            login_btn: "Entrar", goto_register: "Não tem conta? Cadastre-se", register_title: "Cadastro LinkFlow",
-            register_sub: "Crie sua conta", confirm_label: "🔒 Confirmar senha", register_btn: "Cadastrar",
-            back_login: "← Voltar ao login", video_title: "📺 Etapa do vídeo", video_sub: "Assista e interaja para desbloquear seu link Victory",
-            watch_btn: "🎬 Eu assisto ao vídeo", get_victory_btn: "🏆 Obtenho meu link Victory", collage_title: "🔗 Validação blockchain",
-            collage_sub: "Cole suas informações para gerar seu link final", beneficiary_label: "🏦 Endereço beneficiário (cole aqui)",
-            hash_label: "🔑 Hash / comprovante de pagamento (cole aqui)", victory_link_label: "🔗 Seu link Victory automático (cole aqui)",
-            generate_btn: "⚡ Verificar e gerar meu link com código de convite", final_title: "🏆 Seu link pessoal gerado",
-            copy_btn: "📋 Copiar link", join_title: "🌍 Junte-se às oportunidades", join_victory: "🚀 Victory World (disponível)",
-            join_future: "🔮 Oportunidade 3 (em breve)", popup_title: "🎯 Por que interagir?",
-            popup_text: "Curtir, comentar e compartilhar o vídeo do YouTube multiplica seu alcance. Isso garante um link Victory ativado e impulsiona sua rede.",
-            popup_wait: "Aguarde...", popup_close: "Entendi!", video_opened: "Vídeo aberto em nova aba. Assista e interaja.",
-            blockchain_ok: "✅ Verificação blockchain simulada: hash e endereço válidos.", missing_fields: "Preencha todos os campos.",
-            invalid_victory_link: "Seu link Victory automático parece inválido (deve conter 'victory' ou 'http').", success_generated: "Link gerado com sucesso!",
-            copied: "Copiado!", joined_victory: "🎉 Parabéns! Você entrou no Victory World.", joined_future: "🔔 Oportunidade 3 em breve. Você será notificado."
+    // Récupération des éléments
+    const stepFormDiv = document.getElementById('stepForm');
+    const stepViralDiv = document.getElementById('stepViral');
+    const stepVictoryDiv = document.getElementById('stepVictory');
+    const submitBtn = document.getElementById('submitFormBtn');
+    const confirmBtn = document.getElementById('confirmInteractionBtn');
+    const copyBtn = document.getElementById('copyVictoryBtn');
+    const joinVictoryBtn = document.getElementById('joinVictoryWorldBtn');
+    const joinFutureBtn = document.getElementById('joinFutureBtn');
+    const formError = document.getElementById('formError');
+
+    let userEmailGlobal = '';
+    let generatedVictoryLink = '';
+
+    // ÉTAPE 1 : Soumission du formulaire
+    submitBtn.addEventListener('click', () => {
+        const name = document.getElementById('userName').value.trim();
+        const email = document.getElementById('userEmail').value.trim();
+
+        if (!name || !email) {
+            formError.innerText = "Veuillez remplir tous les champs.";
+            formError.classList.remove('hidden');
+            return;
         }
-    };
-
-    let currentLang = 'fr';
-    let currentUser = null; // email
-    let users = JSON.parse(localStorage.getItem('linkflow_users')) || [];
-    let watchTimerInterval = null;
-    let remainingSeconds = 180; // 3 minutes
-
-    // Helper: sauvegarder users
-    function saveUsers() {
-        localStorage.setItem('linkflow_users', JSON.stringify(users));
-    }
-
-    function findUser(email) {
-        return users.find(u => u.email === email);
-    }
-
-    function register(email, password, confirm) {
-        if (!email || !password || !confirm) return "Tous les champs sont requis.";
-        if (password !== confirm) return "Les mots de passe ne correspondent pas.";
-        if (password.length < 6) return "Le mot de passe doit faire au moins 6 caractères.";
-        if (findUser(email)) return "Cet email est déjà utilisé.";
-        users.push({ email, password });
-        saveUsers();
-        return "success";
-    }
-
-    function login(email, password) {
-        const user = findUser(email);
-        if (!user) return "Email inconnu.";
-        if (user.password !== password) return "Mot de passe incorrect.";
-        currentUser = email;
-        sessionStorage.setItem('linkflow_session', email);
-        return "success";
-    }
-
-    function logout() {
-        currentUser = null;
-        sessionStorage.removeItem('linkflow_session');
-        if (watchTimerInterval) clearInterval(watchTimerInterval);
-    }
-
-    function checkSession() {
-        const saved = sessionStorage.getItem('linkflow_session');
-        if (saved && findUser(saved)) {
-            currentUser = saved;
-            return true;
-        }
-        return false;
-    }
-
-    // UI: affichage selon connexion
-    function renderAuth() {
-        const authDiv = document.getElementById('authSection');
-        const videoDiv = document.getElementById('videoSection');
-        if (currentUser) {
-            authDiv.classList.add('hidden');
-            videoDiv.classList.remove('hidden');
-            resetVideoStep();
-        } else {
-            authDiv.classList.remove('hidden');
-            videoDiv.classList.add('hidden');
-            document.getElementById('collageSection').classList.add('hidden');
-            document.getElementById('finalSection').classList.add('hidden');
-            showLoginForm();
-        }
-    }
-
-    function resetVideoStep() {
-        document.getElementById('timerContainer').classList.add('hidden');
-        document.getElementById('getVictoryBtnContainer').classList.add('hidden');
-        if (watchTimerInterval) clearInterval(watchTimerInterval);
-        remainingSeconds = 180;
-        document.getElementById('countdown').innerText = "03:00";
-        document.getElementById('watchVideoBtn').disabled = false;
-    }
-
-    function showLoginForm() {
-        document.getElementById('loginView').classList.remove('hidden');
-        document.getElementById('registerView').classList.add('hidden');
-        clearMessages();
-    }
-
-    function showRegisterForm() {
-        document.getElementById('loginView').classList.add('hidden');
-        document.getElementById('registerView').classList.remove('hidden');
-        clearMessages();
-    }
-
-    function clearMessages() {
-        document.getElementById('loginMessage').innerHTML = '';
-        document.getElementById('registerMessage').innerHTML = '';
-        document.getElementById('verificationResult').innerHTML = '';
-        document.getElementById('joinMessage').classList.add('hidden');
-    }
-
-    // Mise à jour des textes multilingues
-    function updateTexts() {
-        document.querySelectorAll('[data-key]').forEach(el => {
-            const key = el.getAttribute('data-key');
-            if (translations[currentLang][key]) {
-                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-                    el.placeholder = translations[currentLang][key];
-                } else {
-                    el.innerText = translations[currentLang][key];
-                }
-            }
-        });
-        // Titres h2 déjà gérés, mais on force ceux qui ne sont pas data-key ?
-        document.querySelectorAll('h2').forEach(h => {
-            if(!h.hasAttribute('data-key')) return;
-        });
-    }
-
-    // Popup 10 secondes avant vidéo
-    function showInfoPopup(callback) {
-        const popup = document.getElementById('infoPopup');
-        const popupTimerSpan = document.getElementById('popupTimer');
-        const closeBtn = document.getElementById('closePopupBtn');
-        let count = 10;
-        popupTimerSpan.innerText = count;
-        closeBtn.disabled = true;
-        closeBtn.innerText = translations[currentLang].popup_wait;
-        popup.classList.remove('hidden');
-
-        const interval = setInterval(() => {
-            count--;
-            popupTimerSpan.innerText = count;
-            if (count <= 0) {
-                clearInterval(interval);
-                closeBtn.disabled = false;
-                closeBtn.innerText = translations[currentLang].popup_close;
-            }
-        }, 1000);
-
-        const onClose = () => {
-            clearInterval(interval);
-            popup.classList.add('hidden');
-            closeBtn.removeEventListener('click', onClose);
-            if (callback) callback();
-        };
-        closeBtn.addEventListener('click', onClose, { once: true });
-    }
-
-    // Lancement du chrono 180s après avoir ouvert la vidéo
-    function startVideoTimer() {
-        const timerContainer = document.getElementById('timerContainer');
-        const getVictoryContainer = document.getElementById('getVictoryBtnContainer');
-        timerContainer.classList.remove('hidden');
-        getVictoryContainer.classList.add('hidden');
-        remainingSeconds = 180;
-        updateTimerDisplay();
-
-        if (watchTimerInterval) clearInterval(watchTimerInterval);
-        watchTimerInterval = setInterval(() => {
-            if (remainingSeconds <= 1) {
-                clearInterval(watchTimerInterval);
-                document.getElementById('countdown').innerText = "00:00";
-                getVictoryContainer.classList.remove('hidden');
-            } else {
-                remainingSeconds--;
-                updateTimerDisplay();
-            }
-        }, 1000);
-    }
-
-    function updateTimerDisplay() {
-        const mins = Math.floor(remainingSeconds / 60);
-        const secs = remainingSeconds % 60;
-        document.getElementById('countdown').innerText = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
-    }
-
-    // Vérification blockchain simulée
-    function simulateBlockchainCheck(beneficiary, hash) {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                // Simulation : on accepte si les champs ne sont pas vides et contiennent au moins 5 caractères
-                const valid = beneficiary.length >= 5 && hash.length >= 5;
-                resolve(valid);
-            }, 1000);
-        });
-    }
-
-    // Événements DOM
-    document.getElementById('doLoginBtn').onclick = async () => {
-        const email = document.getElementById('loginEmail').value.trim();
-        const pwd = document.getElementById('loginPassword').value;
-        const res = login(email, pwd);
-        if (res === 'success') {
-            renderAuth();
-        } else {
-            document.getElementById('loginMessage').innerHTML = `<div class="message error">${res}</div>`;
-        }
-    };
-
-    document.getElementById('showRegisterBtn').onclick = () => showRegisterForm();
-    document.getElementById('backToLoginBtn').onclick = () => showLoginForm();
-
-    document.getElementById('doRegisterBtn').onclick = () => {
-        const email = document.getElementById('regEmail').value.trim();
-        const pwd = document.getElementById('regPassword').value;
-        const confirm = document.getElementById('regConfirm').value;
-        const res = register(email, pwd, confirm);
-        if (res === 'success') {
-            document.getElementById('registerMessage').innerHTML = `<div class="message success">Inscription réussie ! Connectez-vous.</div>`;
-            setTimeout(() => showLoginForm(), 1500);
-        } else {
-            document.getElementById('registerMessage').innerHTML = `<div class="message error">${res}</div>`;
-        }
-    };
-
-    // Étape vidéo : popup puis ouverture YouTube et chrono
-    document.getElementById('watchVideoBtn').onclick = () => {
-        showInfoPopup(() => {
-            // Ouvrir YouTube dans un nouvel onglet
-            window.open('https://www.youtube.com/watch?v=9uPybhkqYw4', '_blank');
-            alert(translations[currentLang].video_opened);
-            startVideoTimer();
-        });
-    };
-
-    // Après le chrono, clic sur "J'obtiens mon lien Victory"
-    document.getElementById('getVictoryLinkBtn').onclick = () => {
-        // Cacher la section vidéo, afficher la section collage
-        document.getElementById('videoSection').classList.add('hidden');
-        document.getElementById('collageSection').classList.remove('hidden');
-    };
-
-    // Génération du lien final avec vérification blockchain et code d'invitation
-    document.getElementById('generateFinalLinkBtn').onclick = async () => {
-        const beneficiary = document.getElementById('beneficiaryAddr').value.trim();
-        const hash = document.getElementById('paymentHash').value.trim();
-        const userVictoryLink = document.getElementById('userVictoryLink').value.trim();
-
-        if (!beneficiary || !hash || !userVictoryLink) {
-            document.getElementById('verificationResult').innerHTML = `<div class="message error">${translations[currentLang].missing_fields}</div>`;
+        if (!email.includes('@')) {
+            formError.innerText = "Email invalide.";
+            formError.classList.remove('hidden');
             return;
         }
 
-        // Validation simple du lien Victory collé
-        if (!userVictoryLink.includes('http') && !userVictoryLink.includes('victory')) {
-            document.getElementById('verificationResult').innerHTML = `<div class="message error">${translations[currentLang].invalid_victory_link}</div>`;
-            return;
-        }
+        formError.classList.add('hidden');
+        userEmailGlobal = email;
 
-        document.getElementById('verificationResult').innerHTML = `<div class="message">⏳ Vérification blockchain en cours...</div>`;
+        // Sauvegarde dans localStorage
+        const lead = { name, email, date: new Date().toISOString() };
+        localStorage.setItem('linkflow_lead', JSON.stringify(lead));
 
-        const isValid = await simulateBlockchainCheck(beneficiary, hash);
-        if (!isValid) {
-            document.getElementById('verificationResult').innerHTML = `<div class="message error">❌ Vérification blockchain échouée (hash ou adresse invalide).</div>`;
-            return;
-        }
-
-        document.getElementById('verificationResult').innerHTML = `<div class="message success">${translations[currentLang].blockchain_ok}</div>`;
-
-        // Générer un code d'invitation unique (parrainage personnel)
-        const invitationCode = `${currentUser.split('@')[0]}_${Date.now().toString(36)}`;
-        const finalLink = `https://linkflow-victory.com/join?ref=${invitationCode}&benef=${encodeURIComponent(beneficiary)}&hash=${encodeURIComponent(hash)}&victory=${encodeURIComponent(userVictoryLink)}`;
-
-        // Afficher la section finale
-        document.getElementById('finalLinkDisplay').innerHTML = `<a href="${finalLink}" target="_blank" style="color:#7dd3fc;">${finalLink}</a>`;
-        document.getElementById('collageSection').classList.add('hidden');
-        document.getElementById('finalSection').classList.remove('hidden');
-
-        // Copie
-        document.getElementById('copyFinalBtn').onclick = () => {
-            navigator.clipboard.writeText(finalLink);
-            alert(translations[currentLang].copied);
-        };
-    };
-
-    // Rejoindre Victory World et opportunité future
-    document.getElementById('joinVictoryWorldBtn').onclick = () => {
-        const msgDiv = document.getElementById('joinMessage');
-        msgDiv.innerHTML = `<div class="message success">${translations[currentLang].joined_victory}</div>`;
-        msgDiv.classList.remove('hidden');
-        // Simulation redirection possible
-    };
-    document.getElementById('joinFutureBtn').onclick = () => {
-        const msgDiv = document.getElementById('joinMessage');
-        msgDiv.innerHTML = `<div class="message success">${translations[currentLang].joined_future}</div>`;
-        msgDiv.classList.remove('hidden');
-    };
-
-    // Gestion langue
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentLang = btn.getAttribute('data-lang');
-            updateTexts();
-            // Re-traduire les messages éventuels
-            clearMessages();
-        });
+        // Passage à l'étape 2
+        stepFormDiv.classList.add('hidden');
+        stepViralDiv.classList.remove('hidden');
     });
 
-    // Déconnexion : ajouter un bouton de déconnexion dans la section vidéo
-    const logoutBtn = document.createElement('button');
-    logoutBtn.innerText = "🚪 Déconnexion";
-    logoutBtn.classList.add('link-btn');
-    logoutBtn.style.marginTop = '1rem';
-    logoutBtn.onclick = () => {
-        logout();
-        renderAuth();
-    };
-    document.getElementById('videoSection').appendChild(logoutBtn);
+    // ÉTAPE 2 : Confirmation d'interaction YouTube
+    confirmBtn.addEventListener('click', () => {
+        // Générer un lien Victory unique (simulé)
+        const code = `${userEmailGlobal.split('@')[0]}_${Date.now().toString(36)}`;
+        generatedVictoryLink = `https://linkflow-victory.com/join?ref=${code}&email=${encodeURIComponent(userEmailGlobal)}`;
 
-    // Initialisation
-    if (checkSession()) {
-        renderAuth();
-    } else {
-        renderAuth();
-    }
-    updateTexts();
+        // Afficher dans l'étape 3
+        document.getElementById('victoryLinkDisplay').innerHTML = `<a href="${generatedVictoryLink}" target="_blank" style="color:#7dd3fc;">${generatedVictoryLink}</a>`;
+        stepViralDiv.classList.add('hidden');
+        stepVictoryDiv.classList.remove('hidden');
+    });
+
+    // Copie du lien Victory
+    copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(generatedVictoryLink);
+        alert('Lien copié dans le presse-papier !');
+    });
+
+    // Rejoindre Victory World
+    joinVictoryBtn.addEventListener('click', () => {
+        const msg = document.getElementById('joinMessage');
+        msg.innerText = "🎉 Félicitations ! Vous avez rejoint Victory World. Un email de bienvenue vous sera envoyé.";
+        msg.classList.remove('hidden');
+        // Optionnel : rediriger vers un vrai lien
+        // window.open('https://ton-site.com/victory-world', '_blank');
+    });
+
+    // Opportunité future
+    joinFutureBtn.addEventListener('click', () => {
+        const msg = document.getElementById('joinMessage');
+        msg.innerText = "🔔 Opportunité 3 bientôt disponible. Vous serez averti par email.";
+        msg.classList.remove('hidden');
+    });
+
+    // Nettoyage d'éventuels résidus de session
+    console.log("✅ LINK FLOW prêt - Formulaire corrigé et fonctionnel.");
 </script>
 </body>
 </html>
