@@ -147,7 +147,7 @@
   const SUPABASE_ANON_KEY = 'sb_publishable_lt7g7MVXBUSpDUvYtifwDw_a4us-Yiq';
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // === TRADUCTIONS (identique à avant) ===
+  // === TRADUCTIONS ===
   const translations = {
     fr: {
       login_title: "Connexion", login_btn: "Se connecter", no_account: "Pas de compte ? Inscrivez-vous",
@@ -272,6 +272,7 @@
   document.getElementById('showForgot').addEventListener('click', (e) => { e.preventDefault(); document.getElementById('loginForm').classList.add('hidden'); document.getElementById('forgotForm').classList.remove('hidden'); });
   document.getElementById('backToLogin').addEventListener('click', (e) => { e.preventDefault(); document.getElementById('forgotForm').classList.add('hidden'); document.getElementById('loginForm').classList.remove('hidden'); });
 
+  // ========== INSCRIPTION AVEC EMAILREDIRECTO ==========
   document.getElementById('registerBtn').addEventListener('click', async () => {
     const email = document.getElementById('regEmail').value;
     const password = document.getElementById('regPassword').value;
@@ -281,8 +282,22 @@
     if (password !== confirm) { showMessage('registerMessage', 'Les mots de passe ne correspondent pas'); return; }
     const validSponsorCodes = ['LINK2024', 'FLOW2025'];
     if (!validSponsorCodes.includes(sponsor)) { showMessage('registerMessage', 'Code parrain invalide'); return; }
-    const { data, error } = await supabaseClient.auth.signUp({ email, password, options: { data: { sponsor_code: sponsor } } });
-    if (error) { showMessage('registerMessage', error.message); } else { showMessage('registerMessage', 'Inscription réussie ! Vérifiez vos emails pour confirmer.', false); setTimeout(() => { document.getElementById('showLogin').click(); }, 3000); }
+
+    // AJOUT DE emailRedirectTo :
+    const { data, error } = await supabaseClient.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { sponsor_code: sponsor },
+        emailRedirectTo: 'https://eldamama.github.io/LINKFLOW-_COULEUR/'
+      }
+    });
+
+    if (error) { showMessage('registerMessage', error.message); }
+    else {
+      showMessage('registerMessage', 'Inscription réussie ! Vérifiez vos emails pour confirmer votre compte.', false);
+      setTimeout(() => { document.getElementById('showLogin').click(); }, 3000);
+    }
   });
 
   document.getElementById('loginBtn').addEventListener('click', async () => {
