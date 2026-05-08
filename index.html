@@ -2,8 +2,9 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>LinkFlow – Victoire Automatique</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkFlow - Victory Automatic | Parrainage BSC</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
             margin: 0;
@@ -12,319 +13,441 @@
         }
 
         body {
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(145deg, #0a0f1e 0%, #0c1222 100%);
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0f1e 0%, #0c1222 100%);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 1.5rem;
+            padding: 2rem 1rem;
+            color: #e2e8f0;
         }
 
-        /* Carte principale */
-        .main-card {
-            max-width: 680px;
-            width: 100%;
-            background: rgba(18, 25, 45, 0.75);
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(15, 25, 45, 0.75);
             backdrop-filter: blur(12px);
-            border-radius: 2.5rem;
-            border: 1px solid rgba(66, 153, 225, 0.3);
-            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(66, 153, 225, 0.1);
-            padding: 2rem 1.8rem;
-            transition: all 0.2s ease;
-            text-align: center;
+            border-radius: 2rem;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            padding: 2rem;
+            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
         }
 
         h1 {
             font-size: 1.9rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #FFF, #94a3f8);
+            background: linear-gradient(135deg, #fff, #94a3f8);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
-            letter-spacing: -0.3px;
-            margin-bottom: 0.6rem;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            margin: 1.5rem 0 1rem;
+            color: #facc15;
         }
 
         .badge {
             display: inline-block;
             background: #2dd4bf20;
-            backdrop-filter: blur(4px);
-            border-radius: 60px;
             padding: 0.3rem 1rem;
+            border-radius: 60px;
             font-size: 0.75rem;
-            font-weight: 500;
             color: #9ae6f0;
-            border: 0.5px solid #2dd4bf70;
             margin-bottom: 1.5rem;
         }
 
-        p {
-            color: #cbd5e1;
-            line-height: 1.5;
-            margin: 1rem 0;
-            font-size: 1rem;
-        }
-
-        .btn {
-            font-family: inherit;
-            font-weight: 600;
-            padding: 0.9rem 1.8rem;
-            border-radius: 60px;
-            font-size: 1rem;
-            letter-spacing: 0.3px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border: none;
-            background: #1e293b;
-            color: #e2e8f0;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        input, select, button {
             width: 100%;
-            max-width: 320px;
-            margin: 0.8rem auto;
-            display: inline-block;
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            border-radius: 1rem;
+            border: none;
+            font-size: 1rem;
+            transition: all 0.2s;
         }
 
-        .btn-primary {
-            background: linear-gradient(95deg, #2563eb, #1e40af);
+        input, select {
+            background: #1e293b;
             color: white;
-            box-shadow: 0 8px 18px -6px #1e3a8a80;
-            border: 1px solid #3b82f6;
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.5;
-            transform: none;
-            cursor: not-allowed;
-            background: #334155;
-            box-shadow: none;
-            border-color: #475569;
-        }
-
-        .btn-primary:not(:disabled):hover {
-            transform: translateY(-2px);
-            background: linear-gradient(95deg, #3b82f6, #2563eb);
-            box-shadow: 0 12px 22px -10px #1e3a8a;
-        }
-
-        .btn-secondary {
-            background: #0f172a;
             border: 1px solid #334155;
         }
 
-        .btn-secondary:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6;
         }
 
-        .btn-secondary:not(:disabled):hover {
-            background: #1e293b;
-            border-color: #5b6a8c;
+        button {
+            background: linear-gradient(95deg, #2563eb, #1e40af);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            background: linear-gradient(95deg, #3b82f6, #2563eb);
+        }
+
+        .btn-secondary {
+            background: #334155;
+        }
+
+        .alert {
+            background: #991b1b;
+            padding: 0.8rem;
+            border-radius: 1rem;
+            margin: 1rem 0;
+            border-left: 4px solid #ef4444;
+        }
+
+        .success {
+            background: #065f46;
+            border-left-color: #10b981;
+        }
+
+        .step {
+            display: none;
+            margin-top: 1rem;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        .code-block {
+            background: #0f172a;
+            padding: 0.8rem;
+            border-radius: 0.8rem;
+            font-family: monospace;
+            word-break: break-all;
+            margin: 0.5rem 0;
+        }
+
+        .opportunity-card {
+            border: 1px solid #334155;
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 1rem;
+            background: rgba(0,0,0,0.2);
         }
 
         hr {
-            border: none;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #2d3a5e, transparent);
-            margin: 1.6rem 0;
-        }
-
-        /* Popup overlay */
-        .popup-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(8px);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 1.5rem;
-        }
-
-        .popup-card {
-            background: #0f172ad9;
-            backdrop-filter: blur(16px);
-            max-width: 500px;
-            width: 100%;
-            border-radius: 2rem;
-            border: 1px solid #3b82f680;
-            padding: 2rem 1.8rem;
-            text-align: center;
-            box-shadow: 0 30px 40px -20px black;
-            animation: fadeScale 0.25s ease-out;
-        }
-
-        .popup-card h2 {
-            color: #facc15;
-            font-size: 1.7rem;
-            margin-bottom: 1rem;
-        }
-
-        .popup-card ul {
-            text-align: left;
-            margin: 1.2rem 0;
-            padding-left: 1.5rem;
-            color: #cbd5e1;
-        }
-
-        .popup-card li {
-            margin: 0.8rem 0;
-            line-height: 1.4;
-        }
-
-        @keyframes fadeScale {
-            from {
-                opacity: 0;
-                transform: scale(0.96);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .footer-note {
-            font-size: 0.75rem;
-            margin-top: 1.8rem;
-            color: #5b6e8c;
+            border-color: #334155;
+            margin: 1.5rem 0;
         }
     </style>
 </head>
 <body>
+<div class="container">
+    <div class="badge">⚡ VICTORY AUTOMATIC · PARRAINAGE BSC ⚡</div>
+    <h1>🚀 LINKFLOW · VICTORY AUTOMATIC</h1>
+    <p>Plateforme de parrainage décentralisée avec vérification blockchain BSC. Générez votre lien, invitez des filleuls, et suivez les opportunités.</p>
+    <hr>
 
-    <div class="main-card">
-        <div class="badge">⚡ Engagement collectif ⚡</div>
-        <h1>LINKFLOW · VICTORY AUTOMATIC</h1>
-        <p>Débloquez la puissance du réseau : chaque like, commentaire et abonnement propulse la vidéo vers le sommet des algorithmes.</p>
-        
-        <hr />
-        
-        <!-- Le bouton final qui devient actif après la vidéo -->
-        <button id="get-link-btn" class="btn btn-primary" disabled>📌 J'obtiens le lien Victory Automatic</button>
-        <p class="footer-note">✅ Aucune action sans votre engagement préalable</p>
+    <!-- Étape 1 : Authentification -->
+    <div id="step-auth" class="step active">
+        <h2>🔐 Inscription / Connexion</h2>
+        <input type="email" id="email" placeholder="Email" autocomplete="email">
+        <input type="password" id="password" placeholder="Mot de passe">
+        <input type="text" id="sponsor-code" placeholder="Code parrain (optionnel)">
+        <input type="text" id="wallet-address" placeholder="Adresse wallet BSC (0x...)">
+        <input type="text" id="beneficiary-address" placeholder="Adresse bénéficiaire (pour le don)">
+        <button id="btn-signup">📝 S'inscrire</button>
+        <button id="btn-login" class="btn-secondary">🔑 Se connecter</button>
+        <div id="auth-status"></div>
     </div>
 
-    <!-- POP-UP après inscription / affiché au chargement -->
-    <div id="popup" class="popup-overlay">
-        <div class="popup-card">
-            <h2>🎥 Pourquoi interagir avec la vidéo ?</h2>
-            <p>Ton interaction (like, commentaire, abonnement) est essentielle :</p>
-            <ul>
-                <li>⚡ Chaque action incite l’algorithme YouTube à mettre la vidéo en avant.</li>
-                <li>🚀 Une vidéo propulsée devient virale et attire de nouveaux adhérents.</li>
-                <li>🌍 Plus la communauté grandit, plus chacun bénéficie d’un réseau solide.</li>
-            </ul>
-            <p>👉 <strong>En participant, tu contribues directement à la croissance collective.</strong></p>
-            <button id="watch-btn" class="btn btn-secondary" disabled>📺 Je regarde la vidéo (débloquage dans 10 sec)</button>
-        </div>
+    <!-- Étape 2 : Vérification du don BSC -->
+    <div id="step-donation" class="step">
+        <h2>💰 Vérification du don (BSC)</h2>
+        <p>Collez le hash de votre transaction BSC (après avoir envoyé le montant requis à l'adresse bénéficiaire).</p>
+        <input type="text" id="tx-hash" placeholder="0x...">
+        <select id="bsc-network">
+            <option value="mainnet">BSC Mainnet</option>
+            <option value="testnet">BSC Testnet (pour test)</option>
+        </select>
+        <button id="btn-verify-tx">🔍 Vérifier la transaction</button>
+        <div id="donation-status"></div>
     </div>
 
-    <script>
-        (function() {
-            // Récupération des éléments
-            const popup = document.getElementById('popup');
-            const watchBtn = document.getElementById('watch-btn');
-            const getLinkBtn = document.getElementById('get-link-btn');
-            
-            let youtubeTimer = null;
-            let videoOpened = false;
-            let countdownInterval = null;
+    <!-- Étape 3 : Génération du lien LinkFlow -->
+    <div id="step-linkflow" class="step">
+        <h2>🔗 Générez votre lien personnel LinkFlow</h2>
+        <p>Une fois votre don vérifié, vous pouvez créer votre lien de parrainage unique.</p>
+        <button id="btn-generate-link">✨ Générer mon lien LinkFlow</button>
+        <div id="linkflow-result"></div>
+    </div>
 
-            // Afficher le pop-up immédiatement
-            function showPopup() {
-                if (popup) {
-                    popup.style.display = 'flex';
-                }
-                // Activer le bouton "Je regarde la vidéo" après 10 secondes
-                setTimeout(() => {
-                    if (watchBtn) {
-                        watchBtn.disabled = false;
-                        watchBtn.innerText = '🎬 Je regarde la vidéo (prêt)';
-                    }
-                }, 10000);
+    <!-- Étape 4 : Opportunités (Follow Me) -->
+    <div id="step-opportunities" class="step">
+        <h2>🌍 Opportunités actives (Follow Me)</h2>
+        <div id="opportunities-list"></div>
+        <div id="my-opportunities"></div>
+    </div>
+
+    <button id="btn-logout" class="btn-secondary" style="margin-top: 2rem;">🚪 Déconnexion</button>
+</div>
+
+<script>
+    // ========== CONFIGURATION SUPABASE ==========
+    const SUPABASE_URL = 'https://xyfnhxxgvqjinfmlgduz.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_lt7g7MVXBUSpDUvYtifwDw_a4us-Yiq';
+    const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let currentUser = null;
+
+    // Helper : afficher une étape
+    function setStep(stepName) {
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+        document.getElementById(`step-${stepName}`).classList.add('active');
+    }
+
+    // Vérifier l'état de session et rediriger vers la bonne étape
+    async function checkSession() {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+            currentUser = null;
+            setStep('auth');
+            return;
+        }
+        currentUser = user;
+
+        // Récupérer le profil
+        const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', user.id)
+            .single();
+
+        if (profileError || !profile) {
+            // Profil manquant (cas improbable, mais sécurité)
+            setStep('auth');
+            return;
+        }
+
+        // Vérifier si un don vérifié existe
+        const { data: donation } = await supabase
+            .from('donations')
+            .select('verified')
+            .eq('user_id', user.id)
+            .eq('verified', true)
+            .maybeSingle();
+
+        if (!donation) {
+            setStep('donation');
+            return;
+        }
+
+        // Vérifier si le lien LinkFlow est déjà généré
+        if (profile.personal_link && profile.linkflow_code) {
+            // Afficher le lien déjà existant
+            document.getElementById('linkflow-result').innerHTML = `
+                <div class="success alert">
+                    ✅ Votre lien LinkFlow est déjà actif :<br>
+                    <div class="code-block">🔗 <a href="${profile.personal_link}" target="_blank">${profile.personal_link}</a></div>
+                    Code invitation : <strong>${profile.linkflow_code}</strong>
+                </div>
+            `;
+            setStep('opportunities');
+            loadOpportunities();
+        } else {
+            setStep('linkflow');
+        }
+    }
+
+    // Inscription
+    document.getElementById('btn-signup').onclick = async () => {
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const sponsorCode = document.getElementById('sponsor-code').value.trim() || null;
+        const wallet = document.getElementById('wallet-address').value.trim();
+        const beneficiary = document.getElementById('beneficiary-address').value.trim();
+
+        if (!email || !password || !wallet || !beneficiary) {
+            document.getElementById('auth-status').innerHTML = '<div class="alert">⚠️ Tous les champs sauf code parrain sont requis.</div>';
+            return;
+        }
+
+        document.getElementById('auth-status').innerHTML = 'Création du compte...';
+
+        // 1. Créer l'utilisateur dans Auth
+        const { data: authData, error: signUpError } = await supabase.auth.signUp({ email, password });
+        if (signUpError) {
+            document.getElementById('auth-status').innerHTML = `<div class="alert">Erreur : ${signUpError.message}</div>`;
+            return;
+        }
+
+        // 2. Appeler la fonction RPC pour créer le profil avec parrain
+        const { data: profileResult, error: rpcError } = await supabase.rpc('create_profile_with_sponsor', {
+            user_id: authData.user.id,
+            user_email: email,
+            wallet_addr: wallet,
+            beneficiary_addr: beneficiary,
+            sponsor_code: sponsorCode
+        });
+
+        if (rpcError || !profileResult?.success) {
+            // Nettoyer l'utilisateur (optionnel, mais recommandé)
+            await supabase.auth.admin.deleteUser(authData.user.id);
+            document.getElementById('auth-status').innerHTML = `<div class="alert">Erreur lors de la création du profil : ${rpcError?.message || profileResult?.error}</div>`;
+            return;
+        }
+
+        document.getElementById('auth-status').innerHTML = '<div class="success alert">✅ Inscription réussie ! Connectez-vous maintenant.</div>';
+        // Connexion automatique après signUp (selon config Supabase, parfois besoin de confirmer email)
+        // On tente une connexion directe
+        const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+        if (signInError) {
+            document.getElementById('auth-status').innerHTML += '<div>Veuillez vous connecter manuellement.</div>';
+        } else {
+            checkSession();
+        }
+    };
+
+    // Connexion
+    document.getElementById('btn-login').onclick = async () => {
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        if (!email || !password) {
+            document.getElementById('auth-status').innerHTML = '<div class="alert">Email et mot de passe requis</div>';
+            return;
+        }
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+            document.getElementById('auth-status').innerHTML = `<div class="alert">${error.message}</div>`;
+        } else {
+            checkSession();
+        }
+    };
+
+    // Vérification transaction BSC
+    document.getElementById('btn-verify-tx').onclick = async () => {
+        const txHash = document.getElementById('tx-hash').value.trim();
+        const network = document.getElementById('bsc-network').value;
+        if (!txHash) {
+            document.getElementById('donation-status').innerHTML = '<div class="alert">Hash de transaction requis</div>';
+            return;
+        }
+        document.getElementById('donation-status').innerHTML = '⏳ Vérification en cours...';
+        
+        // Appel à l'Edge Function verify-donation
+        const { data, error } = await supabase.functions.invoke('verify-donation', {
+            body: { tx_hash: txHash, bsc_network: network }
+        });
+
+        if (error) {
+            document.getElementById('donation-status').innerHTML = `<div class="alert">Erreur API : ${error.message}</div>`;
+        } else if (data.verified) {
+            document.getElementById('donation-status').innerHTML = `<div class="success alert">✅ Transaction vérifiée ! Montant : ${data.amount || '?'} BNB. Vous pouvez maintenant générer votre lien.</div>`;
+            setStep('linkflow');
+        } else {
+            document.getElementById('donation-status').innerHTML = '<div class="alert">❌ Transaction non valide ou inexistante sur la blockchain.</div>';
+        }
+    };
+
+    // Génération du lien LinkFlow
+    document.getElementById('btn-generate-link').onclick = async () => {
+        document.getElementById('linkflow-result').innerHTML = '⏳ Génération en cours...';
+        const { data, error } = await supabase.functions.invoke('generate-linkflow');
+        if (error || !data?.success) {
+            document.getElementById('linkflow-result').innerHTML = `<div class="alert">Erreur : ${error?.message || data?.error}</div>`;
+        } else {
+            document.getElementById('linkflow-result').innerHTML = `
+                <div class="success alert">
+                    ✅ Votre lien LinkFlow est prêt !<br>
+                    <div class="code-block">🔗 <a href="${data.personal_link}" target="_blank">${data.personal_link}</a></div>
+                    Code invitation : <strong>${data.linkflow_code}</strong><br>
+                    Partagez ce code ou ce lien à vos filleuls.
+                </div>
+            `;
+            setStep('opportunities');
+            loadOpportunities();
+        }
+    };
+
+    // Charger les opportunités disponibles et celles de l'utilisateur
+    async function loadOpportunities() {
+        // Récupérer toutes les opportunités actives
+        const { data: allOpps, error: oppsError } = await supabase
+            .from('opportunities')
+            .select('*')
+            .eq('is_active', true)
+            .order('display_order', { ascending: true });
+        
+        if (oppsError) {
+            console.error(oppsError);
+            return;
+        }
+
+        // Récupérer les opportunités auxquelles l'utilisateur est déjà inscrit
+        const { data: myOpps } = await supabase
+            .from('user_opportunities')
+            .select('opportunity_id');
+        const myOppIds = myOpps?.map(o => o.opportunity_id) || [];
+
+        const listDiv = document.getElementById('opportunities-list');
+        const myDiv = document.getElementById('my-opportunities');
+
+        if (allOpps && allOpps.length > 0) {
+            listDiv.innerHTML = '<h3>📢 Opportunités disponibles</h3>';
+            for (const opp of allOpps) {
+                const isJoined = myOppIds.includes(opp.id);
+                listDiv.innerHTML += `
+                    <div class="opportunity-card">
+                        <strong>${opp.name}</strong><br>
+                        ${opp.description || ''}<br>
+                        ${!isJoined ? `<button class="join-opp-btn" data-id="${opp.id}">➕ Rejoindre cette opportunité</button>` : '<span>✅ Vous y participez déjà</span>'}
+                    </div>
+                `;
             }
-
-            // Fonction pour démarrer le timer de 3min (180 secondes) après ouverture vidéo
-            function startVideoEngagementTimer() {
-                if (countdownInterval) clearInterval(countdownInterval);
-                let remainingSeconds = 180; // 3 minutes
-
-                // Désactiver le bouton de lien en attendant
-                if (getLinkBtn) getLinkBtn.disabled = true;
-                
-                countdownInterval = setInterval(() => {
-                    remainingSeconds--;
-                    
-                    // Optionnel : mettre à jour un texte sur le bouton watch ou autre feedback
-                    if (remainingSeconds <= 0) {
-                        clearInterval(countdownInterval);
-                        countdownInterval = null;
-                        if (getLinkBtn) {
-                            getLinkBtn.disabled = false;
-                            // Petit effet visuel + texte modifié
-                            getLinkBtn.innerText = '🔓 Lien Victory Automatic débloqué !';
-                            getLinkBtn.classList.add('btn-primary');
-                        }
-                        // Optionnel : fermer ou masquer le pop-up après déblocage (pour ne pas gêner)
-                        if (popup) {
-                            popup.style.display = 'none';
-                        }
-                    } else if (getLinkBtn && getLinkBtn.disabled) {
-                        // On peut afficher un message dans le tooltip ou dans le footer, mais pas obligatoire
-                        // Rien de trop intrusif.
-                    }
-                }, 1000);
-            }
-
-            // Quand l’utilisateur clique sur "Je regarde la vidéo"
-            if (watchBtn) {
-                watchBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    if (watchBtn.disabled) return;
-                    
-                    // Empêcher plusieurs ouvertures intempestives
-                    if (videoOpened) return;
-                    videoOpened = true;
-                    
-                    // Ouvrir la vidéo YouTube dans un nouvel onglet
-                    window.open('https://www.youtube.com/watch?v=9uPybhkqYw4', '_blank');
-                    
-                    // Lancer le compte à rebours de 180 secondes
-                    startVideoEngagementTimer();
-                    
-                    // Optionnel : désactiver définitivement le bouton watch pour éviter un second reset
-                    watchBtn.disabled = true;
-                    watchBtn.innerText = '✅ Vidéo ouverte (timer actif)';
-                });
-            }
-
-            // Initialisation : afficher le popup au chargement de la page
-            showPopup();
-
-            // Si jamais l'utilisateur recharge la page et que le timer n'est pas actif,
-            // on réinitialise l'état sain. (Le localStorage pourrait être utilisé pour persister,
-            // mais la spec demande juste le comportement classique: l'utilisateur doit revoir la popup)
-            // Gestion gracieuse si le getLinkBtn est cliqué accidentellement tant que désactivé.
-            if (getLinkBtn) {
-                getLinkBtn.addEventListener('click', (e) => {
-                    if (getLinkBtn.disabled) {
-                        e.preventDefault();
-                        alert("⌛ Vous devez d'abord visionner la vidéo YouTube (timer 3 min) pour obtenir le lien.");
+            // Attacher les événements aux boutons "Rejoindre"
+            document.querySelectorAll('.join-opp-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const oppId = btn.dataset.id;
+                    const { data, error } = await supabase.functions.invoke('join-opportunity', {
+                        body: { opportunity_id: oppId }
+                    });
+                    if (error) {
+                        alert('Erreur : ' + error.message);
                     } else {
-                        // Redirection ou téléchargement / affichage du lien précieux
-                        // Ici nous pouvons rediriger vers une page de remerciement ou dévoiler un lien.
-                        // Simulons un lien "Victory Automatic"
-                        window.open('https://eldamama.github.io/LINKFLOW-_COULEUR/victory-link', '_blank');
-                        // ou directement remplacer le contenu de la page :
-                        // alert("Félicitations ! Voici ton accès : [LINK]");
+                        alert(`✅ Inscription réussie à l'opportunité ! Tous vos filleuls suivront automatiquement.`);
+                        loadOpportunities(); // Recharge
                     }
                 });
+            });
+        } else {
+            listDiv.innerHTML = '<p>Aucune opportunité active pour le moment.</p>';
+        }
+
+        // Afficher les opportunités rejointes
+        if (myOppIds.length > 0) {
+            const oppNames = [];
+            for (const id of myOppIds) {
+                const { data: opp } = await supabase.from('opportunities').select('name').eq('id', id).single();
+                if (opp) oppNames.push(opp.name);
             }
-        })();
-    </script>
+            myDiv.innerHTML = `<h3>📌 Mes opportunités actives</h3><ul>${oppNames.map(n => `<li>${n}</li>`).join('')}</ul>`;
+        } else {
+            myDiv.innerHTML = '<p>Vous n’avez encore rejoint aucune opportunité.</p>';
+        }
+    }
+
+    // Déconnexion
+    document.getElementById('btn-logout').onclick = async () => {
+        await supabase.auth.signOut();
+        currentUser = null;
+        location.reload();
+    };
+
+    // Au chargement
+    checkSession();
+</script>
 </body>
 </html>
