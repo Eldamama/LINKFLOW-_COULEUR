@@ -1,353 +1,330 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LINK FLOW - Authentification</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: system-ui, 'Segoe UI', 'Helvetica Neue', sans-serif;
-      background: linear-gradient(145deg, #f0f9ff 0%, #e6f0fa 100%);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    header {
-      text-align: center;
-      margin: 2rem 0 1rem;
-    }
-    .logo {
-      width: 80px;
-      height: auto;
-      border-radius: 20px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    }
-    h1 {
-      margin-top: 1rem;
-      font-size: 2rem;
-      color: #1a3e50;
-      letter-spacing: -0.5px;
-    }
-    nav {
-      background: white;
-      padding: 0.8rem 2rem;
-      border-radius: 60px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      margin-bottom: 2rem;
-      display: flex;
-      gap: 2rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    nav a {
-      text-decoration: none;
-      font-weight: 600;
-      color: #2c6e9e;
-      transition: 0.2s;
-    }
-    nav a:hover {
-      color: #0f3b4f;
-      transform: scale(1.05);
-    }
-    .container {
-      background: white;
-      border-radius: 32px;
-      box-shadow: 0 20px 35px rgba(0,0,0,0.1);
-      width: 90%;
-      max-width: 450px;
-      padding: 2rem 1.8rem;
-      margin-bottom: 2rem;
-    }
-    .tabs {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-      border-bottom: 2px solid #e2e8f0;
-      padding-bottom: 0.5rem;
-    }
-    .tab-btn {
-      background: none;
-      border: none;
-      font-size: 1.2rem;
-      font-weight: 600;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-      color: #5b6e8c;
-      transition: 0.2s;
-    }
-    .tab-btn.active {
-      color: #2c6e9e;
-      border-bottom: 3px solid #2c6e9e;
-      margin-bottom: -0.5rem;
-    }
-    .form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-    .form.hidden {
-      display: none;
-    }
-    input {
-      padding: 0.9rem 1rem;
-      border: 1px solid #cbd5e1;
-      border-radius: 28px;
-      font-size: 1rem;
-      outline: none;
-      transition: 0.2s;
-    }
-    input:focus {
-      border-color: #2c6e9e;
-      box-shadow: 0 0 0 3px rgba(44,110,158,0.2);
-    }
-    button {
-      background: #2c6e9e;
-      color: white;
-      border: none;
-      padding: 0.9rem;
-      border-radius: 40px;
-      font-weight: bold;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    button:hover {
-      background: #1f4e6e;
-      transform: scale(0.98);
-    }
-    .forgot-link {
-      text-align: right;
-      margin-top: -0.5rem;
-    }
-    .forgot-link a {
-      font-size: 0.85rem;
-      color: #4b7a9c;
-      text-decoration: none;
-    }
-    .forgot-link a:hover {
-      text-decoration: underline;
-    }
-    .message-area {
-      background: #f1f5f9;
-      padding: 0.8rem;
-      border-radius: 24px;
-      margin-top: 1rem;
-      text-align: center;
-      font-size: 0.9rem;
-      transition: 0.2s;
-    }
-    footer {
-      margin-top: auto;
-      padding: 1.5rem;
-      text-align: center;
-      color: #4b5563;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>LinkFlow – Victoire Automatique</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(145deg, #0a0f1e 0%, #0c1222 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+        }
+
+        /* Carte principale */
+        .main-card {
+            max-width: 680px;
+            width: 100%;
+            background: rgba(18, 25, 45, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 2.5rem;
+            border: 1px solid rgba(66, 153, 225, 0.3);
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(66, 153, 225, 0.1);
+            padding: 2rem 1.8rem;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #FFF, #94a3f8);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+            margin-bottom: 0.6rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #2dd4bf20;
+            backdrop-filter: blur(4px);
+            border-radius: 60px;
+            padding: 0.3rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #9ae6f0;
+            border: 0.5px solid #2dd4bf70;
+            margin-bottom: 1.5rem;
+        }
+
+        p {
+            color: #cbd5e1;
+            line-height: 1.5;
+            margin: 1rem 0;
+            font-size: 1rem;
+        }
+
+        .btn {
+            font-family: inherit;
+            font-weight: 600;
+            padding: 0.9rem 1.8rem;
+            border-radius: 60px;
+            font-size: 1rem;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            background: #1e293b;
+            color: #e2e8f0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 320px;
+            margin: 0.8rem auto;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(95deg, #2563eb, #1e40af);
+            color: white;
+            box-shadow: 0 8px 18px -6px #1e3a8a80;
+            border: 1px solid #3b82f6;
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            transform: none;
+            cursor: not-allowed;
+            background: #334155;
+            box-shadow: none;
+            border-color: #475569;
+        }
+
+        .btn-primary:not(:disabled):hover {
+            transform: translateY(-2px);
+            background: linear-gradient(95deg, #3b82f6, #2563eb);
+            box-shadow: 0 12px 22px -10px #1e3a8a;
+        }
+
+        .btn-secondary {
+            background: #0f172a;
+            border: 1px solid #334155;
+        }
+
+        .btn-secondary:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary:not(:disabled):hover {
+            background: #1e293b;
+            border-color: #5b6a8c;
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #2d3a5e, transparent);
+            margin: 1.6rem 0;
+        }
+
+        /* Popup overlay */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 1.5rem;
+        }
+
+        .popup-card {
+            background: #0f172ad9;
+            backdrop-filter: blur(16px);
+            max-width: 500px;
+            width: 100%;
+            border-radius: 2rem;
+            border: 1px solid #3b82f680;
+            padding: 2rem 1.8rem;
+            text-align: center;
+            box-shadow: 0 30px 40px -20px black;
+            animation: fadeScale 0.25s ease-out;
+        }
+
+        .popup-card h2 {
+            color: #facc15;
+            font-size: 1.7rem;
+            margin-bottom: 1rem;
+        }
+
+        .popup-card ul {
+            text-align: left;
+            margin: 1.2rem 0;
+            padding-left: 1.5rem;
+            color: #cbd5e1;
+        }
+
+        .popup-card li {
+            margin: 0.8rem 0;
+            line-height: 1.4;
+        }
+
+        @keyframes fadeScale {
+            from {
+                opacity: 0;
+                transform: scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .footer-note {
+            font-size: 0.75rem;
+            margin-top: 1.8rem;
+            color: #5b6e8c;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="LINK FLOW Logo" class="logo" onerror="this.src='https://via.placeholder.com/80?text=LF'">
-    <h1>Bienvenue sur LINK FLOW</h1>
-  </header>
 
-  <nav>
-    <a href="#">Accueil</a>
-    <a href="video.html">Vidéo</a>
-    <a href="hub.html">Hub</a>
-  </nav>
-
-  <div class="container">
-    <div class="tabs">
-      <button class="tab-btn active" id="tab-signup">Inscription</button>
-      <button class="tab-btn" id="tab-login">Connexion</button>
+    <div class="main-card">
+        <div class="badge">⚡ Engagement collectif ⚡</div>
+        <h1>LINKFLOW · VICTORY AUTOMATIC</h1>
+        <p>Débloquez la puissance du réseau : chaque like, commentaire et abonnement propulse la vidéo vers le sommet des algorithmes.</p>
+        
+        <hr />
+        
+        <!-- Le bouton final qui devient actif après la vidéo -->
+        <button id="get-link-btn" class="btn btn-primary" disabled>📌 J'obtiens le lien Victory Automatic</button>
+        <p class="footer-note">✅ Aucune action sans votre engagement préalable</p>
     </div>
 
-    <!-- Formulaire d'inscription -->
-    <div id="signup-form-container" class="form">
-      <input type="email" id="signup-email" placeholder="Adresse email" required>
-      <input type="password" id="signup-password" placeholder="Mot de passe (min. 6 caractères)" required>
-      <input type="password" id="signup-confirm" placeholder="Confirmer le mot de passe" required>
-      <button id="signup-btn">S'inscrire</button>
+    <!-- POP-UP après inscription / affiché au chargement -->
+    <div id="popup" class="popup-overlay">
+        <div class="popup-card">
+            <h2>🎥 Pourquoi interagir avec la vidéo ?</h2>
+            <p>Ton interaction (like, commentaire, abonnement) est essentielle :</p>
+            <ul>
+                <li>⚡ Chaque action incite l’algorithme YouTube à mettre la vidéo en avant.</li>
+                <li>🚀 Une vidéo propulsée devient virale et attire de nouveaux adhérents.</li>
+                <li>🌍 Plus la communauté grandit, plus chacun bénéficie d’un réseau solide.</li>
+            </ul>
+            <p>👉 <strong>En participant, tu contribues directement à la croissance collective.</strong></p>
+            <button id="watch-btn" class="btn btn-secondary" disabled>📺 Je regarde la vidéo (débloquage dans 10 sec)</button>
+        </div>
     </div>
 
-    <!-- Formulaire de connexion (avec récupération) -->
-    <div id="login-form-container" class="form hidden">
-      <input type="email" id="login-email" placeholder="Votre email" required>
-      <input type="password" id="login-password" placeholder="Mot de passe" required>
-      <div class="forgot-link">
-        <a href="#" id="forgot-password-link">Mot de passe oublié ?</a>
-      </div>
-      <button id="login-btn">Se connecter</button>
-    </div>
+    <script>
+        (function() {
+            // Récupération des éléments
+            const popup = document.getElementById('popup');
+            const watchBtn = document.getElementById('watch-btn');
+            const getLinkBtn = document.getElementById('get-link-btn');
+            
+            let youtubeTimer = null;
+            let videoOpened = false;
+            let countdownInterval = null;
 
-    <div id="message-area" class="message-area"></div>
-  </div>
+            // Afficher le pop-up immédiatement
+            function showPopup() {
+                if (popup) {
+                    popup.style.display = 'flex';
+                }
+                // Activer le bouton "Je regarde la vidéo" après 10 secondes
+                setTimeout(() => {
+                    if (watchBtn) {
+                        watchBtn.disabled = false;
+                        watchBtn.innerText = '🎬 Je regarde la vidéo (prêt)';
+                    }
+                }, 10000);
+            }
 
-  <footer>
-    <p>🔗 LINK FLOW — gérez vos flux vidéo simplement</p>
-  </footer>
+            // Fonction pour démarrer le timer de 3min (180 secondes) après ouverture vidéo
+            function startVideoEngagementTimer() {
+                if (countdownInterval) clearInterval(countdownInterval);
+                let remainingSeconds = 180; // 3 minutes
 
-  <script>
-    (function() {
-      // Éléments DOM
-      const tabSignup = document.getElementById('tab-signup');
-      const tabLogin = document.getElementById('tab-login');
-      const signupContainer = document.getElementById('signup-form-container');
-      const loginContainer = document.getElementById('login-form-container');
-      const messageDiv = document.getElementById('message-area');
+                // Désactiver le bouton de lien en attendant
+                if (getLinkBtn) getLinkBtn.disabled = true;
+                
+                countdownInterval = setInterval(() => {
+                    remainingSeconds--;
+                    
+                    // Optionnel : mettre à jour un texte sur le bouton watch ou autre feedback
+                    if (remainingSeconds <= 0) {
+                        clearInterval(countdownInterval);
+                        countdownInterval = null;
+                        if (getLinkBtn) {
+                            getLinkBtn.disabled = false;
+                            // Petit effet visuel + texte modifié
+                            getLinkBtn.innerText = '🔓 Lien Victory Automatic débloqué !';
+                            getLinkBtn.classList.add('btn-primary');
+                        }
+                        // Optionnel : fermer ou masquer le pop-up après déblocage (pour ne pas gêner)
+                        if (popup) {
+                            popup.style.display = 'none';
+                        }
+                    } else if (getLinkBtn && getLinkBtn.disabled) {
+                        // On peut afficher un message dans le tooltip ou dans le footer, mais pas obligatoire
+                        // Rien de trop intrusif.
+                    }
+                }, 1000);
+            }
 
-      // Champs inscription
-      const signupEmail = document.getElementById('signup-email');
-      const signupPassword = document.getElementById('signup-password');
-      const signupConfirm = document.getElementById('signup-confirm');
-      const signupBtn = document.getElementById('signup-btn');
+            // Quand l’utilisateur clique sur "Je regarde la vidéo"
+            if (watchBtn) {
+                watchBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (watchBtn.disabled) return;
+                    
+                    // Empêcher plusieurs ouvertures intempestives
+                    if (videoOpened) return;
+                    videoOpened = true;
+                    
+                    // Ouvrir la vidéo YouTube dans un nouvel onglet
+                    window.open('https://www.youtube.com/watch?v=9uPybhkqYw4', '_blank');
+                    
+                    // Lancer le compte à rebours de 180 secondes
+                    startVideoEngagementTimer();
+                    
+                    // Optionnel : désactiver définitivement le bouton watch pour éviter un second reset
+                    watchBtn.disabled = true;
+                    watchBtn.innerText = '✅ Vidéo ouverte (timer actif)';
+                });
+            }
 
-      // Champs connexion
-      const loginEmail = document.getElementById('login-email');
-      const loginPassword = document.getElementById('login-password');
-      const loginBtn = document.getElementById('login-btn');
-      const forgotLink = document.getElementById('forgot-password-link');
+            // Initialisation : afficher le popup au chargement de la page
+            showPopup();
 
-      // Afficher un message
-      function showMessage(msg, type = 'info') {
-        messageDiv.textContent = msg;
-        if (type === 'error') {
-          messageDiv.style.backgroundColor = '#fee2e2';
-          messageDiv.style.color = '#b91c1c';
-        } else if (type === 'success') {
-          messageDiv.style.backgroundColor = '#dcfce7';
-          messageDiv.style.color = '#166534';
-        } else {
-          messageDiv.style.backgroundColor = '#eef2ff';
-          messageDiv.style.color = '#1e3a8a';
-        }
-        setTimeout(() => {
-          messageDiv.textContent = '';
-          messageDiv.style.backgroundColor = '#f1f5f9';
-          messageDiv.style.color = '#4b5563';
-        }, 5000);
-      }
-
-      // Basculer entre onglets
-      function setActiveTab(tab) {
-        if (tab === 'signup') {
-          tabSignup.classList.add('active');
-          tabLogin.classList.remove('active');
-          signupContainer.classList.remove('hidden');
-          loginContainer.classList.add('hidden');
-        } else {
-          tabLogin.classList.add('active');
-          tabSignup.classList.remove('active');
-          loginContainer.classList.remove('hidden');
-          signupContainer.classList.add('hidden');
-        }
-      }
-
-      tabSignup.addEventListener('click', () => setActiveTab('signup'));
-      tabLogin.addEventListener('click', () => setActiveTab('login'));
-
-      // ----- INSCRIPTION avec confirmation -----
-      signupBtn.addEventListener('click', () => {
-        const email = signupEmail.value.trim();
-        const pwd = signupPassword.value;
-        const confirmPwd = signupConfirm.value;
-
-        if (!email || !pwd || !confirmPwd) {
-          showMessage('❌ Tous les champs sont obligatoires.', 'error');
-          return;
-        }
-        if (!email.includes('@') || email.length < 5) {
-          showMessage('📧 Email invalide.', 'error');
-          return;
-        }
-        if (pwd.length < 6) {
-          showMessage('🔒 Le mot de passe doit contenir au moins 6 caractères.', 'error');
-          return;
-        }
-        if (pwd !== confirmPwd) {
-          showMessage('⚠️ Les mots de passe ne correspondent pas.', 'error');
-          return;
-        }
-
-        // Simulation inscription réussie (à remplacer par appel backend)
-        showMessage(`✅ Inscription réussie pour ${email} ! Vous pouvez maintenant vous connecter.`, 'success');
-        // Réinitialiser le formulaire
-        signupEmail.value = '';
-        signupPassword.value = '';
-        signupConfirm.value = '';
-        // Basculer vers l'onglet connexion après 1 sec (pratique)
-        setTimeout(() => {
-          setActiveTab('login');
-          // Pré-remplir l'email pour la connexion
-          loginEmail.value = email;
-        }, 1200);
-      });
-
-      // ----- CONNEXION (simulation) -----
-      loginBtn.addEventListener('click', () => {
-        const email = loginEmail.value.trim();
-        const pwd = loginPassword.value;
-
-        if (!email || !pwd) {
-          showMessage('📝 Veuillez remplir l\'email et le mot de passe.', 'error');
-          return;
-        }
-        // Simulation de vérification (dans la réalité : appel API)
-        showMessage(`🔐 Connexion simulée pour ${email}. (mot de passe masqué)`, 'success');
-        // Vous pourriez rediriger vers hub.html après succès
-        // window.location.href = "hub.html";
-        loginEmail.value = '';
-        loginPassword.value = '';
-      });
-
-      // ----- RÉCUPÉRATION DE MOT DE PASSE (oublié) -----
-      forgotLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        let email = loginEmail.value.trim();
-
-        // Si l'utilisateur n'a rien saisi dans le champ email du formulaire de connexion
-        if (!email) {
-          // On propose une saisie via un prompt (simple pour la démo)
-          const userEmail = prompt('Pour réinitialiser votre mot de passe, entrez votre adresse email :');
-          if (userEmail && userEmail.includes('@')) {
-            email = userEmail.trim();
-            showMessage(`📩 Un lien de réinitialisation a été envoyé à ${email} (simulation). Vérifiez votre messagerie.`, 'success');
-            loginEmail.value = email; // pré-remplir pour la prochaine tentative
-          } else if (userEmail) {
-            showMessage('❌ Adresse email invalide.', 'error');
-          }
-          return;
-        }
-
-        // Si un email est déjà présent dans le champ
-        if (email.includes('@')) {
-          showMessage(`📧 Un email de récupération a été envoyé à ${email}. Suivez les instructions.`, 'success');
-        } else {
-          showMessage('Veuillez entrer un email valide.', 'error');
-        }
-      });
-
-      // Petit bonus : appuyer sur Entrée dans un champ déclenche l'action du formulaire actif
-      const activeSubmit = (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          if (!signupContainer.classList.contains('hidden')) {
-            signupBtn.click();
-          } else {
-            loginBtn.click();
-          }
-        }
-      };
-      document.querySelectorAll('input').forEach(input => {
-        input.addEventListener('keypress', activeSubmit);
-      });
-    })();
-  </script>
+            // Si jamais l'utilisateur recharge la page et que le timer n'est pas actif,
+            // on réinitialise l'état sain. (Le localStorage pourrait être utilisé pour persister,
+            // mais la spec demande juste le comportement classique: l'utilisateur doit revoir la popup)
+            // Gestion gracieuse si le getLinkBtn est cliqué accidentellement tant que désactivé.
+            if (getLinkBtn) {
+                getLinkBtn.addEventListener('click', (e) => {
+                    if (getLinkBtn.disabled) {
+                        e.preventDefault();
+                        alert("⌛ Vous devez d'abord visionner la vidéo YouTube (timer 3 min) pour obtenir le lien.");
+                    } else {
+                        // Redirection ou téléchargement / affichage du lien précieux
+                        // Ici nous pouvons rediriger vers une page de remerciement ou dévoiler un lien.
+                        // Simulons un lien "Victory Automatic"
+                        window.open('https://eldamama.github.io/LINKFLOW-_COULEUR/victory-link', '_blank');
+                        // ou directement remplacer le contenu de la page :
+                        // alert("Félicitations ! Voici ton accès : [LINK]");
+                    }
+                });
+            }
+        })();
+    </script>
 </body>
 </html>
