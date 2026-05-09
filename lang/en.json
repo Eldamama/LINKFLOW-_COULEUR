@@ -1,1 +1,27 @@
-
+{
+    "popup_title": "🚀 Join the exclusive opportunity",
+    "popup_text": "Before continuing, you must interact with the YouTube video below.",
+    "close_popup": "Got it",
+    "watch_btn": "▶️ I watch the video",
+    "timer_text": "⏱️ Time left: {s} seconds",
+    "victory_btn": "✅ Get Victory Automatic link",
+    "victory_title": "🔗 Your Victory Automatic link",
+    "copy": "Copy",
+    "copied": "✅ Copied!",
+    "form_title": "📝 LinkFlow Registration",
+    "register_btn": "Sign up",
+    "don_title": "💸 Make your USDT BEP-20 donation",
+    "don_instructions": "Send 10 USDT to address: 0x123456789... Paste your hash after payment.",
+    "verify_btn": "🔍 Verify payment",
+    "gen_title": "🔗 Generate your LinkFlow link",
+    "generate_btn": "Generate my link",
+    "followme_msg": "✅ Thanks to Follow Me, all your referrals will follow your opportunities.",
+    "opp_title": "📢 Available opportunities",
+    "success_reg": "✅ Registration successful! Redirecting to donation section...",
+    "invalid_wallet": "❌ Invalid or already used wallet.",
+    "invalid_hash": "❌ Invalid hash or transaction not found.",
+    "valid_hash": "✅ Transaction validated! You can generate your link.",
+    "parrain_not_in_tree": "❌ This sponsor is not in the root genealogy. Link denied.",
+    "invalid_victory_link": "❌ Invalid Victory Automatic link.",
+    "victory_link_placeholder": "Paste your Victory Automatic link here"
+}
