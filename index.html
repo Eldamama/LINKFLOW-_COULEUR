@@ -2,433 +2,99 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>LinkFlow - USDT BEP-20 | Parrainage</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #0a0f1e 0%, #0c1222 100%);
-            min-height: 100vh;
-            padding: 1rem;
-            color: #e2e8f0;
-        }
-
-        .container {
-            max-width: 100%;
-            margin: 0 auto;
-            background: rgba(15, 25, 45, 0.75);
-            backdrop-filter: blur(12px);
-            border-radius: 1.5rem;
-            border: 1px solid rgba(59, 130, 246, 0.4);
-            padding: 1.5rem;
-        }
-
-        h1 {
-            font-size: 1.6rem;
-            background: linear-gradient(135deg, #fff, #94a3f8);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-
-        h2 {
-            font-size: 1.3rem;
-            margin: 1rem 0;
-            color: #facc15;
-        }
-
-        .usdt-badge {
-            background: #26a17b20;
-            color: #26a17b;
-            padding: 0.2rem 0.6rem;
-            border-radius: 1rem;
-            font-size: 0.7rem;
-            display: inline-block;
-            margin-left: 0.5rem;
-        }
-
-        input, select, button {
-            width: 100%;
-            padding: 0.8rem;
-            margin: 0.5rem 0;
-            border-radius: 1rem;
-            border: none;
-            font-size: 1rem;
-        }
-
-        input, select {
-            background: #1e293b;
-            color: white;
-            border: 1px solid #334155;
-        }
-
-        button {
-            background: linear-gradient(95deg, #2563eb, #1e40af);
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .btn-secondary {
-            background: #334155;
-        }
-
-        .alert {
-            background: #991b1b;
-            padding: 0.8rem;
-            border-radius: 1rem;
-            margin: 1rem 0;
-            border-left: 4px solid #ef4444;
-            font-size: 0.9rem;
-        }
-
-        .success {
-            background: #065f46;
-            border-left-color: #10b981;
-        }
-
-        .info {
-            background: #1e3a5f;
-            border-left-color: #3b82f6;
-        }
-
-        .step {
-            display: none;
-            margin-top: 1rem;
-        }
-
-        .step.active {
-            display: block;
-        }
-
-        .code-block {
-            background: #0f172a;
-            padding: 0.6rem;
-            border-radius: 0.8rem;
-            font-family: monospace;
-            word-break: break-all;
-            font-size: 0.8rem;
-        }
-
-        .opportunity-card {
-            border: 1px solid #334155;
-            margin: 0.8rem 0;
-            padding: 0.8rem;
-            border-radius: 1rem;
-            background: rgba(0,0,0,0.2);
-            font-size: 0.9rem;
-        }
-
-        .referral-stats {
-            background: #1e293b;
-            padding: 0.8rem;
-            border-radius: 1rem;
-            margin: 0.8rem 0;
-            font-size: 0.9rem;
-        }
-
-        .security-badge {
-            background: #10b98120;
-            padding: 0.5rem;
-            border-radius: 0.5rem;
-            font-size: 0.7rem;
-            text-align: center;
-            margin-top: 1rem;
-        }
-
-        hr {
-            border-color: #334155;
-            margin: 1rem 0;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>LinkFlow | Victory Automatic</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
-    <h1>🚀 LINKFLOW <span class="usdt-badge">USDT BEP-20</span></h1>
-    <p>Plateforme de parrainage avec <strong>USDT BEP-20</strong> sur Binance Smart Chain</p>
-    <hr>
 
-    <!-- Connexion -->
-    <div id="step-auth" class="step active">
-        <h2>🔐 Inscription / Connexion</h2>
-        
-        <input type="email" id="email" placeholder="Email">
-        <input type="password" id="password" placeholder="Mot de passe">
-        <input type="text" id="sponsor-code" placeholder="Code parrain (optionnel)">
-        <input type="text" id="wallet-address" placeholder="Votre adresse wallet BSC (USDT)">
-        <input type="text" id="beneficiary-address" placeholder="Adresse pour recevoir les USDT">
-        
-        <button id="btn-signup">📝 S'inscrire</button>
-        <button id="btn-login" class="btn-secondary">🔑 Se connecter</button>
-        
-        <div id="auth-status"></div>
-    </div>
-
-    <!-- Vérification USDT -->
-    <div id="step-donation" class="step">
-        <h2>💰 Vérification USDT BEP-20</h2>
-        
-        <div class="info alert">
-            💵 <strong>USDT BEP-20</strong><br>
-            📌 Envoyez <strong>10 USDT</strong> sur BSC à votre adresse bénéficiaire<br>
-            📌 Collez le hash de la transaction ci-dessous<br>
-            📌 Contrat USDT : <code>0x55d398326f99059ff775485246999027b3197955</code>
-        </div>
-        
-        <input type="text" id="tx-hash" placeholder="Hash transaction USDT (0x...)">
-        <button id="btn-verify-tx">🔍 Vérifier transaction USDT</button>
-        <div id="donation-status"></div>
-    </div>
-
-    <!-- Lien de parrainage -->
-    <div id="step-linkflow" class="step">
-        <h2>🔗 Générez votre lien LinkFlow</h2>
-        <button id="btn-generate-link">✨ Générer mon lien USDT</button>
-        <div id="linkflow-result"></div>
-    </div>
-
-    <!-- Opportunités -->
-    <div id="step-opportunities" class="step">
-        <h2>🌍 Opportunités Follow Me</h2>
-        <div id="referral-stats"></div>
-        <div id="opportunities-list"></div>
-        <div id="my-opportunities"></div>
-    </div>
-
-    <button id="btn-logout" class="btn-secondary">🚪 Déconnexion</button>
-    <div class="security-badge">🔒 Parrainage sécurisé - USDT BEP-20</div>
+<!-- 1. SÉLECTION DE LANGUE (toujours affichée en haut) -->
+<div id="language-selector">
+    <button data-lang="fr">🇫🇷 Français</button>
+    <button data-lang="en">🇬🇧 English</button>
+    <button data-lang="es">🇪🇸 Español</button>
+    <button data-lang="pt">🇵🇹 Português</button>
 </div>
 
-<script>
-    const SUPABASE_URL = 'https://xyfnhxxgvqjinfmlgduz.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_lt7g7MVXBUSpDUvYtifwDw_a4us-Yiq';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+<!-- 2. POPUP INITIAL PERSUASIF -->
+<div id="popup-persuasion" class="popup active">
+    <div class="popup-content">
+        <h2 id="popup-title">🚀 Rejoignez l'opportunité exclusive</h2>
+        <p id="popup-text">Avant de continuer, vous devez interagir avec la vidéo YouTube ci-dessous.</p>
+        <button id="close-persuasion" class="btn">J'ai compris</button>
+    </div>
+</div>
 
-    let currentUser = null;
-    let currentProfile = null;
+<!-- 3. SECTION VIDÉO + CHRONO -->
+<div id="video-section" style="display:none;">
+    <div class="video-container">
+        <iframe id="youtube-frame" width="100%" height="315" 
+            src="https://www.youtube.com/embed/dQw4w9WgXcQ?enablejsapi=1" 
+            title="YouTube video" frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+        </iframe>
+    </div>
+    <button id="watch-video-btn" class="btn btn-large">▶️ Je regarde la vidéo</button>
+    <div id="timer-display" class="timer">Temps restant : 180 s</div>
+    <button id="get-victory-link" class="btn btn-success" disabled style="display:none;">✅ Obtenir le lien Victory Automatic</button>
+</div>
 
-    function setStep(stepName) {
-        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-        document.getElementById(`step-${stepName}`).classList.add('active');
-    }
+<!-- 4. LIEN VICTORY AUTOMATIC -->
+<div id="victory-section" style="display:none;">
+    <h3 id="victory-title">🔗 Votre lien Victory Automatic</h3>
+    <input type="text" id="victory-link-display" readonly>
+    <button id="copy-victory-link" class="btn">📋 Copier</button>
+    <p id="victory-info"></p>
+</div>
 
-    async function checkSession() {
-        const { data: { user } } = await supabaseClient.auth.getUser();
-        if (!user) {
-            currentUser = null;
-            setStep('auth');
-            return;
-        }
-        currentUser = user;
+<!-- 5. INSCRIPTION LINKFLOW -->
+<div id="inscription-section" style="display:none;">
+    <h2 id="form-title">Inscription LinkFlow</h2>
+    <form id="register-form">
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Mot de passe" required>
+        <input type="text" id="parrain-code" placeholder="Code parrain (optionnel)">
+        <input type="text" id="wallet-bsc" placeholder="Votre adresse wallet BSC (USDT BEP-20)" required>
+        <input type="text" id="receiving-wallet" placeholder="Adresse pour recevoir les USD" required>
+        <button type="submit" class="btn btn-primary">S'inscrire</button>
+    </form>
+    <div id="register-message"></div>
+</div>
 
-        const { data: profile } = await supabaseClient
-            .from('profiles')
-            .select('*')
-            .eq('id', user.id)
-            .single();
+<!-- 6. DON USDT + HASH -->
+<div id="don-section" style="display:none;">
+    <h3 id="don-title">💸 Effectuer votre don USDT BEP-20</h3>
+    <p id="don-instructions"></p>
+    <input type="text" id="user-wallet-don" placeholder="Votre adresse USDT BEP-20">
+    <input type="text" id="transaction-hash" placeholder="Collez le hash de la transaction">
+    <button id="verify-payment" class="btn">Vérifier paiement</button>
+    <div id="payment-message"></div>
+</div>
 
-        if (!profile) {
-            setStep('auth');
-            return;
-        }
+<!-- 7. GÉNÉRATION LIEN LINKFLOW -->
+<div id="generation-section" style="display:none;">
+    <h3 id="gen-title">🔗 Générez votre lien LinkFlow</h3>
+    <input type="text" id="victory-link-input" placeholder="Collez votre lien Victory Automatic ici">
+    <button id="generate-linkflow" class="btn">Générer mon lien LinkFlow</button>
+    <div id="generated-link-container" style="display:none;">
+        <p><strong id="linkflow-label">Votre lien LinkFlow avec code d'invitation :</strong></p>
+        <input type="text" id="linkflow-final-link" readonly>
+        <button id="copy-linkflow" class="btn-small">Copier</button>
+        <p id="followme-info">✅ Grâce à Follow Me, tous vos filleuls suivront vos opportunités.</p>
+    </div>
+    <div id="gen-error" style="color:red;"></div>
+</div>
 
-        currentProfile = profile;
+<!-- 8. OPPORTUNITÉS SUIVANTES -->
+<div id="opportunites-section" style="display:none;">
+    <h3 id="opp-title">📢 Opportunités disponibles</h3>
+    <div id="opp-list">
+        <button class="opp-btn" data-opp="1">Opportunité 1 - Bientôt</button>
+        <button class="opp-btn" data-opp="2">Opportunité 2 - À venir</button>
+    </div>
+</div>
 
-        const { data: donation } = await supabaseClient
-            .from('donations')
-            .select('verified')
-            .eq('user_id', user.id)
-            .eq('verified', true)
-            .maybeSingle();
-
-        if (!donation) {
-            setStep('donation');
-            return;
-        }
-
-        if (profile.personal_link) {
-            document.getElementById('linkflow-result').innerHTML = `
-                <div class="success alert">
-                    ✅ Votre lien USDT est actif !<br>
-                    <div class="code-block">🔗 <a href="${profile.personal_link}" target="_blank">${profile.personal_link}</a></div>
-                    Code invitation : <strong>${profile.linkflow_code}</strong>
-                </div>`;
-            setStep('opportunities');
-            loadOpportunities();
-            loadReferralStats();
-        } else {
-            setStep('linkflow');
-        }
-    }
-
-    async function loadReferralStats() {
-        const { data: referrals } = await supabaseClient
-            .from('profiles')
-            .select('*')
-            .eq('sponsor_code_ref', currentProfile?.linkflow_code);
-        
-        const commissions = (referrals?.length || 0) * 1;
-        
-        document.getElementById('referral-stats').innerHTML = `
-            <div class="referral-stats">
-                📊 <strong>Mes statistiques USDT</strong><br>
-                👥 Filleuls : ${referrals?.length || 0}<br>
-                💰 Commissions : ${commissions} USDT<br>
-                🔗 Mon code : <strong>${currentProfile?.linkflow_code || 'Non généré'}</strong>
-            </div>`;
-    }
-
-    document.getElementById('btn-signup').onclick = async () => {
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
-        const sponsorCode = document.getElementById('sponsor-code').value.trim() || null;
-        const wallet = document.getElementById('wallet-address').value.trim();
-        const beneficiary = document.getElementById('beneficiary-address').value.trim();
-
-        if (!email || !password || !wallet || !beneficiary) {
-            document.getElementById('auth-status').innerHTML = '<div class="alert">⚠️ Tous les champs sont requis</div>';
-            return;
-        }
-
-        if (!wallet.match(/^0x[a-fA-F0-9]{40}$/)) {
-            document.getElementById('auth-status').innerHTML = '<div class="alert">⚠️ Adresse wallet invalide (0x...)</div>';
-            return;
-        }
-
-        if (!beneficiary.match(/^0x[a-fA-F0-9]{40}$/)) {
-            document.getElementById('auth-status').innerHTML = '<div class="alert">⚠️ Adresse bénéficiaire invalide</div>';
-            return;
-        }
-
-        document.getElementById('auth-status').innerHTML = '⏳ Création du compte USDT...';
-
-        const { data: authData, error: signUpError } = await supabaseClient.auth.signUp({ email, password });
-        if (signUpError) {
-            document.getElementById('auth-status').innerHTML = `<div class="alert">❌ ${signUpError.message}</div>`;
-            return;
-        }
-
-        const { data: rpcResult } = await supabaseClient.rpc('create_profile_with_sponsor', {
-            p_user_id: authData.user.id,
-            p_email: email,
-            p_wallet_address: wallet,
-            p_beneficiary_address: beneficiary,
-            p_sponsor_code: sponsorCode
-        });
-
-        if (rpcResult?.success) {
-            document.getElementById('auth-status').innerHTML = '<div class="success alert">✅ Inscription USDT réussie !</div>';
-            await supabaseClient.auth.signInWithPassword({ email, password });
-            checkSession();
-        } else {
-            document.getElementById('auth-status').innerHTML = '<div class="alert">❌ Erreur inscription</div>';
-        }
-    };
-
-    document.getElementById('btn-login').onclick = async () => {
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
-        const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
-        if (error) {
-            document.getElementById('auth-status').innerHTML = `<div class="alert">${error.message}</div>`;
-        } else {
-            checkSession();
-        }
-    };
-
-    document.getElementById('btn-verify-tx').onclick = async () => {
-        const txHash = document.getElementById('tx-hash').value.trim();
-
-        if (!txHash) {
-            document.getElementById('donation-status').innerHTML = '<div class="alert">Hash USDT requis</div>';
-            return;
-        }
-
-        if (!txHash.startsWith('0x')) {
-            document.getElementById('donation-status').innerHTML = '<div class="alert">Le hash doit commencer par 0x</div>';
-            return;
-        }
-
-        document.getElementById('donation-status').innerHTML = '⏳ Vérification USDT...';
-
-        await supabaseClient.from('donations').insert([{
-            user_id: currentUser.id,
-            tx_hash: txHash,
-            amount: 10,
-            token_type: 'USDT',
-            verified: true
-        }]);
-
-        await supabaseClient.from('profiles').update({ donation_verified: true }).eq('id', currentUser.id);
-
-        document.getElementById('donation-status').innerHTML = '<div class="success alert">✅ 10 USDT vérifiés ! Vous pouvez générer votre lien.</div>';
-        setStep('linkflow');
-    };
-
-    document.getElementById('btn-generate-link').onclick = async () => {
-        const { data } = await supabaseClient.rpc('generate_linkflow', { p_user_id: currentUser.id });
-        if (data?.success) {
-            document.getElementById('linkflow-result').innerHTML = `
-                <div class="success alert">
-                    ✅ Lien de parrainage USDT généré !<br>
-                    <div class="code-block">🔗 <a href="${data.personal_link}" target="_blank">${data.personal_link}</a></div>
-                    Code : <strong>${data.linkflow_code}</strong>
-                </div>`;
-            setStep('opportunities');
-            loadOpportunities();
-            loadReferralStats();
-        }
-    };
-
-    async function loadOpportunities() {
-        const { data: opportunities } = await supabaseClient
-            .from('opportunities')
-            .select('*')
-            .eq('is_active', true);
-
-        const { data: myOpps } = await supabaseClient
-            .from('user_opportunities')
-            .select('opportunity_id');
-
-        const myOppIds = myOpps?.map(o => o.opportunity_id) || [];
-        
-        let html = '<h3>📢 Opportunités USDT</h3>';
-        for (const opp of opportunities || []) {
-            html += `
-                <div class="opportunity-card">
-                    <strong>${opp.name}</strong><br>
-                    ${opp.description}<br>
-                    🎁 Bonus: ${opp.bonus_percentage}% en USDT<br>
-                    👥 Minimum: ${opp.min_referrals} filleuls<br>
-                    ${!myOppIds.includes(opp.id) ? `<button class="join-opp-btn" data-id="${opp.id}">➕ Rejoindre</button>` : '✅ Déjà membre'}
-                </div>`;
-        }
-        document.getElementById('opportunities-list').innerHTML = html;
-
-        document.querySelectorAll('.join-opp-btn').forEach(btn => {
-            btn.onclick = async () => {
-                await supabaseClient.from('user_opportunities').insert({
-                    user_id: currentUser.id,
-                    opportunity_id: parseInt(btn.dataset.id)
-                });
-                loadOpportunities();
-            };
-        });
-    }
-
-    document.getElementById('btn-logout').onclick = async () => {
-        await supabaseClient.auth.signOut();
-        location.reload();
-    };
-
-    checkSession();
-</script>
+<script src="script.js"></script>
 </body>
 </html>
