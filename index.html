@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LinkFlow - Victory Automatic | Parrainage BSC Sécurisé</title>
+    <title>LinkFlow - USDT BEP-20 | Plateforme de Parrainage</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
@@ -62,6 +62,15 @@
             margin-bottom: 1.5rem;
         }
 
+        .usdt-badge {
+            background: #26a17b20;
+            color: #26a17b;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+
         input, select, button {
             width: 100%;
             padding: 0.8rem 1rem;
@@ -90,12 +99,6 @@
             cursor: pointer;
         }
 
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
         button:hover:not(:disabled) {
             transform: translateY(-2px);
             background: linear-gradient(95deg, #3b82f6, #2563eb);
@@ -118,9 +121,9 @@
             border-left-color: #10b981;
         }
 
-        .warning {
-            background: #854d0e;
-            border-left-color: #facc15;
+        .info {
+            background: #1e3a5f;
+            border-left-color: #3b82f6;
         }
 
         .step {
@@ -182,38 +185,53 @@
 </head>
 <body>
 <div class="container">
-    <div class="badge">🔒 VICTORY AUTOMATIC · SÉCURISÉ SANS EDGE FUNCTION</div>
-    <h1>🚀 LINKFLOW · VICTORY AUTOMATIC</h1>
-    <p>Plateforme de parrainage sécurisée avec vérification blockchain BSC.</p>
+    <div class="badge">💵 VICTORY AUTOMATIC · USDT BEP-20</div>
+    <h1>🚀 LINKFLOW · USDT BEP-20</h1>
+    <p>Plateforme de parrainage avec vérification <span class="usdt-badge">USDT BEP-20</span> sur Binance Smart Chain</p>
     <hr>
 
     <!-- Étape 1 : Authentification -->
     <div id="step-auth" class="step active">
         <h2>🔐 Inscription / Connexion</h2>
+        
+        <div class="info alert" style="margin-bottom: 1rem;">
+            💡 <strong>Informations importantes :</strong><br>
+            • Montant minimum : <strong>10 USDT (BEP-20)</strong><br>
+            • Contrat USDT BSC : <code>0x55d398326f99059ff775485246999027b3197955</code>
+        </div>
+        
         <input type="email" id="email" placeholder="Email" autocomplete="email">
         <input type="password" id="password" placeholder="Mot de passe">
         <input type="text" id="sponsor-code" placeholder="Code parrain (optionnel)">
-        <input type="text" id="wallet-address" placeholder="Adresse wallet BSC (0x...)" pattern="0x[a-fA-F0-9]{40}">
-        <input type="text" id="beneficiary-address" placeholder="Adresse bénéficiaire (pour le don)">
+        <input type="text" id="wallet-address" placeholder="Votre adresse wallet BSC (0x...)" pattern="0x[a-fA-F0-9]{40}">
+        <input type="text" id="beneficiary-address" placeholder="Adresse pour recevoir les USDT">
+        
         <button id="btn-signup">📝 S'inscrire</button>
         <button id="btn-login" class="btn-secondary">🔑 Se connecter</button>
         <button id="btn-forgot" class="btn-secondary" style="margin-top: 0;">🔒 Mot de passe oublié</button>
+        
         <div id="auth-status"></div>
     </div>
 
-    <!-- Étape 2 : Vérification du don BSC -->
+    <!-- Étape 2 : Vérification du don USDT -->
     <div id="step-donation" class="step">
-        <h2>💰 Vérification du don (BSC)</h2>
-        <div class="warning alert">
-            ⚠️ IMPORTANT : Envoyez EXACTEMENT 0.01 BNB à l'adresse bénéficiaire que vous avez fournie lors de l'inscription.<br>
-            Puis collez le hash de votre transaction ci-dessous.
+        <h2>💰 Vérification don USDT</h2>
+        
+        <div class="info alert">
+            ⚠️ <strong>Instructions :</strong><br>
+            1. Envoyez <strong>10 USDT (BEP-20)</strong> à l'adresse bénéficiaire que vous avez fournie<br>
+            2. Attendez la confirmation de la transaction<br>
+            3. Collez le hash de la transaction ci-dessous<br>
+            4. Cliquez sur "Vérifier"
         </div>
-        <input type="text" id="tx-hash" placeholder="0x... (hash de la transaction)">
+        
+        <input type="text" id="tx-hash" placeholder="Hash de la transaction USDT (0x...)">
         <select id="bsc-network">
-            <option value="mainnet">BSC Mainnet (réel)</option>
-            <option value="testnet">BSC Testnet (pour test - BNB gratuit)</option>
+            <option value="testnet">🔬 BSC Testnet (test - BNB/USDT gratuit)</option>
+            <option value="mainnet">💰 BSC Mainnet (USDT réel)</option>
         </select>
-        <button id="btn-verify-tx">🔍 Vérifier la transaction</button>
+        
+        <button id="btn-verify-tx">🔍 Vérifier la transaction USDT</button>
         <div id="donation-status"></div>
     </div>
 
@@ -236,7 +254,7 @@
     <button id="btn-logout" class="btn-secondary" style="margin-top: 2rem;">🚪 Déconnexion</button>
     
     <div class="security-badge">
-        🔒 Sécurité garantie par : RLS (Row Level Security) + Fonctions SQL sécurisées + Validation côté serveur
+        🔒 Sécurité garantie par Supabase RLS + Fonctions SQL sécurisées
     </div>
 </div>
 
@@ -248,9 +266,6 @@
 
     let currentUser = null;
     let currentProfile = null;
-
-    // Adresse bénéficiaire autorisée (celle que vous avez configurée)
-    const AUTHORIZED_BENEFICIARY = '0x742d35Cc6634C0532925a3b844Bc9e7595f0b124'; // À MODIFIER
 
     function setStep(stepName) {
         document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
@@ -317,13 +332,13 @@
             document.getElementById('referral-stats').innerHTML = `
                 <strong>📊 Mes statistiques</strong><br>
                 👥 Nombre de filleuls : ${referrals.length}<br>
-                🔗 Mon code parrain : <strong>${currentProfile?.linkflow_code || 'Non généré'}</strong><br>
-                💰 Commission générée : ${(referrals.length * 0.001).toFixed(3)} BNB
+                💰 Commissions estimées : ${(referrals.length * 1).toFixed(0)} USDT<br>
+                🔗 Mon code parrain : <strong>${currentProfile?.linkflow_code || 'Non généré'}</strong>
             `;
         }
     }
 
-    // Inscription avec validation sécurisée
+    // Inscription
     document.getElementById('btn-signup').onclick = async () => {
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
@@ -332,34 +347,28 @@
         const beneficiary = document.getElementById('beneficiary-address').value.trim();
 
         if (!email || !password || !wallet || !beneficiary) {
-            document.getElementById('auth-status').innerHTML = '<div class="alert">⚠️ Tous les champs sauf code parrain sont requis.</div>';
+            document.getElementById('auth-status').innerHTML = '<div class="alert">⚠️ Tous les champs sont requis</div>';
             return;
         }
 
         if (!wallet.match(/^0x[a-fA-F0-9]{40}$/)) {
-            document.getElementById('auth-status').innerHTML = '<div class="alert">⚠️ Adresse wallet BSC invalide (doit commencer par 0x et contenir 40 caractères hexadécimaux).</div>';
+            document.getElementById('auth-status').innerHTML = '<div class="alert">⚠️ Adresse wallet BSC invalide</div>';
             return;
         }
 
         if (!beneficiary.match(/^0x[a-fA-F0-9]{40}$/)) {
-            document.getElementById('auth-status').innerHTML = '<div class="alert">⚠️ Adresse bénéficiaire invalide.</div>';
+            document.getElementById('auth-status').innerHTML = '<div class="alert">⚠️ Adresse bénéficiaire invalide</div>';
             return;
         }
 
-        document.getElementById('auth-status').innerHTML = 'Création du compte...';
+        document.getElementById('auth-status').innerHTML = '⏳ Création du compte...';
 
         const { data: authData, error: signUpError } = await supabaseClient.auth.signUp({ email, password });
         if (signUpError) {
-            document.getElementById('auth-status').innerHTML = `<div class="alert">Erreur : ${signUpError.message}</div>`;
+            document.getElementById('auth-status').innerHTML = `<div class="alert">❌ ${signUpError.message}</div>`;
             return;
         }
 
-        if (!authData.user) {
-            document.getElementById('auth-status').innerHTML = '<div class="alert">Erreur lors de la création du compte</div>';
-            return;
-        }
-
-        // Appel à la fonction SQL sécurisée pour créer le profil
         const { data: rpcResult, error: rpcError } = await supabaseClient.rpc('create_profile_with_sponsor', {
             p_user_id: authData.user.id,
             p_email: email,
@@ -369,12 +378,11 @@
         });
 
         if (rpcError || !rpcResult?.success) {
-            await supabaseClient.auth.admin.deleteUser(authData.user.id);
-            document.getElementById('auth-status').innerHTML = `<div class="alert">Erreur : ${rpcError?.message || rpcResult?.error}</div>`;
+            document.getElementById('auth-status').innerHTML = `<div class="alert">❌ ${rpcError?.message || rpcResult?.error}</div>`;
             return;
         }
 
-        document.getElementById('auth-status').innerHTML = '<div class="success alert">✅ Inscription réussie ! Connectez-vous maintenant.</div>';
+        document.getElementById('auth-status').innerHTML = '<div class="success alert">✅ Inscription réussie ! Connexion en cours...</div>';
         
         const { error: signInError } = await supabaseClient.auth.signInWithPassword({ email, password });
         if (signInError) {
@@ -384,6 +392,7 @@
         }
     };
 
+    // Connexion
     document.getElementById('btn-login').onclick = async () => {
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
@@ -399,6 +408,7 @@
         }
     };
 
+    // Mot de passe oublié
     document.getElementById('btn-forgot').onclick = async () => {
         const email = document.getElementById('email').value.trim();
         if (!email) {
@@ -415,39 +425,38 @@
         }
     };
 
-    // Vérification sécurisée via fonction SQL (pas d'Edge Function)
+    // Vérification USDT
     document.getElementById('btn-verify-tx').onclick = async () => {
         const txHash = document.getElementById('tx-hash').value.trim();
         const network = document.getElementById('bsc-network').value;
-        
+
         if (!txHash) {
             document.getElementById('donation-status').innerHTML = '<div class="alert">Hash de transaction requis</div>';
             return;
         }
 
         if (!txHash.match(/^0x[a-fA-F0-9]{64,66}$/)) {
-            document.getElementById('donation-status').innerHTML = '<div class="alert">Format de hash invalide (doit commencer par 0x et contenir 64-66 caractères)</div>';
+            document.getElementById('donation-status').innerHTML = '<div class="alert">Format de hash invalide (doit commencer par 0x)</div>';
             return;
         }
-        
-        document.getElementById('donation-status').innerHTML = '⏳ Vérification en cours...';
-        
-        // Utiliser une fonction SQL pour la vérification (sécurisé)
-        const { data, error } = await supabaseClient.rpc('verify_donation_simple', {
+
+        document.getElementById('donation-status').innerHTML = '⏳ Vérification USDT sur BSC...';
+
+        const { data, error } = await supabaseClient.rpc('verify_usdt_donation', {
             p_user_id: currentUser.id,
             p_tx_hash: txHash,
             p_network: network,
-            p_expected_beneficiary: currentProfile?.beneficiary_address || AUTHORIZED_BENEFICIARY
+            p_expected_amount: 10
         });
 
         if (error) {
-            document.getElementById('donation-status').innerHTML = `<div class="alert">Erreur : ${error.message}</div>`;
+            document.getElementById('donation-status').innerHTML = `<div class="alert">❌ Erreur : ${error.message}</div>`;
         } else if (data?.success) {
             document.getElementById('donation-status').innerHTML = `
                 <div class="success alert">
-                    ✅ Transaction vérifiée avec succès !<br>
-                    Montant : ${data.amount || '0.01'} BNB<br>
-                    Réseau : ${network === 'mainnet' ? 'BSC Mainnet' : 'BSC Testnet'}<br>
+                    ✅ ${data.message || 'Donation vérifiée avec succès !'}<br>
+                    💵 Montant : ${data.amount} USDT<br>
+                    🌐 Réseau : ${network === 'mainnet' ? 'BSC Mainnet' : 'BSC Testnet'}<br>
                     🔗 <a href="https://${network === 'mainnet' ? 'bscscan.com' : 'testnet.bscscan.com'}/tx/${txHash}" target="_blank">Voir sur BSCScan</a>
                 </div>
             `;
@@ -455,32 +464,31 @@
         } else {
             document.getElementById('donation-status').innerHTML = `
                 <div class="alert">
-                    ❌ ${data?.error || 'Transaction non valide. Vérifiez que vous avez envoyé exactement 0.01 BNB à la bonne adresse.'}
+                    ❌ ${data?.error || 'Transaction USDT non valide'}<br>
+                    Vérifiez que vous avez envoyé exactement 10 USDT à la bonne adresse.
                 </div>
             `;
         }
     };
 
+    // Génération du lien LinkFlow
     document.getElementById('btn-generate-link').onclick = async () => {
         if (!currentUser) return;
         
         document.getElementById('linkflow-result').innerHTML = '⏳ Génération en cours...';
         
-        const { data: rpcResult, error: rpcError } = await supabaseClient.rpc('generate_linkflow', {
+        const { data, error } = await supabaseClient.rpc('generate_linkflow', {
             p_user_id: currentUser.id
         });
 
-        if (rpcError || !rpcResult?.success) {
-            document.getElementById('linkflow-result').innerHTML = `<div class="alert">Erreur : ${rpcError?.message || rpcResult?.error}</div>`;
+        if (error || !data?.success) {
+            document.getElementById('linkflow-result').innerHTML = `<div class="alert">❌ Erreur : ${error?.message || data?.error}</div>`;
         } else {
-            currentProfile.linkflow_code = rpcResult.linkflow_code;
-            currentProfile.personal_link = rpcResult.personal_link;
-            
             document.getElementById('linkflow-result').innerHTML = `
                 <div class="success alert">
                     ✅ Votre lien LinkFlow est prêt !<br>
-                    <div class="code-block">🔗 <a href="${rpcResult.personal_link}" target="_blank">${rpcResult.personal_link}</a></div>
-                    Code invitation : <strong>${rpcResult.linkflow_code}</strong><br>
+                    <div class="code-block">🔗 <a href="${data.personal_link}" target="_blank">${data.personal_link}</a></div>
+                    Code invitation : <strong>${data.linkflow_code}</strong><br>
                     Partagez ce code ou ce lien à vos filleuls.
                 </div>
             `;
@@ -490,6 +498,7 @@
         }
     };
 
+    // Charger les opportunités
     async function loadOpportunities() {
         const { data: opportunities, error: oppsError } = await supabaseClient
             .from('opportunities')
@@ -515,7 +524,7 @@
                     <div class="opportunity-card">
                         <strong>${opp.name}</strong><br>
                         ${opp.description || ''}<br>
-                        🎁 Bonus: ${opp.bonus_percentage}%<br>
+                        🎁 Bonus: ${opp.bonus_percentage}% en USDT<br>
                         👥 Minimum filleuls: ${opp.min_referrals}<br>
                         ${!isJoined ? `<button class="join-opp-btn" data-id="${opp.id}">➕ Rejoindre cette opportunité</button>` : '<span>✅ Vous y participez déjà</span>'}
                     </div>
@@ -547,12 +556,13 @@
 
         if (myOppIds.length > 0) {
             const joinedOpps = opportunities?.filter(opp => myOppIds.includes(opp.id)) || [];
-            myDiv.innerHTML = `<h3>📌 Mes opportunités actives</h3><ul>${joinedOpps.map(opp => `<li>${opp.name} (+${opp.bonus_percentage}%)</li>`).join('')}</ul>`;
+            myDiv.innerHTML = `<h3>📌 Mes opportunités actives</h3><ul>${joinedOpps.map(opp => `<li>${opp.name} (+${opp.bonus_percentage}% USDT)</li>`).join('')}</ul>`;
         } else {
             myDiv.innerHTML = '<p>Vous n\'avez encore rejoint aucune opportunité.</p>';
         }
     }
 
+    // Déconnexion
     document.getElementById('btn-logout').onclick = async () => {
         await supabaseClient.auth.signOut();
         currentUser = null;
@@ -560,6 +570,7 @@
         location.reload();
     };
 
+    // Au chargement
     checkSession();
 </script>
 </body>
