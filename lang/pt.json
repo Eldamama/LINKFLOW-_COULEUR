@@ -1,1 +1,27 @@
-
+{
+    "popup_title": "🚀 Junte-se à oportunidade exclusiva",
+    "popup_text": "Antes de continuar, você deve interagir com o vídeo do YouTube abaixo.",
+    "close_popup": "Entendi",
+    "watch_btn": "▶️ Assisto ao vídeo",
+    "timer_text": "⏱️ Tempo restante: {s} segundos",
+    "victory_btn": "✅ Obter link Victory Automatic",
+    "victory_title": "🔗 Seu link Victory Automatic",
+    "copy": "Copiar",
+    "copied": "✅ Copiado!",
+    "form_title": "📝 Registro LinkFlow",
+    "register_btn": "Inscrever-se",
+    "don_title": "💸 Faça sua doação USDT BEP-20",
+    "don_instructions": "Envie 10 USDT para o endereço: 0x123456789... Cole seu hash após o pagamento.",
+    "verify_btn": "🔍 Verificar pagamento",
+    "gen_title": "🔗 Gere seu link LinkFlow",
+    "generate_btn": "Gerar meu link",
+    "followme_msg": "✅ Graças ao Follow Me, todos os seus afiliados seguirão suas oportunidades.",
+    "opp_title": "📢 Oportunidades disponíveis",
+    "success_reg": "✅ Registro bem-sucedido! Redirecionando para seção de doação...",
+    "invalid_wallet": "❌ Wallet inválida ou já utilizada.",
+    "invalid_hash": "❌ Hash inválido ou transação não encontrada.",
+    "valid_hash": "✅ Transação validada! Você pode gerar seu link.",
+    "parrain_not_in_tree": "❌ Este patrocinador não está na genealogia raiz. Link negado.",
+    "invalid_victory_link": "❌ Link Victory Automatic inválido.",
+    "victory_link_placeholder": "Cole seu link Victory Automatic aqui"
+}
