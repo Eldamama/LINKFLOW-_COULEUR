@@ -10,7 +10,7 @@
         .main-container { max-width: 650px; width: 100%; background: white; border-radius: 2rem; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.15); padding: 1.8rem; }
         #language-selector { display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 15px; flex-wrap: wrap; }
         #language-selector button { background: #fff; border: 1px solid #cfdee9; border-radius: 40px; padding: 6px 14px; cursor: pointer; font-size: 0.8rem; transition: 0.2s; }
-        #language-selector button:hover { background: #e9f0f5; border-color: #2c7da0; }
+        #language-selector button.active { background: #2a9d8f; color: white; border-color: #2a9d8f; }
         .btn-small { background: transparent; border: 1px solid #2c7da0; padding: 6px 12px; border-radius: 40px; cursor: pointer; font-size: 0.75rem; }
         h2, h3 { color: #0a2b38; margin-bottom: 1rem; }
         form { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
@@ -48,13 +48,14 @@
         hr { margin: 15px 0; }
         .form-group { margin-bottom: 15px; }
         label { font-size: 0.85rem; font-weight: 500; color: #2c3e50; margin-bottom: 5px; display: block; }
+        .hidden { display: none !important; }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <div class="main-container">
     <div id="language-selector">
-        <button data-lang="fr">🇫🇷 Français</button>
+        <button data-lang="fr" class="active">🇫🇷 Français</button>
         <button data-lang="en">🇬🇧 English</button>
         <button data-lang="es">🇪🇸 Español</button>
         <button data-lang="pt">🇵🇹 Português</button>
@@ -72,7 +73,7 @@
         <div class="step" data-step="4">4. Opportunités</div>
     </div>
 
-    <!-- ÉTAPE 1 : FORMULAIRE -->
+    <!-- SECTION INSCRIPTION -->
     <div id="step1-section">
         <h2 id="register-title">🚀 Inscription LinkFlow</h2>
         <p id="register-subtitle">Rejoignez la communauté qui transforme la vie des gens</p>
@@ -96,7 +97,7 @@
         <div id="register-message"></div>
     </div>
 
-    <!-- CONNEXION -->
+    <!-- SECTION CONNEXION -->
     <div id="login-section" style="display:none;">
         <h2 id="login-title">🔐 Connexion</h2>
         <form id="login-form">
@@ -112,6 +113,20 @@
         </form>
         <p style="text-align:center; margin-top:15px;"><a href="#" id="show-register-link">Pas encore inscrit ? S'inscrire</a><br><a href="#" id="show-forgot-link">Mot de passe oublié ?</a></p>
         <div id="login-message"></div>
+    </div>
+
+    <!-- SECTION MOT DE PASSE OUBLIÉ -->
+    <div id="forgot-section" style="display:none;">
+        <h2 id="forgot-title">🔄 Réinitialisation</h2>
+        <form id="forgot-form">
+            <div class="form-group">
+                <label id="forgot-email-label">📧 Email</label>
+                <input type="email" id="forgot-email" placeholder="exemple@email.com" required>
+            </div>
+            <button type="submit" class="btn btn-primary" id="forgot-submit-btn">Envoyer le lien</button>
+        </form>
+        <p style="text-align:center; margin-top:15px;"><a href="#" id="back-to-login">← Retour à la connexion</a></p>
+        <div id="forgot-message"></div>
     </div>
 
     <!-- POPUP ÉMOTIONNEL -->
@@ -130,70 +145,45 @@
         </div>
     </div>
 
-    <!-- ÉTAPE 2 : VIDÉO -->
+    <!-- SECTION VIDÉO -->
     <div id="step2-section" style="display:none;">
         <h2 id="video-title">🎬 Visionnez la vidéo stratégique</h2>
         <div class="video-container">
             <iframe id="youtube-frame" width="100%" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?enablejsapi=1" frameborder="0" allowfullscreen></iframe>
         </div>
-        <button id="watch-video-btn" class="btn btn-large" disabled>🔒 Regarder la vidéo (déverrouillée après popup)</button>
+        <button id="watch-video-btn" class="btn btn-large" disabled>🔒 Regarder la vidéo</button>
         <div id="timer-display" class="timer">⏱️ Temps restant : 180 s</div>
         <button id="get-parrain-link-btn" class="btn btn-success" disabled>🔗 J'obtiens le lien de mon parrain</button>
     </div>
 
-    <!-- ÉTAPE 3 : PAIEMENT -->
+    <!-- SECTION PAIEMENT (simplifiée) -->
     <div id="step3-section" style="display:none;">
-        <h2 id="parrain-link-title">🔗 Le lien de votre parrain</h2>
-        <div class="instruction-box" id="parrain-instructions">📌 Utilisez ce lien pour vous inscrire sur Victory Automatic.<br>Victory vous donnera votre propre lien et une adresse USDT.</div>
-        <input type="text" id="parrain-link-display" readonly>
-        <button id="copy-parrain-link" class="btn">📋 Copier</button>
-        <button id="i-am-registered" class="btn btn-primary" style="margin-top:15px;">✅ Je me suis inscrit sur Victory</button>
-        
-        <div id="target-address-area" style="margin-top:20px;display:none;">
-            <hr><h3 id="target-title">💰 Adresse USDT cible</h3>
-            <input type="text" id="target-wallet" placeholder="Adresse USDT BEP-20 (fournie par Victory)">
-            <button id="save-target-address" class="btn btn-primary">📌 Enregistrer l'adresse</button>
+        <h2 id="step3-title">💰 Validation du don</h2>
+        <div class="instruction-box" id="step3-instructions">
+            Après avoir effectué votre don de 2.03 USDT, collez votre hash de transaction ci-dessous.
         </div>
-        
-        <div id="payment-area" style="margin-top:20px;display:none;">
-            <hr><h3 id="payment-title">💸 Paiement et vérification</h3>
-            <input type="text" id="transaction-hash" placeholder="Hash TXID (0x...)" style="margin-bottom:10px;">
-            <button id="verify-payment" class="btn">🔍 Vérifier mon don</button>
-            <div id="payment-message"></div>
-        </div>
-        
-        <div id="victory-link-area" style="margin-top:20px;display:none;">
-            <hr><h3 id="victory-link-title">🔗 Votre lien Victory personnel</h3>
-            <input type="text" id="victory-link-field" placeholder="https://victoryauto.app/ref/votre_code">
-            <button id="generate-linkflow" class="btn btn-success">✨ Générer mon lien LinkFlow</button>
-        </div>
-        
-        <div id="generation-result" style="margin-top:20px;display:none;">
-            <hr><h3 id="congrats-title">🎉 Félicitations !</h3>
-            <div class="code-display" id="user-invite-code"></div>
-            <input type="text" id="linkflow-final-link" readonly style="margin:10px 0;">
-            <button id="copy-linkflow" class="btn-small">📋 Copier</button>
-            <div class="instruction-box" id="followme-text">🤝 <strong>Follow Me activé</strong> — Vos filleuls suivront vos opportunités.</div>
-            <button id="continue-to-opportunities" class="btn btn-primary" style="margin-top:15px;">🚀 Voir les opportunités</button>
-        </div>
-        <div id="step3-message"></div>
+        <input type="text" id="transaction-hash" placeholder="Hash TXID (0x...)" style="margin-bottom:10px;">
+        <button id="verify-payment" class="btn btn-primary">🔍 Vérifier mon don</button>
+        <div id="payment-message"></div>
+        <button id="continue-to-opps" class="btn btn-success" style="margin-top:15px; display:none;">🚀 Accéder aux opportunités</button>
     </div>
 
-    <!-- OPPORTUNITÉS -->
-    <div id="opportunites-section" style="display:none;">
+    <!-- SECTION OPPORTUNITÉS -->
+    <div id="step4-section" style="display:none;">
         <h3 id="opp-title">📢 Opportunités disponibles</h3>
         <p id="followme-info" style="margin-bottom:15px; font-size:0.85rem; color:#2a9d8f;">🤝 <strong>Follow Me</strong> : Vos filleuls vous suivront automatiquement</p>
-        <div id="opportunities-list"></div>
-    </div>
-
-    <div id="forgot-section" style="display:none;">
-        <h2 id="forgot-title">Réinitialisation</h2>
-        <form id="forgot-form">
-            <input type="email" id="forgot-email" placeholder="Email" required>
-            <button type="submit" class="btn btn-primary">Envoyer le lien</button>
-        </form>
-        <p style="text-align:center; margin-top:10px;"><a href="#" id="back-to-login">Retour</a></p>
-        <div id="forgot-message"></div>
+        <div id="opportunities-list">
+            <div class="opportunity-card active" style="background:#fff; border-radius:16px; padding:15px; margin-bottom:12px; border-left:4px solid #2a9d8f;">
+                <div class="opportunity-title">✅ Victory World <span style="background:#2a9d8f; color:white; font-size:0.7rem; padding:2px 8px; border-radius:20px; margin-left:10px;">ACTIVE</span></div>
+                <div class="opportunity-desc">Plateforme de donation avec matrice</div>
+                <button class="btn-small" id="join-victory-btn" style="margin-top:10px;">🚀 Rejoindre</button>
+            </div>
+            <div class="opportunity-card inactive" style="background:#fff; border-radius:16px; padding:15px; margin-bottom:12px; opacity:0.6;">
+                <div class="opportunity-title">📌 Opportunité 3 <span style="background:#6c757d; color:white; font-size:0.7rem; padding:2px 8px; border-radius:20px; margin-left:10px;">BIENTÔT</span></div>
+                <div class="opportunity-desc">Nouvelle opportunité à venir</div>
+                <button class="btn-small" disabled style="margin-top:10px;">🔒 Bientôt disponible</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -202,19 +192,12 @@
     const SUPABASE_URL = 'https://yxkhqwccyagshwyfvhky.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4a2hxd2NjeWFnc2h3eWZ2aGt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYzODQ5MzAsImV4cCI6MjA2MTk2MDkzMH0.RF47rJhN2hrQvWR9Xw9SXdbTRJtdcO2kEsVvEw7BIOY';
     const ROOT_REF_CODE = "AFEG1000";
-    const ROOT_PARRAIN_LINK = "https://victoryauto.app/ref/AFEG1000";
 
     let supabaseClient = null;
     let currentUser = null;
     let currentUserInviteCode = null;
-    let currentTargetWallet = null;
-    let videoTimer = null;
-    let remainingSeconds = 180;
-    let videoWatched = false;
-    let popupTimer = null;
-    let popupSeconds = 10;
 
-    // ==================== MULTILINGUISME COMPLET ====================
+    // ==================== TRADUCTIONS COMPLÈTES ====================
     const translations = {
         fr: {
             register_title: "🚀 Inscription LinkFlow", register_subtitle: "Rejoignez la communauté qui transforme la vie des gens",
@@ -222,18 +205,15 @@
             register_btn: "📍 Je rejoins l'aventure", login_link: "Déjà inscrit ? Se connecter",
             login_title: "🔐 Connexion", login_email_label: "📧 Email", login_password_label: "🔒 Mot de passe",
             login_btn: "Se connecter", register_link: "Pas encore inscrit ? S'inscrire", forgot_link: "Mot de passe oublié ?",
-            popup_title: "🎬 La clé de votre réussite !", popup_desc: "Cette courte vidéo a déjà transformé des milliers de vies",
+            forgot_title: "🔄 Réinitialisation", forgot_email_label: "📧 Email", forgot_submit_btn: "Envoyer le lien",
+            back_login: "← Retour à la connexion", popup_title: "🎬 La clé de votre réussite !",
+            popup_desc: "Cette courte vidéo a déjà transformé des milliers de vies",
             video_title: "🎬 Visionnez la vidéo stratégique", watch_btn: "🔒 Regarder la vidéo",
-            get_link_btn: "🔗 J'obtiens le lien de mon parrain", parrain_link_title: "🔗 Le lien de votre parrain",
-            parrain_instructions: "📌 Utilisez ce lien pour vous inscrire sur Victory Automatic.",
-            registered_btn: "✅ Je me suis inscrit sur Victory", target_title: "💰 Adresse USDT cible",
-            payment_title: "💸 Paiement et vérification", verify_btn: "🔍 Vérifier mon don",
-            victory_title: "🔗 Votre lien Victory personnel", generate_btn: "✨ Générer mon lien LinkFlow",
-            congrats_title: "🎉 Félicitations !", followme_text: "🤝 Follow Me activé — Vos filleuls suivront vos opportunités.",
-            opportunities_btn: "🚀 Voir les opportunités", opp_title: "📢 Opportunités disponibles",
-            followme_info: "🤝 Follow Me : Vos filleuls vous suivront automatiquement",
-            forgot_title: "Réinitialisation", back_login: "Retour", copy_btn: "📋 Copier",
-            save_address_btn: "📌 Enregistrer", join_btn: "Rejoindre", coming_soon: "Bientôt"
+            get_link_btn: "🔗 J'obtiens le lien de mon parrain", step3_title: "💰 Validation du don",
+            step3_instructions: "Après avoir effectué votre don de 2.03 USDT, collez votre hash de transaction ci-dessous.",
+            verify_btn: "🔍 Vérifier mon don", continue_btn: "🚀 Accéder aux opportunités",
+            opp_title: "📢 Opportunités disponibles", followme_info: "🤝 Follow Me : Vos filleuls vous suivront automatiquement",
+            join_btn: "🚀 Rejoindre", coming_soon: "🔒 Bientôt disponible"
         },
         en: {
             register_title: "🚀 LinkFlow Sign Up", register_subtitle: "Join the community that changes lives",
@@ -241,18 +221,15 @@
             register_btn: "📍 I join the adventure", login_link: "Already registered? Sign in",
             login_title: "🔐 Login", login_email_label: "📧 Email", login_password_label: "🔒 Password",
             login_btn: "Sign in", register_link: "Not registered? Sign up", forgot_link: "Forgot password?",
-            popup_title: "🎬 The key to your success!", popup_desc: "This short video has transformed thousands of lives",
+            forgot_title: "🔄 Reset Password", forgot_email_label: "📧 Email", forgot_submit_btn: "Send reset link",
+            back_login: "← Back to login", popup_title: "🎬 The key to your success!",
+            popup_desc: "This short video has transformed thousands of lives",
             video_title: "🎬 Watch the strategic video", watch_btn: "🔒 Watch video",
-            get_link_btn: "🔗 Get my sponsor's link", parrain_link_title: "🔗 Your sponsor's link",
-            parrain_instructions: "📌 Use this link to register on Victory Automatic.",
-            registered_btn: "✅ I registered on Victory", target_title: "💰 Target USDT address",
-            payment_title: "💸 Payment & verification", verify_btn: "🔍 Verify my donation",
-            victory_title: "🔗 Your personal Victory link", generate_btn: "✨ Generate my LinkFlow link",
-            congrats_title: "🎉 Congratulations!", followme_text: "🤝 Follow Me activated — Your referrals will follow your opportunities.",
-            opportunities_btn: "🚀 View opportunities", opp_title: "📢 Available opportunities",
-            followme_info: "🤝 Follow Me: Your referrals will automatically follow you",
-            forgot_title: "Reset Password", back_login: "Back", copy_btn: "📋 Copy",
-            save_address_btn: "📌 Save", join_btn: "Join", coming_soon: "Soon"
+            get_link_btn: "🔗 Get my sponsor's link", step3_title: "💰 Donation verification",
+            step3_instructions: "After making your 2.03 USDT donation, paste your transaction hash below.",
+            verify_btn: "🔍 Verify my donation", continue_btn: "🚀 Access opportunities",
+            opp_title: "📢 Available opportunities", followme_info: "🤝 Follow Me: Your referrals will automatically follow you",
+            join_btn: "🚀 Join", coming_soon: "🔒 Coming soon"
         },
         es: {
             register_title: "🚀 Registro LinkFlow", register_subtitle: "Únete a la comunidad que cambia vidas",
@@ -260,18 +237,15 @@
             register_btn: "📍 Me uno a la aventura", login_link: "¿Ya registrado? Iniciar sesión",
             login_title: "🔐 Iniciar sesión", login_email_label: "📧 Correo", login_password_label: "🔒 Contraseña",
             login_btn: "Iniciar sesión", register_link: "¿No registrado? Regístrate", forgot_link: "¿Olvidaste contraseña?",
-            popup_title: "🎬 ¡La clave de tu éxito!", popup_desc: "Este video ha transformado miles de vidas",
+            forgot_title: "🔄 Restablecer", forgot_email_label: "📧 Correo", forgot_submit_btn: "Enviar enlace",
+            back_login: "← Volver al inicio", popup_title: "🎬 ¡La clave de tu éxito!",
+            popup_desc: "Este video ha transformado miles de vidas",
             video_title: "🎬 Mira el video estratégico", watch_btn: "🔒 Ver video",
-            get_link_btn: "🔗 Obtener link de mi patrocinador", parrain_link_title: "🔗 Link de tu patrocinador",
-            parrain_instructions: "📌 Usa este link para registrarte en Victory Automatic.",
-            registered_btn: "✅ Me registré en Victory", target_title: "💰 Dirección USDT objetivo",
-            payment_title: "💸 Pago y verificación", verify_btn: "🔍 Verificar mi donación",
-            victory_title: "🔗 Tu link Victory personal", generate_btn: "✨ Generar mi link LinkFlow",
-            congrats_title: "🎉 ¡Felicidades!", followme_text: "🤝 Follow Me activado — Tus referidos seguirán tus oportunidades.",
-            opportunities_btn: "🚀 Ver oportunidades", opp_title: "📢 Oportunidades disponibles",
-            followme_info: "🤝 Follow Me: Tus referidos te seguirán automáticamente",
-            forgot_title: "Restablecer", back_login: "Volver", copy_btn: "📋 Copiar",
-            save_address_btn: "📌 Guardar", join_btn: "Unirse", coming_soon: "Pronto"
+            get_link_btn: "🔗 Obtener link de mi patrocinador", step3_title: "💰 Verificación de donación",
+            step3_instructions: "Después de hacer tu donación de 2.03 USDT, pega el hash de tu transacción.",
+            verify_btn: "🔍 Verificar mi donación", continue_btn: "🚀 Ver oportunidades",
+            opp_title: "📢 Oportunidades disponibles", followme_info: "🤝 Follow Me: Tus referidos te seguirán automáticamente",
+            join_btn: "🚀 Unirse", coming_soon: "🔒 Próximamente"
         },
         pt: {
             register_title: "🚀 Cadastro LinkFlow", register_subtitle: "Junte-se à comunidade que muda vidas",
@@ -279,103 +253,92 @@
             register_btn: "📍 Eu entro na aventura", login_link: "Já registrado? Entrar",
             login_title: "🔐 Entrar", login_email_label: "📧 Email", login_password_label: "🔒 Senha",
             login_btn: "Entrar", register_link: "Não registrado? Cadastre-se", forgot_link: "Esqueceu a senha?",
-            popup_title: "🎬 A chave do seu sucesso!", popup_desc: "Este vídeo curto já transformou milhares de vidas",
+            forgot_title: "🔄 Redefinir", forgot_email_label: "📧 Email", forgot_submit_btn: "Enviar link",
+            back_login: "← Voltar ao login", popup_title: "🎬 A chave do seu sucesso!",
+            popup_desc: "Este vídeo curto já transformou milhares de vidas",
             video_title: "🎬 Assista ao vídeo estratégico", watch_btn: "🔒 Assistir vídeo",
-            get_link_btn: "🔗 Obter link do meu padrinho", parrain_link_title: "🔗 Link do seu padrinho",
-            parrain_instructions: "📌 Use este link para se registrar no Victory Automatic.",
-            registered_btn: "✅ Me registrei no Victory", target_title: "💰 Endereço USDT alvo",
-            payment_title: "💸 Pagamento e verificação", verify_btn: "🔍 Verificar minha doação",
-            victory_title: "🔗 Seu link Victory pessoal", generate_btn: "✨ Gerar meu link LinkFlow",
-            congrats_title: "🎉 Parabéns!", followme_text: "🤝 Follow Me ativado — Seus indicados seguirão suas oportunidades.",
-            opportunities_btn: "🚀 Ver oportunidades", opp_title: "📢 Oportunidades disponíveis",
-            followme_info: "🤝 Follow Me: Seus indicados seguirão você automaticamente",
-            forgot_title: "Redefinir", back_login: "Voltar", copy_btn: "📋 Copiar",
-            save_address_btn: "📌 Salvar", join_btn: "Participar", coming_soon: "Em breve"
+            get_link_btn: "🔗 Obter link do meu padrinho", step3_title: "💰 Verificação de doação",
+            step3_instructions: "Após fazer sua doação de 2.03 USDT, cole o hash da sua transação.",
+            verify_btn: "🔍 Verificar minha doação", continue_btn: "🚀 Ver oportunidades",
+            opp_title: "📢 Oportunidades disponíveis", followme_info: "🤝 Follow Me: Seus indicados seguirão você automaticamente",
+            join_btn: "🚀 Participar", coming_soon: "🔒 Em breve"
         }
     };
     let currentLang = 'fr';
 
+    // ==================== MISE À JOUR DES TEXTES ====================
     function updateAllTexts() {
         const t = translations[currentLang];
-        document.getElementById('register-title') && (document.getElementById('register-title').innerText = t.register_title);
-        document.getElementById('register-subtitle') && (document.getElementById('register-subtitle').innerText = t.register_subtitle);
-        document.getElementById('email-label') && (document.getElementById('email-label').innerText = t.email_label);
-        document.getElementById('password-label') && (document.getElementById('password-label').innerText = t.password_label);
-        document.getElementById('sponsor-label') && (document.getElementById('sponsor-label').innerText = t.sponsor_label);
-        document.getElementById('register-submit-btn') && (document.getElementById('register-submit-btn').innerText = t.register_btn);
-        document.getElementById('show-login-link') && (document.getElementById('show-login-link').innerText = t.login_link);
-        document.getElementById('login-title') && (document.getElementById('login-title').innerText = t.login_title);
-        document.getElementById('login-email-label') && (document.getElementById('login-email-label').innerText = t.login_email_label);
-        document.getElementById('login-password-label') && (document.getElementById('login-password-label').innerText = t.login_password_label);
-        document.getElementById('login-submit-btn') && (document.getElementById('login-submit-btn').innerText = t.login_btn);
-        document.getElementById('show-register-link') && (document.getElementById('show-register-link').innerText = t.register_link);
-        document.getElementById('show-forgot-link') && (document.getElementById('show-forgot-link').innerText = t.forgot_link);
-        document.getElementById('popup-title') && (document.getElementById('popup-title').innerText = t.popup_title);
-        document.getElementById('popup-desc') && (document.getElementById('popup-desc').innerHTML = t.popup_desc);
-        document.getElementById('video-title') && (document.getElementById('video-title').innerText = t.video_title);
-        document.getElementById('watch-video-btn') && (document.getElementById('watch-video-btn').innerText = t.watch_btn);
-        document.getElementById('get-parrain-link-btn') && (document.getElementById('get-parrain-link-btn').innerText = t.get_link_btn);
-        document.getElementById('parrain-link-title') && (document.getElementById('parrain-link-title').innerText = t.parrain_link_title);
-        document.getElementById('parrain-instructions') && (document.getElementById('parrain-instructions').innerHTML = t.parrain_instructions);
-        document.getElementById('i-am-registered') && (document.getElementById('i-am-registered').innerText = t.registered_btn);
-        document.getElementById('target-title') && (document.getElementById('target-title').innerText = t.target_title);
-        document.getElementById('payment-title') && (document.getElementById('payment-title').innerText = t.payment_title);
-        document.getElementById('verify-payment') && (document.getElementById('verify-payment').innerText = t.verify_btn);
-        document.getElementById('victory-link-title') && (document.getElementById('victory-link-title').innerText = t.victory_title);
-        document.getElementById('generate-linkflow') && (document.getElementById('generate-linkflow').innerText = t.generate_btn);
-        document.getElementById('congrats-title') && (document.getElementById('congrats-title').innerText = t.congrats_title);
-        document.getElementById('followme-text') && (document.getElementById('followme-text').innerHTML = t.followme_text);
-        document.getElementById('continue-to-opportunities') && (document.getElementById('continue-to-opportunities').innerText = t.opportunities_btn);
-        document.getElementById('opp-title') && (document.getElementById('opp-title').innerText = t.opp_title);
-        document.getElementById('followme-info') && (document.getElementById('followme-info').innerHTML = t.followme_info);
-        document.getElementById('forgot-title') && (document.getElementById('forgot-title').innerText = t.forgot_title);
-        document.getElementById('back-to-login') && (document.getElementById('back-to-login').innerText = t.back_login);
-        document.getElementById('copy-parrain-link') && (document.getElementById('copy-parrain-link').innerText = t.copy_btn);
-        document.getElementById('save-target-address') && (document.getElementById('save-target-address').innerText = t.save_address_btn);
-        document.getElementById('copy-linkflow') && (document.getElementById('copy-linkflow').innerText = t.copy_btn);
+        const elements = {
+            'register-title': 'register_title', 'register-subtitle': 'register_subtitle',
+            'email-label': 'email_label', 'password-label': 'password_label', 'sponsor-label': 'sponsor_label',
+            'register-submit-btn': 'register_btn', 'show-login-link': 'login_link',
+            'login-title': 'login_title', 'login-email-label': 'login_email_label', 'login-password-label': 'login_password_label',
+            'login-submit-btn': 'login_btn', 'show-register-link': 'register_link', 'show-forgot-link': 'forgot_link',
+            'forgot-title': 'forgot_title', 'forgot-email-label': 'forgot_email_label', 'forgot-submit-btn': 'forgot_submit_btn',
+            'back-to-login': 'back_login', 'popup-title': 'popup_title', 'popup-desc': 'popup_desc',
+            'video-title': 'video_title', 'watch-video-btn': 'watch_btn', 'get-parrain-link-btn': 'get_link_btn',
+            'step3-title': 'step3_title', 'step3-instructions': 'step3_instructions', 'verify-payment': 'verify_btn',
+            'continue-to-opps': 'continue_btn', 'opp-title': 'opp_title', 'followme-info': 'followme_info',
+            'join-victory-btn': 'join_btn'
+        };
+        for (const [id, key] of Object.entries(elements)) {
+            const el = document.getElementById(id);
+            if (el) el.innerText = t[key];
+        }
     }
 
+    // ==================== CHANGEMENT DE LANGUE ====================
     document.querySelectorAll('[data-lang]').forEach(btn => {
         btn.addEventListener('click', (e) => {
-            currentLang = e.target.getAttribute('data-lang');
+            document.querySelectorAll('[data-lang]').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentLang = btn.getAttribute('data-lang');
             updateAllTexts();
-            displayOpportunities();
         });
     });
-    updateAllTexts();
 
-    // ==================== FONCTIONS ====================
-    function isValidBEP20Address(address) {
-        return /^0x[a-fA-F0-9]{40}$/.test(address);
-    }
-
-    function showStep(step) {
-        const sections = ['step1-section', 'step2-section', 'step3-section', 'opportunites-section', 'login-section', 'forgot-section'];
-        sections.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
-        if (step === 1) document.getElementById('step1-section').style.display = 'block';
-        else if (step === 2) document.getElementById('step2-section').style.display = 'block';
-        else if (step === 3) document.getElementById('step3-section').style.display = 'block';
-        else if (step === 4) { document.getElementById('opportunites-section').style.display = 'block'; displayOpportunities(); }
-        
-        const stepDivs = document.querySelectorAll('.step');
-        stepDivs.forEach((el, idx) => {
-            el.classList.remove('active', 'done');
-            if (idx + 1 < step) el.classList.add('done');
-            else if (idx + 1 === step) el.classList.add('active');
+    // ==================== BASCULEMENT DES VUES ====================
+    function toggleView(showId, hideIds = []) {
+        const showEl = document.getElementById(showId);
+        if (showEl) showEl.style.display = 'block';
+        hideIds.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
         });
     }
 
+    document.getElementById('show-login-link')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleView('login-section', ['step1-section', 'forgot-section']);
+    });
+
+    document.getElementById('show-register-link')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleView('step1-section', ['login-section', 'forgot-section']);
+    });
+
+    document.getElementById('show-forgot-link')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleView('forgot-section', ['login-section', 'step1-section']);
+    });
+
+    document.getElementById('back-to-login')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleView('login-section', ['forgot-section', 'step1-section']);
+    });
+
+    // ==================== FONCTIONS SUPABASE ====================
     async function checkSponsorExists(sponsorCode) {
+        if (sponsorCode === ROOT_REF_CODE) return true;
         const { data, error } = await supabaseClient
             .from('user_progress')
             .select('invite_code')
             .eq('invite_code', sponsorCode)
             .single();
-        if (error || !data) return false;
-        return true;
+        return !error && data;
     }
 
-    // ==================== INITIALISATION ====================
     async function init() {
         supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         const { data: { user } } = await supabaseClient.auth.getUser();
@@ -383,14 +346,22 @@
             currentUser = user;
             const { data } = await supabaseClient.from('user_progress').select('step, invite_code').eq('user_id', currentUser.id).single();
             currentUserInviteCode = data?.invite_code;
-            if (data?.step === 4) showStep(4);
-            else if (data?.step === 3) showStep(3);
-            else if (data?.step === 2) showStep(2);
-            else showStep(1);
+            if (data?.step === 4) {
+                document.getElementById('step4-section').style.display = 'block';
+                document.getElementById('step1-section').style.display = 'none';
+                document.getElementById('step2-section').style.display = 'none';
+                document.getElementById('step3-section').style.display = 'none';
+            } else if (data?.step === 3) {
+                document.getElementById('step3-section').style.display = 'block';
+            } else if (data?.step === 2) {
+                document.getElementById('step2-section').style.display = 'block';
+            } else {
+                document.getElementById('step1-section').style.display = 'block';
+            }
             document.getElementById('show-login-btn').style.display = 'none';
             document.getElementById('logout-btn').style.display = 'inline-block';
         } else {
-            showStep(1);
+            document.getElementById('step1-section').style.display = 'block';
             document.getElementById('show-login-btn').style.display = 'inline-block';
             document.getElementById('logout-btn').style.display = 'none';
         }
@@ -402,19 +373,110 @@
         const email = document.getElementById('reg-email').value;
         const password = document.getElementById('reg-password').value;
         const sponsorCode = document.getElementById('ref-link').value.trim();
-        
+        const msgDiv = document.getElementById('register-message');
+
         if (!sponsorCode) {
-            document.getElementById('register-message').innerHTML = "<div class='message error-message'>❌ Le code parrain est obligatoire</div>";
+            msgDiv.innerHTML = "<div class='message error-message'>❌ Le code parrain est obligatoire</div>";
             return;
         }
-        
-        // Vérifier que le parrain existe
+
         const sponsorExists = await checkSponsorExists(sponsorCode);
-        if (!sponsorExists && sponsorCode !== ROOT_REF_CODE) {
-            document.getElementById('register-message').innerHTML = "<div class='message error-message'>❌ Code parrain invalide</div>";
+        if (!sponsorExists) {
+            msgDiv.innerHTML = "<div class='message error-message'>❌ Code parrain invalide</div>";
             return;
         }
-        
+
         const { data, error } = await supabaseClient.auth.signUp({ email, password });
         if (error) {
-            document.getElementById('register-message').innerHTML = `<div class='message error-message
+            msgDiv.innerHTML = `<div class='message error-message'>${error.message}</div>`;
+        } else {
+            currentUser = data.user;
+            const inviteCode = email.split('@')[0] + Math.floor(Math.random() * 10000);
+            await supabaseClient.from('user_progress').insert({
+                user_id: currentUser.id, email: email, parrain_code: sponsorCode,
+                invite_code: inviteCode, step: 1
+            });
+            msgDiv.innerHTML = "<div class='message success-message'>✅ Inscription réussie ! Vérifiez votre email.</div>";
+            setTimeout(() => {
+                document.getElementById('video-popup').style.display = 'flex';
+            }, 1500);
+        }
+    });
+
+    // ==================== CONNEXION ====================
+    document.getElementById('login-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        const msgDiv = document.getElementById('login-message');
+
+        const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) {
+            msgDiv.innerHTML = `<div class='message error-message'>${error.message}</div>`;
+        } else {
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            currentUser = user;
+            const { data } = await supabaseClient.from('user_progress').select('step').eq('user_id', currentUser.id).single();
+            if (data?.step === 4) {
+                document.getElementById('step4-section').style.display = 'block';
+                document.getElementById('step1-section').style.display = 'none';
+            } else if (data?.step === 3) {
+                document.getElementById('step3-section').style.display = 'block';
+            } else if (data?.step === 2) {
+                document.getElementById('step2-section').style.display = 'block';
+            } else {
+                document.getElementById('step1-section').style.display = 'block';
+            }
+            document.getElementById('show-login-btn').style.display = 'none';
+            document.getElementById('logout-btn').style.display = 'inline-block';
+        }
+    });
+
+    // ==================== DÉCONNEXION ====================
+    document.getElementById('logout-btn')?.addEventListener('click', async () => {
+        await supabaseClient.auth.signOut();
+        currentUser = null;
+        document.getElementById('step1-section').style.display = 'block';
+        document.getElementById('step2-section').style.display = 'none';
+        document.getElementById('step3-section').style.display = 'none';
+        document.getElementById('step4-section').style.display = 'none';
+        document.getElementById('login-section').style.display = 'none';
+        document.getElementById('show-login-btn').style.display = 'inline-block';
+        document.getElementById('logout-btn').style.display = 'none';
+    });
+
+    // ==================== POPUP VIDÉO ====================
+    let popupSeconds = 10;
+    let popupTimer = null;
+    const popup = document.getElementById('video-popup');
+    const countdownSpan = document.getElementById('popup-countdown');
+    const triggerBtn = document.getElementById('watch-video-trigger');
+
+    if (popup && countdownSpan && triggerBtn) {
+        popupTimer = setInterval(() => {
+            popupSeconds--;
+            countdownSpan.innerText = `⏳ ${popupSeconds} seconde${popupSeconds > 1 ? 's' : ''}`;
+            if (popupSeconds <= 0) {
+                clearInterval(popupTimer);
+                countdownSpan.innerText = '✅ Prêt à transformer votre réseau !';
+                triggerBtn.disabled = false;
+                triggerBtn.innerText = '🎬 Je regarde la vidéo stratégique';
+            }
+        }, 1000);
+
+        triggerBtn.onclick = () => {
+            popup.style.display = 'none';
+            document.getElementById('step2-section').style.display = 'block';
+            document.getElementById('step1-section').style.display = 'none';
+            document.getElementById('watch-video-btn').disabled = false;
+        };
+    }
+
+    // ==================== VIDÉO CHRONO ====================
+    let remainingSeconds = 180;
+    let videoTimer = null;
+    const watchVideoBtn = document.getElementById('watch-video-btn');
+    const timerDisplay = document.getElementById('timer-display');
+    const getLinkBtn = document.getElementById('get-parrain-link-btn');
+
+    if (watchVideoBtn) {
