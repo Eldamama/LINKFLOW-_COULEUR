@@ -46,6 +46,13 @@
         .step.active { background: #2a9d8f; color: white; }
         .step.done { background: #136b8d; color: white; }
         hr { margin: 15px 0; }
+        .opportunity-card { background: #fff; border-radius: 16px; padding: 15px; margin-bottom: 12px; border: 1px solid #e9ecef; transition: 0.2s; cursor: pointer; }
+        .opportunity-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .opportunity-card.active { border-left: 4px solid #2a9d8f; background: #f8f9fa; }
+        .opportunity-card.inactive { opacity: 0.6; }
+        .opportunity-title { font-weight: bold; font-size: 1.1rem; margin-bottom: 5px; }
+        .opportunity-desc { font-size: 0.85rem; color: #6c757d; }
+        .opportunity-badge { display: inline-block; background: #2a9d8f; color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 20px; margin-left: 10px; }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -67,7 +74,7 @@
         <div class="step" data-step="1">1. Formulaire</div>
         <div class="step" data-step="2">2. Vidéo</div>
         <div class="step" data-step="3">3. Paiement</div>
-        <div class="step" data-step="4">4. Lien LinkFlow</div>
+        <div class="step" data-step="4">4. Opportunités</div>
     </div>
 
     <!-- ÉTAPE 1 : FORMULAIRE -->
@@ -124,7 +131,7 @@
         <button id="get-parrain-link-btn" class="btn btn-success" disabled>🔗 J'obtiens le lien de mon parrain</button>
     </div>
 
-    <!-- ÉTAPE 3 : PAIEMENT ET GÉNÉRATION -->
+    <!-- ÉTAPE 3 : PAIEMENT -->
     <div id="step3-section" style="display:none;">
         <h2 id="parrain-link-title">🔗 Le lien de votre parrain</h2>
         <div class="instruction-box" id="parrain-instructions-text">📌 Utilisez ce lien pour vous inscrire sur Victory Automatic.<br>Victory vous donnera votre propre lien et une adresse USDT.</div>
@@ -162,12 +169,14 @@
         <div id="step3-message"></div>
     </div>
 
-    <!-- OPPORTUNITÉS -->
+    <!-- ÉTAPE 4 : OPPORTUNITÉS AVEC FOLLOW ME -->
     <div id="opportunites-section" style="display:none;">
         <h3 id="opp-section-title">📢 Opportunités disponibles</h3>
-        <div id="opp-list">
-            <button class="opp-btn" id="opp1-btn" data-opp="1">Opportunité 1 - Bientôt</button>
-            <button class="opp-btn" id="opp2-btn" data-opp="2" style="background:#ff9800;" onclick="window.open('https://victoryworld.club/longa01','_blank')">✅ Opportunité 2 - Victory World (Active)</button>
+        <p id="followme-info" style="margin-bottom:15px; font-size:0.85rem; color:#2a9d8f;">🤝 <strong>Follow Me</strong> : Vos filleuls vous suivront automatiquement sur toutes les opportunités</p>
+        <div id="opportunities-list"></div>
+        <div id="my-referrals" style="margin-top:25px;">
+            <h4 id="referrals-title">👥 Mes filleuls Follow Me</h4>
+            <div id="referrals-list" style="font-size:0.85rem; color:#6c757d;"></div>
         </div>
     </div>
 
@@ -185,12 +194,20 @@
 <script>
     // ==================== CONFIGURATION ====================
     const SUPABASE_URL = 'https://yxkhqwccyagshwyfvhky.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4a2hxd2NjeWFnc2h3eWZ2aGt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYzODQ5MzAsImV4cCI6MjA2MTk2MDkzMH0.RF47rJhN2hrQvWR9Xw9SXdbTRJtdcO2kEsVvEw7BIOY';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4a2hxd2NjeWFnc2h3eWZ2aGt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYzODQ5MzAsImV4cCI6MjA2MTk2MDkzMH0.RF47rJhN2hrQvWR9Xw9SXdbTRJtdcO2kEsVvEw7BIOY';
     const ROOT_REF_CODE = "AFEG1000";
     const ROOT_PARRAIN_LINK = "https://victoryauto.app/ref/AFEG1000";
 
+    // ==================== CONFIGURATION DES OPPORTUNITÉS (extensible) ====================
+    const OPPORTUNITIES = [
+        { id: "victory_world", name: "Victory World", description: "Plateforme de donation avec matrice", url: "https://victoryworld.club/longa01", active: true, badge: "ACTIVE" },
+        { id: "opportunity_3", name: "Opportunité 3", description: "Nouvelle opportunité à venir", url: "#", active: false, badge: "BIENTÔT" },
+        { id: "opportunity_4", name: "Opportunité 4", description: "En développement", url: "#", active: false, badge: "À VENIR" }
+    ];
+
     let supabaseClient = null;
     let currentUser = null;
+    let currentUserInviteCode = null;
     let currentParrainCode = null;
     let currentTargetWallet = null;
     let videoTimer = null;
@@ -199,7 +216,7 @@
     let popupTimer = null;
     let popupSeconds = 10;
 
-    // ==================== MULTILINGUISME COMPLET ====================
+    // ==================== MULTILINGUISME ====================
     const translations = {
         fr: {
             register_title: "🚀 Inscription LinkFlow", register_subtitle: "Rejoignez la communauté qui transforme la vie des gens",
@@ -215,9 +232,11 @@
             victory_title: "🔗 Votre lien Victory personnel", generate_btn: "✨ Générer mon lien LinkFlow",
             congrats_title: "🎉 Félicitations !", followme_text: "🤝 Follow Me activé — Vos filleuls suivront vos opportunités.",
             opportunities_btn: "🚀 Voir les opportunités", opp_title: "📢 Opportunités disponibles",
-            opp1: "Opportunité 1 - Bientôt", opp2: "✅ Opportunité 2 - Victory World (Active)",
             forgot_title: "Réinitialisation du mot de passe", back_login: "Retour à la connexion",
-            copy_btn: "📋 Copier", save_address_btn: "📌 Enregistrer l'adresse"
+            copy_btn: "📋 Copier", save_address_btn: "📌 Enregistrer l'adresse",
+            followme_info: "🤝 Follow Me : Vos filleuls vous suivront automatiquement sur toutes les opportunités",
+            referrals_title: "👥 Mes filleuls Follow Me", no_referrals: "Aucun filleul pour le moment",
+            join_btn: "Rejoindre", coming_soon: "Bientôt disponible"
         },
         en: {
             register_title: "🚀 LinkFlow Sign Up", register_subtitle: "Join the community that changes lives",
@@ -233,9 +252,11 @@
             victory_title: "🔗 Your personal Victory link", generate_btn: "✨ Generate my LinkFlow link",
             congrats_title: "🎉 Congratulations!", followme_text: "🤝 Follow Me activated — Your referrals will follow your opportunities.",
             opportunities_btn: "🚀 View opportunities", opp_title: "📢 Available opportunities",
-            opp1: "Opportunity 1 - Soon", opp2: "✅ Opportunity 2 - Victory World (Active)",
             forgot_title: "Reset Password", back_login: "Back to login",
-            copy_btn: "📋 Copy", save_address_btn: "📌 Save address"
+            copy_btn: "📋 Copy", save_address_btn: "📌 Save address",
+            followme_info: "🤝 Follow Me: Your referrals will automatically follow you on all opportunities",
+            referrals_title: "👥 My Follow Me referrals", no_referrals: "No referrals yet",
+            join_btn: "Join", coming_soon: "Coming soon"
         },
         es: {
             register_title: "🚀 Registro LinkFlow", register_subtitle: "Únete a la comunidad que cambia vidas",
@@ -251,9 +272,11 @@
             victory_title: "🔗 Tu enlace Victory personal", generate_btn: "✨ Generar mi enlace LinkFlow",
             congrats_title: "🎉 ¡Felicidades!", followme_text: "🤝 Follow Me activado — Tus referidos seguirán tus oportunidades.",
             opportunities_btn: "🚀 Ver oportunidades", opp_title: "📢 Oportunidades disponibles",
-            opp1: "Oportunidad 1 - Pronto", opp2: "✅ Oportunidad 2 - Victory World (Activa)",
             forgot_title: "Restablecer Contraseña", back_login: "Volver al inicio",
-            copy_btn: "📋 Copiar", save_address_btn: "📌 Guardar dirección"
+            copy_btn: "📋 Copiar", save_address_btn: "📌 Guardar dirección",
+            followme_info: "🤝 Follow Me: Tus referidos te seguirán automáticamente en todas las oportunidades",
+            referrals_title: "👥 Mis referidos Follow Me", no_referrals: "Sin referidos aún",
+            join_btn: "Unirse", coming_soon: "Próximamente"
         },
         pt: {
             register_title: "🚀 Cadastro LinkFlow", register_subtitle: "Junte-se à comunidade que muda vidas",
@@ -269,132 +292,69 @@
             victory_title: "🔗 Seu link Victory pessoal", generate_btn: "✨ Gerar meu link LinkFlow",
             congrats_title: "🎉 Parabéns!", followme_text: "🤝 Follow Me ativado — Seus indicados seguirão suas oportunidades.",
             opportunities_btn: "🚀 Ver oportunidades", opp_title: "📢 Oportunidades disponíveis",
-            opp1: "Oportunidade 1 - Em breve", opp2: "✅ Oportunidade 2 - Victory World (Ativa)",
             forgot_title: "Redefinir Senha", back_login: "Voltar ao login",
-            copy_btn: "📋 Copiar", save_address_btn: "📌 Salvar endereço"
+            copy_btn: "📋 Copiar", save_address_btn: "📌 Salvar endereço",
+            followme_info: "🤝 Follow Me: Seus indicados seguirão você automaticamente em todas as oportunidades",
+            referrals_title: "👥 Meus indicados Follow Me", no_referrals: "Nenhum indicado ainda",
+            join_btn: "Participar", coming_soon: "Em breve"
         }
     };
     let currentLang = 'fr';
 
     function updateAllTexts() {
         const t = translations[currentLang];
-        // Étape 1 - Formulaire
-        const hRegister = document.getElementById('h-register-title');
-        if (hRegister) hRegister.innerText = t.register_title;
-        const pSubtitle = document.getElementById('p-register-subtitle');
-        if (pSubtitle) pSubtitle.innerText = t.register_subtitle;
-        const parrainInfo = document.getElementById('parrain-required-info');
-        if (parrainInfo) parrainInfo.innerHTML = t.parrain_required;
-        const registerBtn = document.getElementById('register-submit-btn');
-        if (registerBtn) registerBtn.innerText = t.register_btn;
-        const loginLink = document.getElementById('show-login-link');
-        if (loginLink) loginLink.innerText = t.login_link;
-        
-        // Connexion
-        const loginTitle = document.getElementById('login-section-title');
-        if (loginTitle) loginTitle.innerText = t.login_title;
-        const loginBtn = document.getElementById('login-submit-btn');
-        if (loginBtn) loginBtn.innerText = t.login_btn;
-        const registerLink = document.getElementById('show-register-link');
-        if (registerLink) registerLink.innerText = t.register_link;
-        const forgotLink = document.getElementById('show-forgot-link');
-        if (forgotLink) forgotLink.innerText = t.forgot_link;
-        
-        // Popup
-        const popupTitle = document.getElementById('popup-title-text');
-        if (popupTitle) popupTitle.innerText = t.popup_title;
-        const popupDesc = document.getElementById('popup-desc-text');
-        if (popupDesc) popupDesc.innerHTML = t.popup_desc;
-        
-        // Vidéo
-        const videoTitle = document.getElementById('video-section-title');
-        if (videoTitle) videoTitle.innerText = t.video_title;
-        const watchBtn = document.getElementById('watch-video-btn');
-        if (watchBtn) watchBtn.innerText = t.watch_btn;
-        const getLinkBtn = document.getElementById('get-parrain-link-btn');
-        if (getLinkBtn) getLinkBtn.innerText = t.get_link_btn;
-        
-        // Étape 3
-        const parrainLinkTitle = document.getElementById('parrain-link-title');
-        if (parrainLinkTitle) parrainLinkTitle.innerText = t.parrain_link_title;
-        const parrainInstructions = document.getElementById('parrain-instructions-text');
-        if (parrainInstructions) parrainInstructions.innerHTML = t.parrain_instructions;
-        const registeredBtn = document.getElementById('i-am-registered');
-        if (registeredBtn) registeredBtn.innerText = t.registered_btn;
-        const targetTitle = document.getElementById('target-address-title');
-        if (targetTitle) targetTitle.innerText = t.target_title;
-        const paymentTitle = document.getElementById('payment-section-title');
-        if (paymentTitle) paymentTitle.innerText = t.payment_title;
-        const verifyBtn = document.getElementById('verify-payment');
-        if (verifyBtn) verifyBtn.innerText = t.verify_btn;
-        const victoryLinkTitle = document.getElementById('victory-link-title');
-        if (victoryLinkTitle) victoryLinkTitle.innerText = t.victory_title;
-        const generateBtn = document.getElementById('generate-linkflow');
-        if (generateBtn) generateBtn.innerText = t.generate_btn;
-        const congratsTitle = document.getElementById('congrats-title');
-        if (congratsTitle) congratsTitle.innerText = t.congrats_title;
-        const followmeText = document.getElementById('followme-text');
-        if (followmeText) followmeText.innerHTML = t.followme_text;
-        const opportunitiesBtn = document.getElementById('continue-to-opportunities');
-        if (opportunitiesBtn) opportunitiesBtn.innerText = t.opportunities_btn;
-        
-        // Opportunités
-        const oppTitle = document.getElementById('opp-section-title');
-        if (oppTitle) oppTitle.innerText = t.opp_title;
-        const opp1 = document.getElementById('opp1-btn');
-        if (opp1) opp1.innerText = t.opp1;
-        const opp2 = document.getElementById('opp2-btn');
-        if (opp2) opp2.innerHTML = t.opp2;
-        
-        // Forgot
-        const forgotTitle = document.getElementById('forgot-section-title');
-        if (forgotTitle) forgotTitle.innerText = t.forgot_title;
-        const backLogin = document.getElementById('back-to-login');
-        if (backLogin) backLogin.innerText = t.back_login;
-        
-        // Boutons copier
-        const copyParrainBtn = document.getElementById('copy-parrain-link');
-        if (copyParrainBtn) copyParrainBtn.innerText = t.copy_btn;
-        const saveAddressBtn = document.getElementById('save-target-address');
-        if (saveAddressBtn) saveAddressBtn.innerText = t.save_address_btn;
-        const copyLinkflowBtn = document.getElementById('copy-linkflow');
-        if (copyLinkflowBtn) copyLinkflowBtn.innerText = t.copy_btn;
+        const elements = {
+            'h-register-title': 'register_title', 'p-register-subtitle': 'register_subtitle',
+            'parrain-required-info': 'parrain_required', 'register-submit-btn': 'register_btn',
+            'show-login-link': 'login_link', 'login-section-title': 'login_title',
+            'login-submit-btn': 'login_btn', 'show-register-link': 'register_link',
+            'show-forgot-link': 'forgot_link', 'popup-title-text': 'popup_title',
+            'popup-desc-text': 'popup_desc', 'video-section-title': 'video_title',
+            'watch-video-btn': 'watch_btn', 'get-parrain-link-btn': 'get_link_btn',
+            'parrain-link-title': 'parrain_link_title', 'parrain-instructions-text': 'parrain_instructions',
+            'i-am-registered': 'registered_btn', 'target-address-title': 'target_title',
+            'payment-section-title': 'payment_title', 'verify-payment': 'verify_btn',
+            'victory-link-title': 'victory_title', 'generate-linkflow': 'generate_btn',
+            'congrats-title': 'congrats_title', 'followme-text': 'followme_text',
+            'continue-to-opportunities': 'opportunities_btn', 'opp-section-title': 'opp_title',
+            'forgot-section-title': 'forgot_title', 'back-to-login': 'back_login',
+            'copy-parrain-link': 'copy_btn', 'save-target-address': 'save_address_btn',
+            'copy-linkflow': 'copy_btn', 'followme-info': 'followme_info',
+            'referrals-title': 'referrals_title'
+        };
+        for (const [id, key] of Object.entries(elements)) {
+            const el = document.getElementById(id);
+            if (el) el.innerText = t[key];
+        }
+        const noReferrals = document.getElementById('no-referrals-placeholder');
+        if (noReferrals) noReferrals.innerText = t.no_referrals;
     }
 
     document.querySelectorAll('[data-lang]').forEach(btn => {
         btn.addEventListener('click', (e) => {
             currentLang = e.target.getAttribute('data-lang');
             updateAllTexts();
+            displayOpportunities();
         });
     });
     updateAllTexts();
 
     // ==================== FONCTIONS ====================
     function isValidBEP20Address(address) {
-        const re = /^0x[a-fA-F0-9]{40}$/;
-        return re.test(address);
+        return /^0x[a-fA-F0-9]{40}$/.test(address);
     }
 
     function showStep(step) {
-        const step1 = document.getElementById('step1-section');
-        const step2 = document.getElementById('step2-section');
-        const step3 = document.getElementById('step3-section');
-        const oppSec = document.getElementById('opportunites-section');
-        const loginSec = document.getElementById('login-section');
-        const forgotSec = document.getElementById('forgot-section');
-        
-        if (step1) step1.style.display = 'none';
-        if (step2) step2.style.display = 'none';
-        if (step3) step3.style.display = 'none';
-        if (oppSec) oppSec.style.display = 'none';
-        if (loginSec) loginSec.style.display = 'none';
-        if (forgotSec) forgotSec.style.display = 'none';
-        
-        if (step === 1 && step1) step1.style.display = 'block';
-        else if (step === 2 && step2) step2.style.display = 'block';
-        else if (step === 3 && step3) step3.style.display = 'block';
-        else if (step === 4 && oppSec) oppSec.style.display = 'block';
-        
+        const sections = ['step1-section', 'step2-section', 'step3-section', 'opportunites-section', 'login-section', 'forgot-section'];
+        sections.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
+        if (step === 1) document.getElementById('step1-section').style.display = 'block';
+        else if (step === 2) document.getElementById('step2-section').style.display = 'block';
+        else if (step === 3) document.getElementById('step3-section').style.display = 'block';
+        else if (step === 4) {
+            document.getElementById('opportunites-section').style.display = 'block';
+            displayOpportunities();
+            loadReferrals();
+        }
         const stepDivs = document.querySelectorAll('.step');
         stepDivs.forEach((el, idx) => {
             el.classList.remove('active', 'done');
@@ -403,46 +363,58 @@
         });
     }
 
-    async function verifyDonation(txHash, targetWallet) {
-        try {
-            const { data, error } = await supabaseClient.functions.invoke('verify-donation', {
-                body: { txHash, targetWallet }
-            });
-            if (error) return { success: false, message: error.message };
-            return data;
-        } catch (err) {
-            return { success: false, message: 'Erreur de connexion au serveur' };
+    // ==================== FOLLOW ME : AFFICHAGE DES OPPORTUNITÉS ====================
+    async function displayOpportunities() {
+        const container = document.getElementById('opportunities-list');
+        if (!container) return;
+        
+        const t = translations[currentLang];
+        container.innerHTML = '';
+        
+        for (const opp of OPPORTUNITIES) {
+            const card = document.createElement('div');
+            card.className = `opportunity-card ${opp.active ? 'active' : 'inactive'}`;
+            
+            const joinLink = opp.active && currentUserInviteCode 
+                ? `${opp.url}?ref=${currentUserInviteCode}&followme=1`
+                : '#';
+            
+            card.innerHTML = `
+                <div class="opportunity-title">
+                    ${opp.name}
+                    <span class="opportunity-badge">${opp.badge}</span>
+                </div>
+                <div class="opportunity-desc">${opp.description}</div>
+                <button class="btn-small" style="margin-top:10px;" 
+                    ${!opp.active ? 'disabled' : `onclick="window.open('${joinLink}', '_blank')"`}>
+                    ${opp.active ? t.join_btn : t.coming_soon}
+                </button>
+                ${opp.active && currentUserInviteCode ? 
+                    `<div style="font-size:0.7rem; margin-top:8px; color:#2a9d8f;">🔗 followme=1 activé</div>` : ''}
+            `;
+            container.appendChild(card);
         }
     }
 
-    async function init() {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        const { data: { user } } = await supabaseClient.auth.getUser();
-        if (user) {
-            currentUser = user;
-            const { data } = await supabaseClient.from('user_progress').select('step').eq('user_id', currentUser.id).single();
-            if (data?.step === 4) showStep(4);
-            else if (data?.step === 3) showStep(3);
-            else if (data?.step === 2) showStep(2);
-            else showStep(1);
-            document.getElementById('show-login-btn').style.display = 'none';
-            document.getElementById('logout-btn').style.display = 'inline-block';
-        } else {
-            showStep(1);
-            document.getElementById('show-login-btn').style.display = 'inline-block';
-            document.getElementById('logout-btn').style.display = 'none';
+    // ==================== FOLLOW ME : CHARGER LES FILLEULS ====================
+    async function loadReferrals() {
+        if (!currentUser || !currentUserInviteCode) return;
+        
+        const { data, error } = await supabaseClient
+            .from('user_progress')
+            .select('email, invite_code, created_at')
+            .eq('parrain_code', currentUserInviteCode);
+        
+        const container = document.getElementById('referrals-list');
+        const t = translations[currentLang];
+        
+        if (error || !data || data.length === 0) {
+            container.innerHTML = `<p id="no-referrals-placeholder">${t.no_referrals}</p>`;
+            return;
         }
-    }
-
-    function showEmotionalPopup() {
-        const popup = document.getElementById('video-popup');
-        const countdownSpan = document.getElementById('popup-countdown');
-        const triggerBtn = document.getElementById('watch-video-trigger');
-        popupSeconds = 10;
-        popup.style.display = 'flex';
-        triggerBtn.disabled = true;
-        if (popupTimer) clearInterval(popupTimer);
-        popupTimer = setInterval(() => {
-            popupSeconds--;
-            countdownSpan.innerText = `⏳ ${popupSeconds} seconde${popupSeconds > 1 ? 's' : ''}`;
-            if
+        
+        container.innerHTML = data.map(ref => `
+            <div style="padding: 8px 0; border-bottom: 1px solid #e9ecef;">
+                <strong>${ref.email}</strong><br>
+                <span style="font-size:0.7rem;">Code: ${ref.invite_code} | Inscrit le: ${new Date(ref.created_at).toLocaleDateString()}</span>
+            </div
