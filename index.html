@@ -8,92 +8,80 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
         body { background: linear-gradient(145deg, #f5f7fc 0%, #eef2f6 100%); min-height: 100vh; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .main-container { max-width: 650px; width: 100%; background: white; border-radius: 2rem; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.15); padding: 1.8rem; }
+        
+        /* Sélecteur de langue */
         #language-selector { display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 15px; flex-wrap: wrap; }
         #language-selector button { background: #fff; border: 1px solid #cfdee9; border-radius: 40px; padding: 6px 14px; cursor: pointer; font-size: 0.8rem; transition: 0.2s; }
-        #language-selector button.active { background: #2a9d8f; color: white; border-color: #2a9d8f; }
+        #language-selector button.active { background: #0f4c5f; color: white; border-color: #0f4c5f; }
+
+        /* Éléments UI */
         .btn-small { background: transparent; border: 1px solid #2c7da0; padding: 6px 12px; border-radius: 40px; cursor: pointer; font-size: 0.75rem; }
         h2, h3 { color: #0a2b38; margin-bottom: 1rem; }
         form { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
-        input { padding: 12px 16px; border: 1px solid #cbdbe2; border-radius: 60px; font-size: 1rem; outline: none; width: 100%; }
+        input { padding: 12px 16px; border: 1px solid #cbdbe2; border-radius: 60px; font-size: 1rem; outline: none; width: 100%; transition: 0.3s; }
         input:focus { border-color: #2c7da0; box-shadow: 0 0 0 3px rgba(44,125,160,0.2); }
-        .btn, .btn-primary, .btn-success { background: #0f4c5f; color: white; border: none; padding: 12px 18px; border-radius: 60px; font-weight: 600; cursor: pointer; text-align: center; transition: 0.2s; }
+        .btn, .btn-primary, .btn-success { background: #0f4c5f; color: white; border: none; padding: 12px 18px; border-radius: 60px; font-weight: 600; cursor: pointer; text-align: center; transition: 0.2s; text-decoration: none; }
         .btn-primary { background: #136b8d; }
         .btn-success { background: #2a9d8f; }
-        .btn-success:hover:not(:disabled) { background: #21867a; }
-        .btn-primary:hover:not(:disabled) { filter: brightness(0.95); }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .timer { font-size: 1.8rem; font-weight: bold; text-align: center; margin: 15px 0; background: linear-gradient(135deg, #136b8d, #2a9d8f); color: white; padding: 15px; border-radius: 60px; }
-        .video-container { margin: 15px 0; border-radius: 24px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        iframe { width: 100%; border-radius: 24px; }
-        .popup { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; z-index: 1000; animation: fadeIn 0.5s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .popup-content { background: linear-gradient(145deg, #ffffff, #f8f9fa); max-width: 450px; width: 90%; padding: 2rem; border-radius: 2rem; text-align: center; animation: slideUp 0.6s ease-out; }
-        .popup-icon { font-size: 4rem; margin-bottom: 1rem; }
-        .benefits-list { text-align: left; margin: 1.5rem 0; padding-left: 1.5rem; }
-        .benefits-list li { margin: 10px 0; color: #2c3e50; }
-        .countdown-badge { background: #136b8d; color: white; display: inline-block; padding: 5px 15px; border-radius: 40px; font-size: 1.2rem; margin: 15px 0; }
-        .message { margin-top: 12px; padding: 8px; border-radius: 40px; text-align: center; font-size: 0.85rem; }
-        .error-message { background: #ffdddd; color: #c00; }
-        .success-message { background: #d4edda; color: #155724; }
-        .loading-message { background: #fff3cd; color: #856404; }
-        .spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(0,0,0,.1); border-radius: 50%; border-top-color: #136b8d; animation: spin 1s ease-in-out infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .instruction-box { background: #f8f9fa; padding: 15px; border-radius: 16px; margin: 15px 0; border-left: 4px solid #2a9d8f; font-size: 0.9rem; }
-        .code-display { font-family: monospace; font-size: 1.2rem; font-weight: bold; background: #e9ecef; padding: 10px; border-radius: 12px; text-align: center; word-break: break-all; }
-        .step-indicator { display: flex; justify-content: space-between; margin-bottom: 25px; flex-wrap: wrap; gap: 5px; }
-        .step { flex: 1; text-align: center; font-size: 0.7rem; padding: 5px; border-radius: 20px; background: #e9ecef; color: #6c757d; }
+
+        /* Step Indicator */
+        .step-indicator { display: flex; justify-content: space-between; margin-bottom: 25px; gap: 5px; }
+        .step { flex: 1; text-align: center; font-size: 0.7rem; padding: 8px; border-radius: 20px; background: #e9ecef; color: #6c757d; }
         .step.active { background: #2a9d8f; color: white; }
         .step.done { background: #136b8d; color: white; }
-        hr { margin: 15px 0; }
-        .form-group { margin-bottom: 15px; }
-        label { font-size: 0.85rem; font-weight: 500; color: #2c3e50; margin-bottom: 5px; display: block; }
-        .hidden { display: none !important; }
+
+        /* Popups et Vidéo */
+        .popup { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .popup-content { background: white; max-width: 450px; width: 90%; padding: 2rem; border-radius: 2rem; text-align: center; animation: slideUp 0.5s ease-out; }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .video-container { margin: 15px 0; border-radius: 24px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .timer { font-size: 1.5rem; font-weight: bold; text-align: center; margin: 15px 0; background: #eee; padding: 10px; border-radius: 40px; }
+        
+        /* Messages */
+        .message { margin-top: 12px; padding: 10px; border-radius: 40px; text-align: center; font-size: 0.85rem; }
+        .error-message { background: #ffdddd; color: #c00; }
+        .success-message { background: #d4edda; color: #155724; }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+
 <div class="main-container">
+    <!-- Langue -->
     <div id="language-selector">
-        <button data-lang="fr" class="active">🇫🇷 Français</button>
-        <button data-lang="en">🇬🇧 English</button>
-        <button data-lang="es">🇪🇸 Español</button>
-        <button data-lang="pt">🇵🇹 Português</button>
+        <button data-lang="fr" class="active">🇫🇷 FR</button>
+        <button data-lang="en">🇬🇧 EN</button>
+        <button data-lang="es">🇪🇸 ES</button>
+        <button data-lang="pt">🇵🇹 PT</button>
     </div>
 
-    <div id="auth-buttons" style="text-align:right; margin-bottom:10px;">
-        <button id="show-login-btn" class="btn-small" style="display:none;">🔐 Se connecter</button>
+    <!-- Auth Buttons -->
+    <div style="text-align:right; margin-bottom:10px;">
         <button id="logout-btn" class="btn-small" style="display:none;">🚪 Déconnexion</button>
     </div>
 
-    <div class="step-indicator" id="step-indicator">
-        <div class="step" data-step="1">1. Formulaire</div>
-        <div class="step" data-step="2">2. Vidéo</div>
-        <div class="step" data-step="3">3. Paiement</div>
-        <div class="step" data-step="4">4. Opportunités</div>
+    <!-- Indicateur d'étapes -->
+    <div class="step-indicator">
+        <div class="step active" id="st1">1</div>
+        <div class="step" id="st2">2</div>
+        <div class="step" id="st3">3</div>
+        <div class="step" id="st4">4</div>
     </div>
 
     <!-- SECTION INSCRIPTION -->
-    <div id="step1-section">
+    <div id="register-section">
         <h2 id="register-title">🚀 Inscription LinkFlow</h2>
-        <p id="register-subtitle">Rejoignez la communauté qui transforme la vie des gens</p>
-        
+        <p id="register-subtitle" style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Rejoignez la communauté qui transforme la vie des gens</p>
         <form id="register-form">
-            <div class="form-group">
-                <label id="email-label">📧 Email</label>
-                <input type="email" id="reg-email" placeholder="exemple@email.com" required>
-            </div>
-            <div class="form-group">
-                <label id="password-label">🔒 Mot de passe</label>
-                <input type="password" id="reg-password" placeholder="••••••••" required>
-            </div>
-            <div class="form-group">
-                <label id="sponsor-label">👥 Code parrain</label>
-                <input type="text" id="ref-link" placeholder="Code parrain (obligatoire)" required>
-            </div>
+            <input type="email" id="reg-email" placeholder="Email" required>
+            <input type="password" id="reg-password" placeholder="Mot de passe" required>
+            <input type="text" id="ref-link" placeholder="Code parrain obligatoire" required>
             <button type="submit" class="btn btn-primary" id="register-submit-btn">📍 Je rejoins l'aventure</button>
         </form>
-        <p style="text-align:center; margin-top:15px;"><a href="#" id="show-login-link">Déjà inscrit ? Se connecter</a></p>
+        <p style="text-align:center; margin-top:15px; font-size: 0.9rem;">
+            <a href="#" id="link-to-login">Déjà inscrit ? Se connecter</a>
+        </p>
         <div id="register-message"></div>
     </div>
 
@@ -101,382 +89,167 @@
     <div id="login-section" style="display:none;">
         <h2 id="login-title">🔐 Connexion</h2>
         <form id="login-form">
-            <div class="form-group">
-                <label id="login-email-label">📧 Email</label>
-                <input type="email" id="login-email" placeholder="exemple@email.com" required>
-            </div>
-            <div class="form-group">
-                <label id="login-password-label">🔒 Mot de passe</label>
-                <input type="password" id="login-password" placeholder="••••••••" required>
-            </div>
+            <input type="email" id="login-email" placeholder="Email" required>
+            <input type="password" id="login-password" placeholder="Mot de passe" required>
             <button type="submit" class="btn btn-primary" id="login-submit-btn">Se connecter</button>
         </form>
-        <p style="text-align:center; margin-top:15px;"><a href="#" id="show-register-link">Pas encore inscrit ? S'inscrire</a><br><a href="#" id="show-forgot-link">Mot de passe oublié ?</a></p>
+        <p style="text-align:center; margin-top:15px; font-size: 0.9rem;">
+            <a href="#" id="link-to-register">Pas encore inscrit ? S'inscrire</a><br><br>
+            <a href="#" id="link-to-forgot">Mot de passe oublié ?</a>
+        </p>
         <div id="login-message"></div>
     </div>
 
-    <!-- SECTION MOT DE PASSE OUBLIÉ -->
+    <!-- SECTION OUBLI -->
     <div id="forgot-section" style="display:none;">
         <h2 id="forgot-title">🔄 Réinitialisation</h2>
         <form id="forgot-form">
-            <div class="form-group">
-                <label id="forgot-email-label">📧 Email</label>
-                <input type="email" id="forgot-email" placeholder="exemple@email.com" required>
-            </div>
+            <input type="email" id="forgot-email" placeholder="Votre Email" required>
             <button type="submit" class="btn btn-primary" id="forgot-submit-btn">Envoyer le lien</button>
         </form>
-        <p style="text-align:center; margin-top:15px;"><a href="#" id="back-to-login">← Retour à la connexion</a></p>
+        <p style="text-align:center; margin-top:15px;">
+            <a href="#" id="back-to-login">← Retour</a>
+        </p>
         <div id="forgot-message"></div>
     </div>
 
-    <!-- POPUP ÉMOTIONNEL -->
-    <div id="video-popup" class="popup" style="display:none;">
-        <div class="popup-content">
-            <div class="popup-icon">🌟🚀🌟</div>
-            <h2 id="popup-title">🎬 La clé de votre réussite !</h2>
-            <p id="popup-desc">Cette courte vidéo a déjà <strong>transformé des milliers de vies</strong>.</p>
-            <ul class="benefits-list">
-                <li>✅ Découvrez comment <strong>doubler votre réseau</strong> en 7 jours</li>
-                <li>✅ Apprenez la stratégie des <strong>leaders à 6 chiffres</strong></li>
-                <li>✅ Comprenez pourquoi 90% des adhérents explosent leur croissance</li>
-            </ul>
-            <div class="countdown-badge" id="popup-countdown">⏳ 10 secondes</div>
-            <button id="watch-video-trigger" class="btn btn-success" disabled>🔓 Débloquer la vidéo</button>
-        </div>
-    </div>
-
-    <!-- SECTION VIDÉO -->
+    <!-- ÉTAPE 2 : VIDÉO (Cachée par défaut) -->
     <div id="step2-section" style="display:none;">
-        <h2 id="video-title">🎬 Visionnez la vidéo stratégique</h2>
+        <h2 id="video-title">🎬 Vidéo Stratégique</h2>
         <div class="video-container">
             <iframe id="youtube-frame" width="100%" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?enablejsapi=1" frameborder="0" allowfullscreen></iframe>
         </div>
-        <button id="watch-video-btn" class="btn btn-large" disabled>🔒 Regarder la vidéo</button>
-        <div id="timer-display" class="timer">⏱️ Temps restant : 180 s</div>
-        <button id="get-parrain-link-btn" class="btn btn-success" disabled>🔗 J'obtiens le lien de mon parrain</button>
+        <div id="timer-display" class="timer">⏱️ 180s</div>
+        <button id="get-parrain-link-btn" class="btn btn-success" disabled>🔗 J'obtiens le lien</button>
     </div>
 
-    <!-- SECTION PAIEMENT (simplifiée) -->
-    <div id="step3-section" style="display:none;">
-        <h2 id="step3-title">💰 Validation du don</h2>
-        <div class="instruction-box" id="step3-instructions">
-            Après avoir effectué votre don de 2.03 USDT, collez votre hash de transaction ci-dessous.
-        </div>
-        <input type="text" id="transaction-hash" placeholder="Hash TXID (0x...)" style="margin-bottom:10px;">
-        <button id="verify-payment" class="btn btn-primary">🔍 Vérifier mon don</button>
-        <div id="payment-message"></div>
-        <button id="continue-to-opps" class="btn btn-success" style="margin-top:15px; display:none;">🚀 Accéder aux opportunités</button>
-    </div>
+</div>
 
-    <!-- SECTION OPPORTUNITÉS -->
-    <div id="step4-section" style="display:none;">
-        <h3 id="opp-title">📢 Opportunités disponibles</h3>
-        <p id="followme-info" style="margin-bottom:15px; font-size:0.85rem; color:#2a9d8f;">🤝 <strong>Follow Me</strong> : Vos filleuls vous suivront automatiquement</p>
-        <div id="opportunities-list">
-            <div class="opportunity-card active" style="background:#fff; border-radius:16px; padding:15px; margin-bottom:12px; border-left:4px solid #2a9d8f;">
-                <div class="opportunity-title">✅ Victory World <span style="background:#2a9d8f; color:white; font-size:0.7rem; padding:2px 8px; border-radius:20px; margin-left:10px;">ACTIVE</span></div>
-                <div class="opportunity-desc">Plateforme de donation avec matrice</div>
-                <button class="btn-small" id="join-victory-btn" style="margin-top:10px;">🚀 Rejoindre</button>
-            </div>
-            <div class="opportunity-card inactive" style="background:#fff; border-radius:16px; padding:15px; margin-bottom:12px; opacity:0.6;">
-                <div class="opportunity-title">📌 Opportunité 3 <span style="background:#6c757d; color:white; font-size:0.7rem; padding:2px 8px; border-radius:20px; margin-left:10px;">BIENTÔT</span></div>
-                <div class="opportunity-desc">Nouvelle opportunité à venir</div>
-                <button class="btn-small" disabled style="margin-top:10px;">🔒 Bientôt disponible</button>
-            </div>
-        </div>
+<!-- POPUP -->
+<div id="video-popup" class="popup">
+    <div class="popup-content">
+        <h2 id="popup-title">🎬 Félicitations !</h2>
+        <p id="popup-desc">Débloquez la vidéo stratégique dans quelques instants...</p>
+        <div id="popup-countdown" style="font-weight:bold; font-size: 1.5rem; margin: 15px 0;">10</div>
+        <button id="watch-video-trigger" class="btn btn-success" disabled>Attendez...</button>
     </div>
 </div>
 
 <script>
-    // ==================== CONFIGURATION ====================
-    const SUPABASE_URL = 'https://yxkhqwccyagshwyfvhky.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4a2hxd2NjeWFnc2h3eWZ2aGt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYzODQ5MzAsImV4cCI6MjA2MTk2MDkzMH0.RF47rJhN2hrQvWR9Xw9SXdbTRJtdcO2kEsVvEw7BIOY';
-    const ROOT_REF_CODE = "AFEG1000";
-
-    let supabaseClient = null;
-    let currentUser = null;
-    let currentUserInviteCode = null;
-
-    // ==================== TRADUCTIONS COMPLÈTES ====================
+    // --- CONFIG ---
     const translations = {
         fr: {
-            register_title: "🚀 Inscription LinkFlow", register_subtitle: "Rejoignez la communauté qui transforme la vie des gens",
-            email_label: "📧 Email", password_label: "🔒 Mot de passe", sponsor_label: "👥 Code parrain",
+            register_title: "🚀 Inscription LinkFlow", register_subtitle: "Rejoignez la communauté qui transforme la vie",
             register_btn: "📍 Je rejoins l'aventure", login_link: "Déjà inscrit ? Se connecter",
-            login_title: "🔐 Connexion", login_email_label: "📧 Email", login_password_label: "🔒 Mot de passe",
-            login_btn: "Se connecter", register_link: "Pas encore inscrit ? S'inscrire", forgot_link: "Mot de passe oublié ?",
-            forgot_title: "🔄 Réinitialisation", forgot_email_label: "📧 Email", forgot_submit_btn: "Envoyer le lien",
-            back_login: "← Retour à la connexion", popup_title: "🎬 La clé de votre réussite !",
-            popup_desc: "Cette courte vidéo a déjà transformé des milliers de vies",
-            video_title: "🎬 Visionnez la vidéo stratégique", watch_btn: "🔒 Regarder la vidéo",
-            get_link_btn: "🔗 J'obtiens le lien de mon parrain", step3_title: "💰 Validation du don",
-            step3_instructions: "Après avoir effectué votre don de 2.03 USDT, collez votre hash de transaction ci-dessous.",
-            verify_btn: "🔍 Vérifier mon don", continue_btn: "🚀 Accéder aux opportunités",
-            opp_title: "📢 Opportunités disponibles", followme_info: "🤝 Follow Me : Vos filleuls vous suivront automatiquement",
-            join_btn: "🚀 Rejoindre", coming_soon: "🔒 Bientôt disponible"
+            login_title: "🔐 Connexion", login_btn: "Se connecter", register_link: "Pas encore inscrit ? S'inscrire",
+            forgot_link: "Mot de passe oublié ?", forgot_title: "🔄 Réinitialisation", back_login: "← Retour",
+            video_title: "🎬 Vidéo Stratégique", get_link_btn: "🔗 J'obtiens le lien", popup_title: "🎬 Félicitations !"
         },
         en: {
             register_title: "🚀 LinkFlow Sign Up", register_subtitle: "Join the community that changes lives",
-            email_label: "📧 Email", password_label: "🔒 Password", sponsor_label: "👥 Sponsor code",
-            register_btn: "📍 I join the adventure", login_link: "Already registered? Sign in",
-            login_title: "🔐 Login", login_email_label: "📧 Email", login_password_label: "🔒 Password",
-            login_btn: "Sign in", register_link: "Not registered? Sign up", forgot_link: "Forgot password?",
-            forgot_title: "🔄 Reset Password", forgot_email_label: "📧 Email", forgot_submit_btn: "Send reset link",
-            back_login: "← Back to login", popup_title: "🎬 The key to your success!",
-            popup_desc: "This short video has transformed thousands of lives",
-            video_title: "🎬 Watch the strategic video", watch_btn: "🔒 Watch video",
-            get_link_btn: "🔗 Get my sponsor's link", step3_title: "💰 Donation verification",
-            step3_instructions: "After making your 2.03 USDT donation, paste your transaction hash below.",
-            verify_btn: "🔍 Verify my donation", continue_btn: "🚀 Access opportunities",
-            opp_title: "📢 Available opportunities", followme_info: "🤝 Follow Me: Your referrals will automatically follow you",
-            join_btn: "🚀 Join", coming_soon: "🔒 Coming soon"
+            register_btn: "📍 Join the adventure", login_link: "Already a member? Sign in",
+            login_title: "🔐 Login", login_btn: "Sign in", register_link: "Not registered? Sign up",
+            forgot_link: "Forgot password?", forgot_title: "🔄 Reset Password", back_login: "← Back",
+            video_title: "🎬 Strategic Video", get_link_btn: "🔗 Get my link", popup_title: "🎬 Congratulations!"
         },
         es: {
             register_title: "🚀 Registro LinkFlow", register_subtitle: "Únete a la comunidad que cambia vidas",
-            email_label: "📧 Correo", password_label: "🔒 Contraseña", sponsor_label: "👥 Código patrocinador",
-            register_btn: "📍 Me uno a la aventura", login_link: "¿Ya registrado? Iniciar sesión",
-            login_title: "🔐 Iniciar sesión", login_email_label: "📧 Correo", login_password_label: "🔒 Contraseña",
-            login_btn: "Iniciar sesión", register_link: "¿No registrado? Regístrate", forgot_link: "¿Olvidaste contraseña?",
-            forgot_title: "🔄 Restablecer", forgot_email_label: "📧 Correo", forgot_submit_btn: "Enviar enlace",
-            back_login: "← Volver al inicio", popup_title: "🎬 ¡La clave de tu éxito!",
-            popup_desc: "Este video ha transformado miles de vidas",
-            video_title: "🎬 Mira el video estratégico", watch_btn: "🔒 Ver video",
-            get_link_btn: "🔗 Obtener link de mi patrocinador", step3_title: "💰 Verificación de donación",
-            step3_instructions: "Después de hacer tu donación de 2.03 USDT, pega el hash de tu transacción.",
-            verify_btn: "🔍 Verificar mi donación", continue_btn: "🚀 Ver oportunidades",
-            opp_title: "📢 Oportunidades disponibles", followme_info: "🤝 Follow Me: Tus referidos te seguirán automáticamente",
-            join_btn: "🚀 Unirse", coming_soon: "🔒 Próximamente"
+            register_btn: "📍 Me uno a la aventura", login_link: "¿Ya eres miembro? Iniciar sesión",
+            login_title: "🔐 Iniciar sesión", login_btn: "Entrar", register_link: "¿No estás registrado? Crear cuenta",
+            forgot_link: "¿Olvidaste tu contraseña?", forgot_title: "🔄 Restablecer", back_login: "← Volver",
+            video_title: "🎬 Video Estratégico", get_link_btn: "🔗 Obtener mi enlace", popup_title: "🎬 ¡Felicidades!"
         },
         pt: {
             register_title: "🚀 Cadastro LinkFlow", register_subtitle: "Junte-se à comunidade que muda vidas",
-            email_label: "📧 Email", password_label: "🔒 Senha", sponsor_label: "👥 Código padrinho",
-            register_btn: "📍 Eu entro na aventura", login_link: "Já registrado? Entrar",
-            login_title: "🔐 Entrar", login_email_label: "📧 Email", login_password_label: "🔒 Senha",
-            login_btn: "Entrar", register_link: "Não registrado? Cadastre-se", forgot_link: "Esqueceu a senha?",
-            forgot_title: "🔄 Redefinir", forgot_email_label: "📧 Email", forgot_submit_btn: "Enviar link",
-            back_login: "← Voltar ao login", popup_title: "🎬 A chave do seu sucesso!",
-            popup_desc: "Este vídeo curto já transformou milhares de vidas",
-            video_title: "🎬 Assista ao vídeo estratégico", watch_btn: "🔒 Assistir vídeo",
-            get_link_btn: "🔗 Obter link do meu padrinho", step3_title: "💰 Verificação de doação",
-            step3_instructions: "Após fazer sua doação de 2.03 USDT, cole o hash da sua transação.",
-            verify_btn: "🔍 Verificar minha doação", continue_btn: "🚀 Ver oportunidades",
-            opp_title: "📢 Oportunidades disponíveis", followme_info: "🤝 Follow Me: Seus indicados seguirão você automaticamente",
-            join_btn: "🚀 Participar", coming_soon: "🔒 Em breve"
+            register_btn: "📍 Eu entro na aventura", login_link: "Já é membro? Entrar",
+            login_title: "🔐 Entrar", login_btn: "Entrar", register_link: "Não tem conta? Cadastre-se",
+            forgot_link: "Esqueceu a senha?", forgot_title: "🔄 Redefinir Senha", back_login: "← Voltar",
+            video_title: "🎬 Vídeo Estratégico", get_link_btn: "🔗 Obter meu link", popup_title: "🎬 Parabéns!"
         }
     };
+
     let currentLang = 'fr';
 
-    // ==================== MISE À JOUR DES TEXTES ====================
-    function updateAllTexts() {
+    // --- FONCTION TRADUCTION ---
+    function updateUI() {
         const t = translations[currentLang];
-        const elements = {
-            'register-title': 'register_title', 'register-subtitle': 'register_subtitle',
-            'email-label': 'email_label', 'password-label': 'password_label', 'sponsor-label': 'sponsor_label',
-            'register-submit-btn': 'register_btn', 'show-login-link': 'login_link',
-            'login-title': 'login_title', 'login-email-label': 'login_email_label', 'login-password-label': 'login_password_label',
-            'login-submit-btn': 'login_btn', 'show-register-link': 'register_link', 'show-forgot-link': 'forgot_link',
-            'forgot-title': 'forgot_title', 'forgot-email-label': 'forgot_email_label', 'forgot-submit-btn': 'forgot_submit_btn',
-            'back-to-login': 'back_login', 'popup-title': 'popup_title', 'popup-desc': 'popup_desc',
-            'video-title': 'video_title', 'watch-video-btn': 'watch_btn', 'get-parrain-link-btn': 'get_link_btn',
-            'step3-title': 'step3_title', 'step3-instructions': 'step3_instructions', 'verify-payment': 'verify_btn',
-            'continue-to-opps': 'continue_btn', 'opp-title': 'opp_title', 'followme-info': 'followme_info',
-            'join-victory-btn': 'join_btn'
-        };
-        for (const [id, key] of Object.entries(elements)) {
-            const el = document.getElementById(id);
-            if (el) el.innerText = t[key];
-        }
+        document.getElementById('register-title').innerText = t.register_title;
+        document.getElementById('register-subtitle').innerText = t.register_subtitle;
+        document.getElementById('register-submit-btn').innerText = t.register_btn;
+        document.getElementById('link-to-login').innerText = t.login_link;
+        document.getElementById('login-title').innerText = t.login_title;
+        document.getElementById('login-submit-btn').innerText = t.login_btn;
+        document.getElementById('link-to-register').innerText = t.register_link;
+        document.getElementById('link-to-forgot').innerText = t.forgot_link;
+        document.getElementById('forgot-title').innerText = t.forgot_title;
+        document.getElementById('back-to-login').innerText = t.back_login;
+        document.getElementById('video-title').innerText = t.video_title;
+        document.getElementById('get-parrain-link-btn').innerText = t.get_link_btn;
+        document.getElementById('popup-title').innerText = t.popup_title;
     }
 
-    // ==================== CHANGEMENT DE LANGUE ====================
-    document.querySelectorAll('[data-lang]').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            document.querySelectorAll('[data-lang]').forEach(b => b.classList.remove('active'));
+    // --- GESTION DES VUES ---
+    function showSection(id) {
+        ['register-section', 'login-section', 'forgot-section', 'step2-section'].forEach(s => {
+            document.getElementById(s).style.display = 'none';
+        });
+        document.getElementById(id).style.display = 'block';
+    }
+
+    // Liens de basculement
+    document.getElementById('link-to-login').onclick = (e) => { e.preventDefault(); showSection('login-section'); };
+    document.getElementById('link-to-register').onclick = (e) => { e.preventDefault(); showSection('register-section'); };
+    document.getElementById('link-to-forgot').onclick = (e) => { e.preventDefault(); showSection('forgot-section'); };
+    document.getElementById('back-to-login').onclick = (e) => { e.preventDefault(); showSection('login-section'); };
+
+    // Boutons de langue
+    document.querySelectorAll('#language-selector button').forEach(btn => {
+        btn.onclick = () => {
+            document.querySelectorAll('#language-selector button').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             currentLang = btn.getAttribute('data-lang');
-            updateAllTexts();
-        });
+            updateUI();
+        };
     });
 
-    // ==================== BASCULEMENT DES VUES ====================
-    function toggleView(showId, hideIds = []) {
-        const showEl = document.getElementById(showId);
-        if (showEl) showEl.style.display = 'block';
-        hideIds.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.style.display = 'none';
-        });
-    }
-
-    document.getElementById('show-login-link')?.addEventListener('click', (e) => {
+    // --- SIMULATION INSCRIPTION (POUR TESTER LA POPUP) ---
+    document.getElementById('register-form').onsubmit = (e) => {
         e.preventDefault();
-        toggleView('login-section', ['step1-section', 'forgot-section']);
-    });
+        // Simulation réussite
+        document.getElementById('register-message').innerHTML = "<div class='message success-message'>Compte créé !</div>";
+        
+        // Lancer la popup
+        setTimeout(() => {
+            document.getElementById('video-popup').style.display = 'flex';
+            startPopupTimer();
+        }, 1000);
+    };
 
-    document.getElementById('show-register-link')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        toggleView('step1-section', ['login-section', 'forgot-section']);
-    });
-
-    document.getElementById('show-forgot-link')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        toggleView('forgot-section', ['login-section', 'step1-section']);
-    });
-
-    document.getElementById('back-to-login')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        toggleView('login-section', ['forgot-section', 'step1-section']);
-    });
-
-    // ==================== FONCTIONS SUPABASE ====================
-    async function checkSponsorExists(sponsorCode) {
-        if (sponsorCode === ROOT_REF_CODE) return true;
-        const { data, error } = await supabaseClient
-            .from('user_progress')
-            .select('invite_code')
-            .eq('invite_code', sponsorCode)
-            .single();
-        return !error && data;
-    }
-
-    async function init() {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        const { data: { user } } = await supabaseClient.auth.getUser();
-        if (user) {
-            currentUser = user;
-            const { data } = await supabaseClient.from('user_progress').select('step, invite_code').eq('user_id', currentUser.id).single();
-            currentUserInviteCode = data?.invite_code;
-            if (data?.step === 4) {
-                document.getElementById('step4-section').style.display = 'block';
-                document.getElementById('step1-section').style.display = 'none';
-                document.getElementById('step2-section').style.display = 'none';
-                document.getElementById('step3-section').style.display = 'none';
-            } else if (data?.step === 3) {
-                document.getElementById('step3-section').style.display = 'block';
-            } else if (data?.step === 2) {
-                document.getElementById('step2-section').style.display = 'block';
-            } else {
-                document.getElementById('step1-section').style.display = 'block';
-            }
-            document.getElementById('show-login-btn').style.display = 'none';
-            document.getElementById('logout-btn').style.display = 'inline-block';
-        } else {
-            document.getElementById('step1-section').style.display = 'block';
-            document.getElementById('show-login-btn').style.display = 'inline-block';
-            document.getElementById('logout-btn').style.display = 'none';
-        }
-    }
-
-    // ==================== INSCRIPTION ====================
-    document.getElementById('register-form')?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('reg-email').value;
-        const password = document.getElementById('reg-password').value;
-        const sponsorCode = document.getElementById('ref-link').value.trim();
-        const msgDiv = document.getElementById('register-message');
-
-        if (!sponsorCode) {
-            msgDiv.innerHTML = "<div class='message error-message'>❌ Le code parrain est obligatoire</div>";
-            return;
-        }
-
-        const sponsorExists = await checkSponsorExists(sponsorCode);
-        if (!sponsorExists) {
-            msgDiv.innerHTML = "<div class='message error-message'>❌ Code parrain invalide</div>";
-            return;
-        }
-
-        const { data, error } = await supabaseClient.auth.signUp({ email, password });
-        if (error) {
-            msgDiv.innerHTML = `<div class='message error-message'>${error.message}</div>`;
-        } else {
-            currentUser = data.user;
-            const inviteCode = email.split('@')[0] + Math.floor(Math.random() * 10000);
-            await supabaseClient.from('user_progress').insert({
-                user_id: currentUser.id, email: email, parrain_code: sponsorCode,
-                invite_code: inviteCode, step: 1
-            });
-            msgDiv.innerHTML = "<div class='message success-message'>✅ Inscription réussie ! Vérifiez votre email.</div>";
-            setTimeout(() => {
-                document.getElementById('video-popup').style.display = 'flex';
-            }, 1500);
-        }
-    });
-
-    // ==================== CONNEXION ====================
-    document.getElementById('login-form')?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('login-email').value;
-        const password = document.getElementById('login-password').value;
-        const msgDiv = document.getElementById('login-message');
-
-        const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
-        if (error) {
-            msgDiv.innerHTML = `<div class='message error-message'>${error.message}</div>`;
-        } else {
-            const { data: { user } } = await supabaseClient.auth.getUser();
-            currentUser = user;
-            const { data } = await supabaseClient.from('user_progress').select('step').eq('user_id', currentUser.id).single();
-            if (data?.step === 4) {
-                document.getElementById('step4-section').style.display = 'block';
-                document.getElementById('step1-section').style.display = 'none';
-            } else if (data?.step === 3) {
-                document.getElementById('step3-section').style.display = 'block';
-            } else if (data?.step === 2) {
-                document.getElementById('step2-section').style.display = 'block';
-            } else {
-                document.getElementById('step1-section').style.display = 'block';
-            }
-            document.getElementById('show-login-btn').style.display = 'none';
-            document.getElementById('logout-btn').style.display = 'inline-block';
-        }
-    });
-
-    // ==================== DÉCONNEXION ====================
-    document.getElementById('logout-btn')?.addEventListener('click', async () => {
-        await supabaseClient.auth.signOut();
-        currentUser = null;
-        document.getElementById('step1-section').style.display = 'block';
-        document.getElementById('step2-section').style.display = 'none';
-        document.getElementById('step3-section').style.display = 'none';
-        document.getElementById('step4-section').style.display = 'none';
-        document.getElementById('login-section').style.display = 'none';
-        document.getElementById('show-login-btn').style.display = 'inline-block';
-        document.getElementById('logout-btn').style.display = 'none';
-    });
-
-    // ==================== POPUP VIDÉO ====================
-    let popupSeconds = 10;
-    let popupTimer = null;
-    const popup = document.getElementById('video-popup');
-    const countdownSpan = document.getElementById('popup-countdown');
-    const triggerBtn = document.getElementById('watch-video-trigger');
-
-    if (popup && countdownSpan && triggerBtn) {
-        popupTimer = setInterval(() => {
-            popupSeconds--;
-            countdownSpan.innerText = `⏳ ${popupSeconds} seconde${popupSeconds > 1 ? 's' : ''}`;
-            if (popupSeconds <= 0) {
-                clearInterval(popupTimer);
-                countdownSpan.innerText = '✅ Prêt à transformer votre réseau !';
-                triggerBtn.disabled = false;
-                triggerBtn.innerText = '🎬 Je regarde la vidéo stratégique';
+    function startPopupTimer() {
+        let count = 10;
+        const btn = document.getElementById('watch-video-trigger');
+        const display = document.getElementById('popup-countdown');
+        const timer = setInterval(() => {
+            count--;
+            display.innerText = count;
+            if(count <= 0) {
+                clearInterval(timer);
+                btn.disabled = false;
+                btn.innerText = "🔓 Débloquer la Vidéo";
             }
         }, 1000);
 
-        triggerBtn.onclick = () => {
-            popup.style.display = 'none';
-            document.getElementById('step2-section').style.display = 'block';
-            document.getElementById('step1-section').style.display = 'none';
-            document.getElementById('watch-video-btn').disabled = false;
+        btn.onclick = () => {
+            document.getElementById('video-popup').style.display = 'none';
+            showSection('step2-section');
+            document.getElementById('st1').className = "step done";
+            document.getElementById('st2').className = "step active";
         };
     }
 
-    // ==================== VIDÉO CHRONO ====================
-    let remainingSeconds = 180;
-    let videoTimer = null;
-    const watchVideoBtn = document.getElementById('watch-video-btn');
-    const timerDisplay = document.getElementById('timer-display');
-    const getLinkBtn = document.getElementById('get-parrain-link-btn');
+    // Init au chargement
+    window.onload = updateUI;
+</script>
 
-    if (watchVideoBtn) {
+</body>
+</html>
