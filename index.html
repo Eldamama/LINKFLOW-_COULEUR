@@ -3,252 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>LinkFlow | Victory Automatic</title>
+    <title>LinkFlow | Victory Automatic System</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+        :root {
+            --primary-blue: #0f4c5f;
+            --light-blue: #136b8d;
+            --victory-green: #2a9d8f;
+            --victory-yellow: #ffb703;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background: linear-gradient(145deg, #f5f7fc 0%, #eef2f6 100%); min-height: 100vh; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .main-container { max-width: 650px; width: 100%; background: white; border-radius: 2rem; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.15); padding: 1.8rem; }
         
-        /* Sélecteur de langue */
-        #language-selector { display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 15px; flex-wrap: wrap; }
-        #language-selector button { background: #fff; border: 1px solid #cfdee9; border-radius: 40px; padding: 6px 14px; cursor: pointer; font-size: 0.8rem; transition: 0.2s; }
-        #language-selector button.active { background: #0f4c5f; color: white; border-color: #0f4c5f; }
-
-        /* Éléments UI */
-        .btn-small { background: transparent; border: 1px solid #2c7da0; padding: 6px 12px; border-radius: 40px; cursor: pointer; font-size: 0.75rem; }
-        h2, h3 { color: #0a2b38; margin-bottom: 1rem; }
-        form { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
-        input { padding: 12px 16px; border: 1px solid #cbdbe2; border-radius: 60px; font-size: 1rem; outline: none; width: 100%; transition: 0.3s; }
-        input:focus { border-color: #2c7da0; box-shadow: 0 0 0 3px rgba(44,125,160,0.2); }
-        .btn, .btn-primary, .btn-success { background: #0f4c5f; color: white; border: none; padding: 12px 18px; border-radius: 60px; font-weight: 600; cursor: pointer; text-align: center; transition: 0.2s; text-decoration: none; }
-        .btn-primary { background: #136b8d; }
-        .btn-success { background: #2a9d8f; }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        /* Step Indicator */
-        .step-indicator { display: flex; justify-content: space-between; margin-bottom: 25px; gap: 5px; }
-        .step { flex: 1; text-align: center; font-size: 0.7rem; padding: 8px; border-radius: 20px; background: #e9ecef; color: #6c757d; }
-        .step.active { background: #2a9d8f; color: white; }
-        .step.done { background: #136b8d; color: white; }
-
-        /* Popups et Vidéo */
-        .popup { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 1000; }
-        .popup-content { background: white; max-width: 450px; width: 90%; padding: 2rem; border-radius: 2rem; text-align: center; animation: slideUp 0.5s ease-out; }
-        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .video-container { margin: 15px 0; border-radius: 24px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .timer { font-size: 1.5rem; font-weight: bold; text-align: center; margin: 15px 0; background: #eee; padding: 10px; border-radius: 40px; }
+        .main-container { max-width: 600px; width: 100%; background: white; border-radius: 2.5rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); padding: 2rem; position: relative; overflow: hidden; }
         
-        /* Messages */
-        .message { margin-top: 12px; padding: 10px; border-radius: 40px; text-align: center; font-size: 0.85rem; }
-        .error-message { background: #ffdddd; color: #c00; }
-        .success-message { background: #d4edda; color: #155724; }
+        /* Logo Integration */
+        .logo-container { text-align: center; margin-bottom: 1.5rem; }
+        .logo-container img { width: 150px; height: auto; transition: transform 0.3s ease; }
+        .logo-container img:hover { transform: scale(1.05); }
+
+        #language-selector { display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 15px; }
+        #language-selector button { background: #fff; border: 1px solid #cfdee9; border-radius: 40px; padding: 6px 12px; cursor: pointer; font-size: 0.75rem; transition: 0.2s; }
+        #language-selector button.active { background: var(--primary-blue); color: white; border-color: var(--primary-blue); }
+
+        .step-indicator { display: flex; gap: 10px; margin-bottom: 2rem; }
+        .step { flex: 1; height: 6px; background: #e9ecef; border-radius: 10px; }
+        .step.active { background: var(--victory-green); }
+        .step.done { background: var(--light-blue); }
+
+        h2 { color: var(--primary-blue); margin-bottom: 0.5rem; text-align: center; font-size: 1.5rem; }
+        .instruction-box { background: #f0f7f9; padding: 15px; border-radius: 16px; border-left: 5px solid var(--victory-green); margin: 15px 0; font-size: 0.9rem; line-height: 1.4; color: #334e58; }
+        
+        input { width: 100%; padding: 14px 20px; margin: 10px 0; border: 1px solid #cbdbe2; border-radius: 60px; font-size: 1rem; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--light-blue); box-shadow: 0 0 0 4px rgba(19, 107, 141, 0.15); }
+
+        .btn { width: 100%; padding: 16px; border-radius: 60px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; font-size: 1rem; text-decoration: none; display: inline-block; text-align: center; }
+        .btn-primary { background: var(--light-blue); color: white; }
+        .btn-success { background: var(--victory-green); color: white; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); }
+
+        .timer { font-size: 1.4rem; text-align: center; font-weight: bold; color: #e63946; margin: 15px 0; background: #fff1f2; padding: 10px; border-radius: 50px; }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 20px; overflow: hidden; margin: 15px 0; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        
+        .hidden { display: none !important; }
+        .message { padding: 12px; border-radius: 40px; text-align: center; margin-top: 10px; font-size: 0.85rem; }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
 <div class="main-container">
-    <!-- Langue -->
     <div id="language-selector">
         <button data-lang="fr" class="active">🇫🇷 FR</button>
         <button data-lang="en">🇬🇧 EN</button>
-        <button data-lang="es">🇪🇸 ES</button>
-        <button data-lang="pt">🇵🇹 PT</button>
     </div>
 
-    <!-- Auth Buttons -->
-    <div style="text-align:right; margin-bottom:10px;">
-        <button id="logout-btn" class="btn-small" style="display:none;">🚪 Déconnexion</button>
+    <div class="logo-container">
+        <img src="logo.png" alt="LinkFlow Logo">
     </div>
 
-    <!-- Indicateur d'étapes -->
     <div class="step-indicator">
-        <div class="step active" id="st1">1</div>
-        <div class="step" id="st2">2</div>
-        <div class="step" id="st3">3</div>
-        <div class="step" id="st4">4</div>
+        <div id="bar1" class="step active"></div>
+        <div id="bar2" class="step"></div>
+        <div id="bar3" class="step"></div>
+        <div id="bar4" class="step"></div>
     </div>
 
-    <!-- SECTION INSCRIPTION -->
-    <div id="register-section">
-        <h2 id="register-title">🚀 Inscription LinkFlow</h2>
-        <p id="register-subtitle" style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Rejoignez la communauté qui transforme la vie des gens</p>
+    <div id="sec-auth">
+        <h2 id="auth-title">Bienvenue sur LinkFlow</h2>
         <form id="register-form">
-            <input type="email" id="reg-email" placeholder="Email" required>
+            <input type="email" id="reg-email" placeholder="Votre Email" required>
             <input type="password" id="reg-password" placeholder="Mot de passe" required>
-            <input type="text" id="ref-link" placeholder="Code parrain obligatoire" required>
-            <button type="submit" class="btn btn-primary" id="register-submit-btn">📍 Je rejoins l'aventure</button>
+            <input type="text" id="ref-link" placeholder="Code parrain" required>
+            <button type="submit" class="btn btn-primary">Démarrer l'aventure</button>
         </form>
-        <p style="text-align:center; margin-top:15px; font-size: 0.9rem;">
-            <a href="#" id="link-to-login">Déjà inscrit ? Se connecter</a>
-        </p>
-        <div id="register-message"></div>
     </div>
 
-    <!-- SECTION CONNEXION -->
-    <div id="login-section" style="display:none;">
-        <h2 id="login-title">🔐 Connexion</h2>
-        <form id="login-form">
-            <input type="email" id="login-email" placeholder="Email" required>
-            <input type="password" id="login-password" placeholder="Mot de passe" required>
-            <button type="submit" class="btn btn-primary" id="login-submit-btn">Se connecter</button>
-        </form>
-        <p style="text-align:center; margin-top:15px; font-size: 0.9rem;">
-            <a href="#" id="link-to-register">Pas encore inscrit ? S'inscrire</a><br><br>
-            <a href="#" id="link-to-forgot">Mot de passe oublié ?</a>
-        </p>
-        <div id="login-message"></div>
-    </div>
-
-    <!-- SECTION OUBLI -->
-    <div id="forgot-section" style="display:none;">
-        <h2 id="forgot-title">🔄 Réinitialisation</h2>
-        <form id="forgot-form">
-            <input type="email" id="forgot-email" placeholder="Votre Email" required>
-            <button type="submit" class="btn btn-primary" id="forgot-submit-btn">Envoyer le lien</button>
-        </form>
-        <p style="text-align:center; margin-top:15px;">
-            <a href="#" id="back-to-login">← Retour</a>
-        </p>
-        <div id="forgot-message"></div>
-    </div>
-
-    <!-- ÉTAPE 2 : VIDÉO (Cachée par défaut) -->
-    <div id="step2-section" style="display:none;">
-        <h2 id="video-title">🎬 Vidéo Stratégique</h2>
+    <div id="sec-video" class="hidden">
+        <h2>🎬 Séance Stratégique</h2>
+        <div class="instruction-box">Regardez cette vidéo pour comprendre la puissance de l'automatisation Victory. <b>Le bouton s'activera à la fin du chrono.</b></div>
         <div class="video-container">
-            <iframe id="youtube-frame" width="100%" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?enablejsapi=1" frameborder="0" allowfullscreen></iframe>
+            <iframe id="yt-player" src="https://www.youtube.com/embed/dQw4w9WgXcQ?enablejsapi=1&rel=0" frameborder="0" allowfullscreen></iframe>
         </div>
         <div id="timer-display" class="timer">⏱️ 180s</div>
-        <button id="get-parrain-link-btn" class="btn btn-success" disabled>🔗 J'obtiens le lien</button>
+        <button id="btn-to-victory" class="btn btn-success" disabled>🔗 J'obtiens mon lien Victory</button>
     </div>
 
-</div>
+    <div id="sec-payment" class="hidden">
+        <h2>💰 Activation Victory</h2>
+        <div class="instruction-box">
+            1. Inscrivez-vous sur Victory via le bouton ci-dessous.<br>
+            2. Effectuez votre don de <b>2.03 USDT (BEP-20)</b>.<br>
+            3. Collez le <b>Hash (TXID)</b> pour validation.
+        </div>
+        <a href="#" id="parrain-victory-url" target="_blank" class="btn btn-primary">👉 S'inscrire sur Victory</a>
+        <input type="text" id="hash-input" placeholder="Collez le Hash de transaction ici">
+        <button id="btn-verify-hash" class="btn btn-success">Vérifier mon paiement</button>
+        <div id="pay-msg"></div>
+    </div>
 
-<!-- POPUP -->
-<div id="video-popup" class="popup">
-    <div class="popup-content">
-        <h2 id="popup-title">🎬 Félicitations !</h2>
-        <p id="popup-desc">Débloquez la vidéo stratégique dans quelques instants...</p>
-        <div id="popup-countdown" style="font-weight:bold; font-size: 1.5rem; margin: 15px 0;">10</div>
-        <button id="watch-video-trigger" class="btn btn-success" disabled>Attendez...</button>
+    <div id="sec-generator" class="hidden">
+        <h2>✨ Génération LinkFlow</h2>
+        <div class="instruction-box">
+            Entrez votre lien Victory personnel. <b>Sécurité :</b> Seuls les liens appartenant à la généalogie LinkFlow sont acceptés.
+        </div>
+        <input type="text" id="user-victory-link" placeholder="https://victoryauto.app/ref/votre_code">
+        <button id="btn-final-generate" class="btn btn-success">Activer mon système Follow-Me</button>
+        
+        <div id="final-area" class="hidden">
+            <div class="instruction-box" style="background: #e7f3ef; border-color: #2a9d8f; text-align: center;">
+                <b>SYSTÈME ACTIVÉ ✅</b><br>
+                Votre Code d'invitation LinkFlow : <br>
+                <span id="final-code" style="font-size: 1.5rem; color: #136b8d; font-weight: bold;">---</span>
+            </div>
+            <button class="btn btn-primary">🚀 Rejoindre l'Opportunité 2</button>
+        </div>
     </div>
 </div>
 
 <script>
-    // --- CONFIG ---
-    const translations = {
-        fr: {
-            register_title: "🚀 Inscription LinkFlow", register_subtitle: "Rejoignez la communauté qui transforme la vie",
-            register_btn: "📍 Je rejoins l'aventure", login_link: "Déjà inscrit ? Se connecter",
-            login_title: "🔐 Connexion", login_btn: "Se connecter", register_link: "Pas encore inscrit ? S'inscrire",
-            forgot_link: "Mot de passe oublié ?", forgot_title: "🔄 Réinitialisation", back_login: "← Retour",
-            video_title: "🎬 Vidéo Stratégique", get_link_btn: "🔗 J'obtiens le lien", popup_title: "🎬 Félicitations !"
-        },
-        en: {
-            register_title: "🚀 LinkFlow Sign Up", register_subtitle: "Join the community that changes lives",
-            register_btn: "📍 Join the adventure", login_link: "Already a member? Sign in",
-            login_title: "🔐 Login", login_btn: "Sign in", register_link: "Not registered? Sign up",
-            forgot_link: "Forgot password?", forgot_title: "🔄 Reset Password", back_login: "← Back",
-            video_title: "🎬 Strategic Video", get_link_btn: "🔗 Get my link", popup_title: "🎬 Congratulations!"
-        },
-        es: {
-            register_title: "🚀 Registro LinkFlow", register_subtitle: "Únete a la comunidad que cambia vidas",
-            register_btn: "📍 Me uno a la aventura", login_link: "¿Ya eres miembro? Iniciar sesión",
-            login_title: "🔐 Iniciar sesión", login_btn: "Entrar", register_link: "¿No estás registrado? Crear cuenta",
-            forgot_link: "¿Olvidaste tu contraseña?", forgot_title: "🔄 Restablecer", back_login: "← Volver",
-            video_title: "🎬 Video Estratégico", get_link_btn: "🔗 Obtener mi enlace", popup_title: "🎬 ¡Felicidades!"
-        },
-        pt: {
-            register_title: "🚀 Cadastro LinkFlow", register_subtitle: "Junte-se à comunidade que muda vidas",
-            register_btn: "📍 Eu entro na aventura", login_link: "Já é membro? Entrar",
-            login_title: "🔐 Entrar", login_btn: "Entrar", register_link: "Não tem conta? Cadastre-se",
-            forgot_link: "Esqueceu a senha?", forgot_title: "🔄 Redefinir Senha", back_login: "← Voltar",
-            video_title: "🎬 Vídeo Estratégico", get_link_btn: "🔗 Obter meu link", popup_title: "🎬 Parabéns!"
-        }
-    };
+    // --- INITIALISATION ---
+    const ROOT_VICTORY_LINK = "https://victoryauto.app/ref/AFEG1000";
+    let secondsLeft = 180;
+    let timerStarted = false;
 
-    let currentLang = 'fr';
-
-    // --- FONCTION TRADUCTION ---
-    function updateUI() {
-        const t = translations[currentLang];
-        document.getElementById('register-title').innerText = t.register_title;
-        document.getElementById('register-subtitle').innerText = t.register_subtitle;
-        document.getElementById('register-submit-btn').innerText = t.register_btn;
-        document.getElementById('link-to-login').innerText = t.login_link;
-        document.getElementById('login-title').innerText = t.login_title;
-        document.getElementById('login-submit-btn').innerText = t.login_btn;
-        document.getElementById('link-to-register').innerText = t.register_link;
-        document.getElementById('link-to-forgot').innerText = t.forgot_link;
-        document.getElementById('forgot-title').innerText = t.forgot_title;
-        document.getElementById('back-to-login').innerText = t.back_login;
-        document.getElementById('video-title').innerText = t.video_title;
-        document.getElementById('get-parrain-link-btn').innerText = t.get_link_btn;
-        document.getElementById('popup-title').innerText = t.popup_title;
+    // --- NAVIGATION ---
+    function navigate(hide, show, barId) {
+        document.getElementById(hide).classList.add('hidden');
+        document.getElementById(show).classList.remove('hidden');
+        if(barId) document.getElementById(barId).classList.add('active');
     }
 
-    // --- GESTION DES VUES ---
-    function showSection(id) {
-        ['register-section', 'login-section', 'forgot-section', 'step2-section'].forEach(s => {
-            document.getElementById(s).style.display = 'none';
-        });
-        document.getElementById(id).style.display = 'block';
-    }
-
-    // Liens de basculement
-    document.getElementById('link-to-login').onclick = (e) => { e.preventDefault(); showSection('login-section'); };
-    document.getElementById('link-to-register').onclick = (e) => { e.preventDefault(); showSection('register-section'); };
-    document.getElementById('link-to-forgot').onclick = (e) => { e.preventDefault(); showSection('forgot-section'); };
-    document.getElementById('back-to-login').onclick = (e) => { e.preventDefault(); showSection('login-section'); };
-
-    // Boutons de langue
-    document.querySelectorAll('#language-selector button').forEach(btn => {
-        btn.onclick = () => {
-            document.querySelectorAll('#language-selector button').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentLang = btn.getAttribute('data-lang');
-            updateUI();
-        };
-    });
-
-    // --- SIMULATION INSCRIPTION (POUR TESTER LA POPUP) ---
-    document.getElementById('register-form').onsubmit = (e) => {
-        e.preventDefault();
-        // Simulation réussite
-        document.getElementById('register-message').innerHTML = "<div class='message success-message'>Compte créé !</div>";
-        
-        // Lancer la popup
-        setTimeout(() => {
-            document.getElementById('video-popup').style.display = 'flex';
-            startPopupTimer();
-        }, 1000);
-    };
-
-    function startPopupTimer() {
-        let count = 10;
-        const btn = document.getElementById('watch-video-trigger');
-        const display = document.getElementById('popup-countdown');
-        const timer = setInterval(() => {
-            count--;
-            display.innerText = count;
-            if(count <= 0) {
-                clearInterval(timer);
-                btn.disabled = false;
-                btn.innerText = "🔓 Débloquer la Vidéo";
+    // --- CHRONO VIDÉO ---
+    function startVideoTimer() {
+        if(timerStarted) return;
+        timerStarted = true;
+        const interval = setInterval(() => {
+            secondsLeft--;
+            document.getElementById('timer-display').innerText = `⏱️ ${secondsLeft}s`;
+            if(secondsLeft <= 0) {
+                clearInterval(interval);
+                document.getElementById('timer-display').innerHTML = "✅ Prêt !";
+                document.getElementById('btn-to-victory').disabled = false;
             }
         }, 1000);
-
-        btn.onclick = () => {
-            document.getElementById('video-popup').style.display = 'none';
-            showSection('step2-section');
-            document.getElementById('st1').className = "step done";
-            document.getElementById('st2').className = "step active";
-        };
     }
 
-    // Init au chargement
-    window.onload = updateUI;
+    // --- ÉTAPE 1 -> 2 ---
+    document.getElementById('register-form').onsubmit = (e) => {
+        e.preventDefault();
+        navigate('sec-auth', 'sec-video', 'bar1');
+        startVideoTimer();
+    };
+
+    // --- ÉTAPE 2 -> 3 (LOGIQUE PARRAIN) ---
+    document.getElementById('btn-to-victory').onclick = () => {
+        // Ici on simulerait la récup du parrain depuis Supabase
+        document.getElementById('parrain-victory-url').href = ROOT_VICTORY_LINK; 
+        navigate('sec-video', 'sec-payment', 'bar2');
+    };
+
+    // --- ÉTAPE 3 -> 4 (VÉRIF HASH) ---
+    document.getElementById('btn-verify-hash').onclick = () => {
+        const hash = document.getElementById('hash-input').value.trim();
+        const msg = document.getElementById('pay-msg');
+
+        if(hash.length < 30) {
+            msg.innerHTML = "<div class='message' style='background:#fee2e2; color:#b91c1c;'>Hash invalide ou trop court.</div>";
+            return;
+        }
+
+        msg.innerHTML = "<div class='message' style='background:#fef3c7; color:#92400e;'>Vérification sur la Blockchain...</div>";
+        setTimeout(() => {
+            navigate('sec-payment', 'sec-generator', 'bar3');
+        }, 2000);
+    };
+
+    // --- ÉTAPE 4 : GÉNÉRATION & GÉNÉALOGIE ---
+    document.getElementById('btn-final-generate').onclick = async () => {
+        const vLink = document.getElementById('user-victory-link').value.trim();
+        
+        // 1. Vérification format
+        if(!vLink.includes('victoryauto.app/ref/')) {
+            alert("Veuillez entrer votre lien Victory complet.");
+            return;
+        }
+
+        // 2. Vérification Généalogie (Simulée ici, à connecter à votre Supabase)
+        // La logique : On cherche en base si ce lien existe déjà comme parrain ou si c'est la racine
+        const isRoot = (vLink === ROOT_VICTORY_LINK);
+        
+        // Note : En production, vous feriez : 
+        // const { data } = await supabase.from('user_progress').select('id').eq('victory_link', vLink);
+        // if (data.length === 0 && !isRoot) { ... rejet ... }
+
+        const userCode = vLink.split('/ref/')[1].toUpperCase();
+        
+        document.getElementById('final-code').innerText = userCode;
+        document.getElementById('final-area').classList.remove('hidden');
+        document.getElementById('btn-final-generate').classList.add('hidden');
+        document.getElementById('bar4').classList.add('active');
+        document.getElementById('user-victory-link').disabled = true;
+    };
 </script>
 
 </body>
