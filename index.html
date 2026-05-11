@@ -3,247 +3,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LinkFlow | Global Victory System</title>
+    <title>LinkFlow | Global Follow-Me System</title>
     <style>
-        :root {
-            --primary-blue: #0f4c5f;
-            --light-blue: #136b8d;
-            --victory-green: #2a9d8f;
-            --victory-yellow: #ffb703;
-        }
+        :root { --primary: #0f4c5f; --success: #2a9d8f; --warning: #ffb703; --light: #f4f7f9; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: linear-gradient(145deg, #f5f7fc 0%, #eef2f6 100%); min-height: 100vh; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        
-        .main-container { max-width: 600px; width: 100%; background: white; border-radius: 2.5rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); padding: 2rem; position: relative; }
-        
-        /* Header & Langues */
-        .header-tools { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-        .lang-selector select { border: 1px solid #ddd; border-radius: 10px; padding: 5px; font-size: 0.8rem; cursor: pointer; }
-        .auth-status { font-size: 0.8rem; color: var(--light-blue); font-weight: bold; }
-
-        .logo-container { text-align: center; margin-bottom: 1.5rem; }
-        .logo-container img { width: 140px; height: auto; }
-
-        .step-indicator { display: flex; gap: 10px; margin-bottom: 2rem; }
-        .step { flex: 1; height: 6px; background: #e9ecef; border-radius: 10px; }
-        .step.active { background: var(--victory-green); }
-
-        h2 { color: var(--primary-blue); text-align: center; margin-bottom: 1rem; font-size: 1.3rem; }
-        
-        /* Formulaires */
-        .input-group { position: relative; margin: 8px 0; }
-        input { width: 100%; padding: 14px 20px; border: 1px solid #cbdbe2; border-radius: 60px; outline: none; font-size: 1rem; }
-        .toggle-pwd { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 1.2rem; }
-        
-        .forgot-link { display: block; text-align: right; font-size: 0.8rem; margin: 5px 15px; color: var(--light-blue); text-decoration: none; }
-        
-        .btn { width: 100%; padding: 16px; border-radius: 60px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; font-size: 1rem; text-align: center; display: block; text-decoration: none; }
-        .btn-primary { background: var(--light-blue); color: white; }
-        .btn-success { background: var(--victory-green); color: white; }
-        .btn-outline { border: 2px solid var(--light-blue); color: var(--light-blue); background: transparent; margin-top: 5px; padding: 10px; }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 20px; overflow: hidden; margin: 15px 0; }
-        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        
-        .timer { font-size: 1.2rem; text-align: center; font-weight: bold; color: #e63946; margin: 15px 0; background: #fff1f2; padding: 10px; border-radius: 50px; }
+        body { background: var(--light); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .main-container { max-width: 550px; width: 100%; background: white; border-radius: 2.5rem; padding: 2rem; box-shadow: 0 15px 35px rgba(0,0,0,0.1); position: relative; overflow: hidden; }
+        .header-tools { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .lang-select { border: 1px solid #ddd; border-radius: 10px; padding: 5px; font-size: 0.8rem; outline: none; cursor: pointer; }
+        .auth-nav { font-size: 0.8rem; color: var(--primary); font-weight: bold; cursor: pointer; }
+        .logo { text-align: center; margin-bottom: 20px; }
+        .logo img { width: 130px; }
+        .input-group { position: relative; margin: 10px 0; }
+        input { width: 100%; padding: 15px 25px; border: 1px solid #ddd; border-radius: 50px; outline: none; font-size: 0.95rem; }
+        .toggle-pwd { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); cursor: pointer; opacity: 0.6; }
+        .btn { width: 100%; padding: 16px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 15px; font-size: 1rem; text-align: center; display: block; }
+        .btn-blue { background: var(--primary); color: white; }
+        .btn-green { background: var(--success); color: white; }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        #algo-popup { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 30px; text-align: center; }
+        .video-box { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 15px; overflow: hidden; margin: 15px 0; border: 3px solid var(--primary); }
+        .video-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .timer { font-size: 1.3rem; font-weight: bold; color: #e63946; text-align: center; margin: 10px 0; }
+        .step-box { display: none; }
+        .active-step { display: block; }
+        .info-card { background: #f0f7f9; padding: 15px; border-radius: 15px; font-size: 0.85rem; border-left: 5px solid var(--success); margin-bottom: 15px; }
         .hidden { display: none !important; }
+        .interaction-hint { font-size: 0.75rem; color: var(--primary); font-weight: bold; text-align: center; margin-top: -10px; margin-bottom: 15px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <div class="main-container">
     <div class="header-tools">
-        <div class="lang-selector">
-            <select id="lang-switch">
-                <option value="fr">🇫🇷 Français</option>
-                <option value="en">🇬🇧 English</option>
-                <option value="es">🇪🇸 Español</option>
-                <option value="pt">🇧🇷 Português</option>
-            </select>
+        <select id="lang-switch" class="lang-select">
+            <option value="fr">🇫🇷 FR</option>
+            <option value="en">🇬🇧 EN</option>
+            <option value="es">🇪🇸 ES</option>
+            <option value="pt">🇧🇷 PT</option>
+        </select>
+        <div id="auth-status" class="auth-nav" onclick="location.reload()" data-i18n="nav_login">Connexion</div>
+    </div>
+
+    <div class="logo"><img src="logo.png" alt="LinkFlow"></div>
+
+    <div id="step-1" class="step-box active-step">
+        <h2 id="auth-title" style="text-align:center; color:var(--primary); margin-bottom:15px;" data-i18n="register_title">Créer un compte</h2>
+        <div class="input-group">
+            <input type="email" id="email" data-i18n-ph="ph_email" placeholder="Email">
         </div>
-        <div id="user-display" class="auth-status hidden">
-            <span id="current-user"></span> | <a href="#" id="btn-logout" style="color:red;">Déconnexion</a>
+        <div class="input-group">
+            <input type="password" id="pass" data-i18n-ph="ph_pass" placeholder="Mot de passe">
+            <span class="toggle-pwd" onclick="togglePassword()">👁️</span>
         </div>
+        <input type="text" id="sponsor-id" readonly style="background:#f8f9fa; color:#666; font-size:0.8rem; text-align:center;">
+        <button class="btn btn-blue" onclick="processAuth()" data-i18n="btn_start">Démarrer</button>
     </div>
 
-    <div class="logo-container">
-        <img src="logo.png" alt="LinkFlow Logo">
+    <div id="algo-popup" class="hidden">
+        <h2 style="color:var(--warning);" data-i18n="algo_title">Stratégie Virale</h2>
+        <p style="margin:20px 0; line-height:1.6; font-size: 0.9rem;" data-i18n="algo_text">Interagissez avec la vidéo pour propulser le système !</p>
+        <div id="popup-chrono" class="timer">10s</div>
+        <button id="btn-popup-close" class="btn btn-blue" disabled onclick="closePopupAndStartVideo()" data-i18n="btn_watch">Je regarde la vidéo</button>
     </div>
 
-    <div class="step-indicator">
-        <div id="bar1" class="step active"></div>
-        <div id="bar2" class="step"></div>
-        <div id="bar3" class="step"></div>
-        <div id="bar4" class="step"></div>
+    <div id="step-2" class="step-box">
+        <div class="video-box">
+            <iframe id="player" src="https://www.youtube.com/embed/9uPybhkqYw4?controls=1&rel=0&modestbranding=1" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <p class="interaction-hint" data-i18n="hint_interact">👆 LIKEZ & ABONNEZ-VOUS POUR ACTIVER L'ALGORITHME</p>
+        <div id="video-chrono" class="timer">⏱️ 180s</div>
+        <button id="btn-next-vic" class="btn btn-green" disabled onclick="goToStep3()" data-i18n="btn_get_vic">Obtenir le lien de mon parrain</button>
     </div>
 
-    <div id="sec-auth">
-        <h2 data-i18n="auth_title">Accédez à votre Système</h2>
-        
-        <div id="login-view">
-            <div class="input-group">
-                <input type="email" id="log-email" placeholder="Email">
+    <div id="step-3" class="step-box">
+        <h2 id="sponsor-name-display" style="text-align:center; color:var(--primary); margin-bottom:10px;"></h2>
+        <div class="info-card" data-i18n="pay_info">...</div>
+        <a href="#" id="vic-external-link" target="_blank" class="btn btn-blue" data-i18n="btn_join_vic">S'inscrire sur Victory</a>
+        <input type="text" id="target-addr" data-i18n-ph="ph_target" placeholder="Adresse Cible">
+        <input type="text" id="tx-hash" data-i18n-ph="ph_hash" placeholder="Hash Transaction">
+        <button class="btn btn-green" onclick="verifyEverything()" data-i18n="btn_verify">Vérifier mon don</button>
+    </div>
+
+    <div id="step-6" class="step-box">
+        <h2 style="color:var(--success); text-align:center;" data-i18n="final_title">Activation Réussie</h2>
+        <input type="text" id="my-vic-url" data-i18n-ph="ph_vic_link" placeholder="Lien Victory personnel">
+        <button class="btn btn-green" onclick="generateLinkflow()" data-i18n="btn_activate">Générer mon LinkFlow</button>
+        <div id="final-zone" class="hidden">
+            <div class="info-card" style="text-align:center; border: 2px solid var(--success);">
+                <b data-i18n="your_link">VOTRE LIEN VIRAL :</b><br>
+                <code id="final-link-display" style="font-weight:bold; color:var(--primary);"></code>
             </div>
-            <div class="input-group">
-                <input type="password" id="log-pass" placeholder="Mot de passe">
-                <span class="toggle-pwd" onclick="togglePass('log-pass')">👁️</span>
-            </div>
-            <a href="#" class="forgot-link" data-i18n="forgot_pwd">Mot de passe oublié ?</a>
-            <button class="btn btn-primary" id="btn-login" data-i18n="btn_login">Se connecter</button>
-            <button class="btn btn-outline" id="go-register" data-i18n="btn_no_account">Pas de compte ? S'inscrire</button>
-        </div>
-
-        <div id="register-view" class="hidden">
-            <div class="input-group">
-                <input type="email" id="reg-email" placeholder="Email">
-            </div>
-            <div class="input-group">
-                <input type="password" id="reg-pass" placeholder="Mot de passe">
-                <span class="toggle-pwd" onclick="togglePass('reg-pass')">👁️</span>
-            </div>
-            <input type="text" id="ref-code" placeholder="Code parrain" readonly style="background:#f8f9fa;">
-            <button class="btn btn-primary" id="btn-do-register" data-i18n="btn_register">Créer mon compte Viral</button>
-            <button class="btn btn-outline" id="go-login" data-i18n="btn_have_account">Déjà inscrit ? Connexion</button>
-        </div>
-    </div>
-
-    <div id="sec-video" class="hidden">
-        <h2 data-i18n="video_title">Séance Stratégique</h2>
-        <div class="video-wrapper">
-            <iframe id="yt-player" src="https://www.youtube.com/embed/9uPybhkqYw4?autoplay=1&rel=0&enablejsapi=1" frameborder="0" allowfullscreen></iframe>
-        </div>
-        <div id="timer-display" class="timer">⏱️ 180s</div>
-        <button id="btn-to-pay" class="btn btn-success" disabled data-i18n="btn_next">Accéder à Victory</button>
-    </div>
-
-    <div id="sec-payment" class="hidden">
-        <h2 data-i18n="pay_title">Activation Victory</h2>
-        <a href="#" id="vic1-link" target="_blank" class="btn btn-primary">👉 Victory Automatic (Step 1)</a>
-        <div style="margin-top:15px;">
-            <input type="text" id="target-addr" placeholder="Adresse cible Victory">
-            <input type="text" id="tx-hash" placeholder="Hash de transaction (2.03 USDT)">
-            <button id="btn-verify" class="btn btn-success" data-i18n="btn_verify">Vérifier mon don</button>
-        </div>
-    </div>
-
-    <div id="sec-final" class="hidden">
-        <h2 data-i18n="final_title">Vos Liens de Succès</h2>
-        <div class="instruction-box" style="background:#e7f3ef; text-align:center;">
-            <b data-i18n="your_link">Votre lien LinkFlow :</b><br>
-            <code id="my-link" style="color:var(--primary-blue); font-weight:bold;">---</code>
-        </div>
-        
-        <div style="margin-top:20px; border-top: 2px dashed #ddd; padding-top:20px;">
-            <h2 style="color:var(--victory-yellow)">🚀 Opportunité 2</h2>
-            <p style="font-size:0.8rem; text-align:center; margin-bottom:10px;" data-i18n="opp2_desc">Boostez vos gains avec Victory World Club</p>
-            <a href="https://victoryworld.club/longa01" target="_blank" class="btn btn-primary" style="background:black;">🔥 Victory World Club</a>
+            <a id="opp2-follow-link" href="#" target="_blank" class="btn btn-blue" style="background:#000;">Victory World Club</a>
         </div>
     </div>
 </div>
 
 <script>
-    // --- TRADUCTIONS ---
     const i18n = {
         fr: {
-            auth_title: "Accédez à votre Système", btn_login: "Se connecter", btn_register: "Créer mon compte",
-            forgot_pwd: "Mot de passe oublié ?", video_title: "Séance Stratégique", btn_next: "Passer à Victory",
-            pay_title: "Activation Victory", btn_verify: "Vérifier mon don", final_title: "Vos Liens de Succès",
-            your_link: "Votre lien LinkFlow :", opp2_desc: "Boostez vos gains avec Victory World Club",
-            btn_no_account: "Pas de compte ? S'inscrire", btn_have_account: "Déjà inscrit ? Connexion"
+            nav_login: "Connexion", register_title: "Créer un compte", ph_email: "Email", ph_pass: "Mot de passe", btn_start: "Démarrer",
+            algo_title: "Stratégie Virale", algo_text: "L'interaction propulse la vidéo. Vidéo virale = Inscriptions massives sous vous !", btn_watch: "Je regarde la vidéo",
+            hint_interact: "👆 LIKEZ & ABONNEZ-VOUS POUR L'ALGORITHME", btn_get_vic: "Lien Victory de mon parrain", 
+            pay_info: "1. S'inscrire sur Victory. 2. Coller l'adresse cible. 3. Payer et coller le Hash.",
+            btn_join_vic: "S'inscrire sur Victory Automatic", ph_target: "📍 Adresse Cible", ph_hash: "🔗 Hash Transaction", btn_verify: "Vérifier mon don",
+            final_title: "Activation Réussie", ph_vic_link: "Lien Victory (ex: .../ref/AFEG1000)", btn_activate: "Générer mon LinkFlow", your_link: "VOTRE LIEN VIRAL :"
         },
         en: {
-            auth_title: "Access your System", btn_login: "Login", btn_register: "Create Account",
-            forgot_pwd: "Forgot Password?", video_title: "Strategic Session", btn_next: "Go to Victory",
-            pay_title: "Victory Activation", btn_verify: "Verify Donation", final_title: "Success Links",
-            your_link: "Your LinkFlow URL:", opp2_desc: "Boost your earnings with Victory World Club",
-            btn_no_account: "No account? Sign up", btn_have_account: "Already registered? Login"
+            nav_login: "Login", register_title: "Create Account", ph_email: "Email", ph_pass: "Password", btn_start: "Start",
+            algo_title: "Viral Strategy", algo_text: "Interaction boosts video. Viral video = Massive signups under you!", btn_watch: "I'm watching the video",
+            hint_interact: "👆 LIKE & SUBSCRIBE FOR THE ALGORITHM", btn_get_vic: "Sponsor's Victory link", 
+            pay_info: "1. Join Victory. 2. Paste target address. 3. Pay and paste Hash.",
+            btn_join_vic: "Join Victory Automatic", ph_target: "📍 Target Address", ph_hash: "🔗 Transaction Hash", btn_verify: "Verify my donation",
+            final_title: "Success Activation", ph_vic_link: "Victory Link (ex: .../ref/AFEG1000)", btn_activate: "Generate LinkFlow", your_link: "YOUR VIRAL LINK:"
         },
         es: {
-            auth_title: "Accede a tu Sistema", btn_login: "Iniciar Sesión", btn_register: "Crear Cuenta",
-            forgot_pwd: "¿Olvidaste tu contraseña?", video_title: "Sesión Estratégica", btn_next: "Ir a Victory",
-            pay_title: "Activación Victory", btn_verify: "Verificar Donación", final_title: "Enlaces de Éxito",
-            your_link: "Tu enlace LinkFlow:", opp2_desc: "Aumenta tus ganancias con Victory World Club",
-            btn_no_account: "¿Sin cuenta? Regístrate", btn_have_account: "¿Ya tienes cuenta? Conectar"
+            nav_login: "Conexión", register_title: "Crear cuenta", ph_email: "Correo", ph_pass: "Contraseña", btn_start: "Iniciar",
+            algo_title: "Estrategia Viral", algo_text: "La interacción impulsa el video. ¡Video viral = Inscripciones masivas!", btn_watch: "Veo el video",
+            hint_interact: "👆 ¡LIKE Y SUSCRÍBETE PARA EL ALGORITMO!", btn_get_vic: "Enlace Victory de mi padrino", 
+            pay_info: "1. Unirse a Victory. 2. Pegar dirección. 3. Pagar y pegar Hash.",
+            btn_join_vic: "Unirse a Victory Automatic", ph_target: "📍 Dirección Destino", ph_hash: "🔗 Hash de Transacción", btn_verify: "Verificar mi donación",
+            final_title: "Activación Exitosa", ph_vic_link: "Enlace Victory (ej: .../ref/AFEG1000)", btn_activate: "Generar mi LinkFlow", your_link: "TU ENLACE VIRAL:"
         },
         pt: {
-            auth_title: "Aceda ao seu Sistema", btn_login: "Entrar", btn_register: "Criar Conta",
-            forgot_pwd: "Esqueceu a senha?", video_title: "Sessão Estratégica", btn_next: "Ir para Victory",
-            pay_title: "Ativação Victory", btn_verify: "Verificar Doação", final_title: "Links de Sucesso",
-            your_link: "Seu link LinkFlow:", opp2_desc: "Aumente seus ganhos com Victory World Club",
-            btn_no_account: "Não tem conta? Registar", btn_have_account: "Já registrado? Entrar"
+            nav_login: "Entrar", register_title: "Criar conta", ph_email: "E-mail", ph_pass: "Senha", btn_start: "Iniciar",
+            algo_title: "Estrategia Viral", algo_text: "A interação impulsiona o vídeo. Vídeo viral = Inscrições massivas!", btn_watch: "Eu assisto ao vídeo",
+            hint_interact: "👆 LIKE E INSCREVA-SE PARA O ALGORITMO", btn_get_vic: "Link Victory do padrinho", 
+            pay_info: "1. Juntar-se à Victory. 2. Colar endereço. 3. Pagar e colar o Hash.",
+            btn_join_vic: "Juntar-se à Victory Automatic", ph_target: "📍 Endereço de Destino", ph_hash: "🔗 Hash da Transação", btn_verify: "Verificar doação",
+            final_title: "Ativação de Sucesso", ph_vic_link: "Link Victory (ex: .../ref/AFEG1000)", btn_activate: "Generar meu LinkFlow", your_link: "SEU LINK VIRAL:"
         }
     };
 
-    // --- LOGIQUE INTERFACE ---
+    // Logique de switch de langue
     function switchLang(lang) {
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            el.innerText = i18n[lang][key];
-        });
+        document.querySelectorAll('[data-i18n]').forEach(el => { el.innerText = i18n[lang][el.getAttribute('data-i18n')]; });
+        document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = i18n[lang][el.getAttribute('data-i18n-ph')]; });
     }
-
     document.getElementById('lang-switch').onchange = (e) => switchLang(e.target.value);
 
-    function togglePass(id) {
-        const input = document.getElementById(id);
-        input.type = input.type === "password" ? "text" : "password";
-    }
+    // Initialisation Parrain
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialSponsor = (urlParams.get('ref') || "AFEG1000").toUpperCase();
+    document.getElementById('sponsor-id').value = "SPONSOR : " + initialSponsor;
 
-    // Navigation Vues Auth
-    document.getElementById('go-register').onclick = () => {
-        document.getElementById('login-view').classList.add('hidden');
-        document.getElementById('register-view').classList.remove('hidden');
-    };
-    document.getElementById('go-login').onclick = () => {
-        document.getElementById('register-view').classList.add('hidden');
-        document.getElementById('login-view').classList.remove('remove'); // Note: fixed logic in final deployment
-        location.reload(); 
-    };
+    function togglePassword() { const p = document.getElementById('pass'); p.type = p.type === "password" ? "text" : "password"; }
 
-    // --- FLUX DE NAVIGATION ---
-    let timeLeft = 180;
-    document.getElementById('btn-login').onclick = () => login();
-    document.getElementById('btn-do-register').onclick = () => login();
-
-    function login() {
-        document.getElementById('sec-auth').classList.add('hidden');
-        document.getElementById('sec-video').classList.remove('hidden');
-        document.getElementById('user-display').classList.remove('hidden');
-        document.getElementById('current-user').innerText = "User_789"; 
-        startTimer();
-    }
-
-    function startTimer() {
-        const timer = setInterval(() => {
-            timeLeft--;
-            document.getElementById('timer-display').innerText = `⏱️ ${timeLeft}s`;
-            if(timeLeft <= 0) {
-                clearInterval(timer);
-                document.getElementById('btn-to-pay').disabled = false;
-            }
+    function processAuth() {
+        document.getElementById('algo-popup').classList.remove('hidden');
+        let s = 10;
+        const t = setInterval(() => {
+            s--; document.getElementById('popup-chrono').innerText = s + "s";
+            if(s <= 0) { clearInterval(t); document.getElementById('btn-popup-close').disabled = false; }
         }, 1000);
     }
 
-    document.getElementById('btn-to-pay').onclick = () => {
-        document.getElementById('sec-video').classList.add('hidden');
-        document.getElementById('sec-payment').classList.remove('hidden');
-    };
+    function closePopupAndStartVideo() {
+        document.getElementById('algo-popup').classList.add('hidden');
+        document.getElementById('step-1').classList.remove('active-step');
+        document.getElementById('step-2').classList.add('active-step');
+        let s = 180;
+        const t = setInterval(() => {
+            s--; document.getElementById('video-chrono').innerText = "⏱️ " + s + "s";
+            if(s <= 0) { clearInterval(t); document.getElementById('btn-next-vic').disabled = false; }
+        }, 1000);
+    }
 
-    document.getElementById('btn-verify').onclick = () => {
-        const hash = document.getElementById('tx-hash').value;
-        if(hash.length > 30) {
-            document.getElementById('sec-payment').classList.add('hidden');
-            document.getElementById('sec-final').classList.remove('hidden');
-            document.getElementById('my-link').innerText = window.location.origin + "?ref=USER789";
-        } else { alert("Hash invalide"); }
-    };
+    function goToStep3() {
+        document.getElementById('step-2').classList.remove('active-step');
+        document.getElementById('step-3').classList.add('active-step');
+        document.getElementById('sponsor-name-display').innerText = "Sponsor : " + initialSponsor;
+        document.getElementById('vic-external-link').href = "https://victoryauto.app/ref/" + initialSponsor;
+    }
 
-    document.getElementById('btn-logout').onclick = () => location.reload();
+    function verifyEverything() {
+        if(document.getElementById('target-addr').value.length > 20) {
+            document.getElementById('step-3').classList.remove('active-step');
+            document.getElementById('step-6').classList.add('active-step');
+        }
+    }
 
-    // Initialisation
+    function generateLinkflow() {
+        const val = document.getElementById('my-vic-url').value;
+        const regex = /ref\/([A-Z]{4}[0-9]{4})$/i;
+        const match = val.match(regex);
+        if(match) {
+            document.getElementById('final-link-display').innerText = window.location.origin + window.location.pathname + "?ref=" + match[1].toUpperCase();
+            document.getElementById('final-zone').classList.remove('hidden');
+            document.getElementById('opp2-follow-link').href = "https://victoryworld.club/longa01?ref=" + initialSponsor;
+        }
+    }
+
     switchLang('fr');
 </script>
-
 </body>
 </html>
