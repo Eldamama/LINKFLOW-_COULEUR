@@ -9,11 +9,12 @@ app.use(express.json());
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
-// --- 1. INSCRIPTION & MOT DE PASSE OUBLIÉ ---
+// --- 1. INSCRIPTION ---
 app.post('/api/register', async (req, res) => {
     const { email, password, sponsorCode } = req.body;
     const hash = await bcrypt.hash(password, 10);
     
+    // Génération d'un code temporaire si besoin, ou on attend la fin du processus
     const { data, error } = await supabase.from('users').insert({
         email, 
         password_hash: hash, 
@@ -25,84 +26,89 @@ app.post('/api/register', async (req, res) => {
     res.json({ success: true, user: data });
 });
 
-// --- 2. DÉMARRAGE DU TIMER (SÉCURISÉ CÔTÉ SERVEUR) ---
+// --- 2. TIMER VIDÉO SÉCURISÉ ---
 app.post('/api/video/start', async (req, res) => {
     const { userId } = req.body;
-    
-    // On enregistre l'heure précise du serveur
-    const { data, error } = await supabase.from('video_sessions').insert({
+    await supabase.from('video_sessions').insert({
         user_id: userId,
         started_at: new Date().toISOString()
     });
-
-    res.json({ success: true, message: "Timer démarré sur le serveur" });
+    res.json({ success: true });
 });
 
-// --- 3. VALIDATION DU TIMER (SANS API YOUTUBE) ---
 app.post('/api/video/verify', async (req, res) => {
     const { userId } = req.body;
-
     const { data: session } = await supabase
         .from('video_sessions')
         .select('*')
         .eq('user_id', userId)
-        .order('started_at', { ascending: false })
-        .limit(1).single();
+        .order('started_at', { ascending: false }).limit(1).single();
 
-    if (!session) return res.status(400).json({ error: "Aucune session démarrée" });
+    if (!session) return res.status(400).json({ error: "Session non trouvée" });
 
-    const startTime = new Date(session.started_at).getTime();
-    const now = Date.now();
-    const diffSeconds = Math.floor((now - startTime) / 1000);
+    const diff = Math.floor((Date.now() - new Date(session.started_at).getTime()) / 1000);
 
-    // VERROUILLAGE : 180 secondes minimum
-    if (diffSeconds < 180) {
-        const restant = 180 - diffSeconds;
-        return res.status(403).json({ 
-            success: false, 
-            message: `Trop tôt ! Revenez dans ${restant} secondes.` 
-        });
-    }
+    if (diff < 180) return res.status(403).json({ error: `Attendez encore ${180 - diff}s` });
 
-    // Si OK, on valide l'étape
     await supabase.from('users').update({ current_step: 3 }).eq('id', userId);
-    await supabase.from('video_sessions').update({ is_verified: true }).eq('id', session.id);
-
-    res.json({ success: true, message: "Étape vidéo validée" });
+    res.json({ success: true });
 });
 
-// --- 4. VÉRIFICATION PAIEMENT (BSCSCAN) ---
+// --- 3. VÉRIFICATION PAIEMENT (BSCSCAN) ---
 app.post('/api/payment/verify', async (req, res) => {
     const { userId, txHash, targetAddress } = req.body;
 
-    // Unicité du Hash
-    const { data: checkHash } = await supabase.from('donations').select('*').eq('tx_hash', txHash).single();
-    if (checkHash) return res.status(400).json({ error: "Ce paiement a déjà été utilisé." });
+    const { data: check } = await supabase.from('donations').select('*').eq('tx_hash', txHash).single();
+    if (check) return res.status(400).json({ error: "Hash déjà utilisé" });
 
     try {
         const bscRes = await axios.get(`https://api.bscscan.com/api`, {
-            params: {
-                module: 'proxy', action: 'eth_getTransactionByHash',
-                txhash: txHash, apikey: process.env.BSCSCAN_API_KEY
-            }
+            params: { module: 'proxy', action: 'eth_getTransactionByHash', txhash: txHash, apikey: process.env.BSCSCAN_API_KEY }
         });
-
         const tx = bscRes.data.result;
         if (!tx) return res.status(404).json({ error: "Transaction introuvable" });
 
-        // Vérification Adresse Cible + Montant (2.03 USDT)
         const amount = parseInt(tx.value, 16) / 1e18;
-        if (tx.to.toLowerCase() !== targetAddress.toLowerCase()) return res.status(400).json({ error: "Mauvaise adresse cible" });
+        if (tx.to.toLowerCase() !== targetAddress.toLowerCase()) return res.status(400).json({ error: "Adresse cible incorrecte" });
         if (amount < 2.03) return res.status(400).json({ error: "Montant insuffisant" });
 
         await supabase.from('users').update({ current_step: 6 }).eq('id', userId);
         await supabase.from('donations').insert({ user_id: userId, tx_hash: txHash, verified: true });
-
         res.json({ success: true });
-    } catch (e) {
-        res.status(500).json({ error: "Erreur Blockchain" });
-    }
+    } catch (e) { res.status(500).json({ error: "Erreur Blockchain" }); }
 });
 
-app.listen(3000);
+// --- 4. NOUVEAU : GÉNÉRATION DU LIEN FINAL (Vérification Généalogie incluse) ---
+app.post('/api/generate-final-link', async (req, res) => {
+    const { userId, victoryLink } = req.body;
 
+    // 1. Vérifier si l'utilisateur est à la bonne étape
+    const { data: user } = await supabase.from('users').select('*').eq('id', userId).single();
+    if (user.current_step < 6) return res.status(403).json({ error: "Paiement non validé" });
+
+    // 2. Appel de la fonction SQL de généalogie (que tu as mise dans Supabase)
+    const { data: isLegacy } = await supabase.rpc('verify_genealogy', { 
+        target_code: user.sponsor_code, 
+        root_code: 'AFEG1000' 
+    });
+
+    if (!isLegacy && user.sponsor_code !== null) {
+        return res.status(403).json({ error: "Votre parrain n'est pas dans la lignée racine." });
+    }
+
+    // 3. Générer le code LinkFlow (4 lettres + 4 chiffres)
+    const randomLetters = Math.random().toString(36).substring(2, 6).toUpperCase();
+    const randomNumbers = Math.floor(1000 + Math.random() * 9000);
+    const newRefCode = randomLetters + randomNumbers;
+
+    // 4. Mettre à jour l'utilisateur
+    await supabase.from('users').update({
+        referral_code: newRefCode,
+        victory_link: victoryLink,
+        current_step: 7
+    }).eq('id', userId);
+
+    res.json({ success: true, link: `https://linkflow.app/?ref=${newRefCode}` });
+});
+
+app.listen(3000, () => console.log("Serveur LinkFlow démarré !"));
