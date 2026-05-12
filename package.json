@@ -1,1 +1,18 @@
+{
+  "name": "linkflow-backend",
+  "version": "1.0.0",
+  "description": "Système de parrainage sécurisé",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "@supabase/supabase-js": "^2.38.0",
+    "axios": "^1.6.0",
+    "bcrypt": "^5.1.1",
+    "jsonwebtoken": "^9.0.2",
+    "dotenv": "^16.3.1"
+  }
+}
 
