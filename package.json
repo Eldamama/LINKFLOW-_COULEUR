@@ -2,9 +2,9 @@
   "name": "linkflow-backend",
   "version": "1.0.0",
   "description": "Système de parrainage sécurisé",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.18.2",
@@ -15,4 +15,3 @@
     "dotenv": "^16.3.1"
   }
 }
-
