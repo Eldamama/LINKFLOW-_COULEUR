@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+
+<img src="images/logo.png" class="logo">
+
+<h1>Dashboard</h1>
+
+<div class="dashboard-card">
+
+<h2>Mon lien Point Focal</h2>
+
+<div class="invite-box" id="myLink"></div>
+
+<button onclick="copyLink()">
+Copier mon lien
+</button>
+
+<p class="share-message">
+Partagez uniquement ce lien
+pour conserver vos filleuls FOLLOW ME.
+</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h2>Mon lien MLM</h2>
+
+<div class="invite-box" id="myMLMLink"></div>
+
+</div>
+
+<div class="dashboard-card">
+
+<h2>Actions</h2>
+
+<a href="submit-link.html" class="action-link">
+Ajouter ou mettre à jour mon lien MLM
+</a>
+
+</div>
+
+</div>
+
+<script>
+
+const link =
+localStorage.getItem('myPointFocalLink');
+
+const mlm =
+localStorage.getItem('myMLMLink');
+
+if(link){
+ document.getElementById('myLink').innerHTML = link;
+}
+
+if(mlm){
+ document.getElementById('myMLMLink').innerHTML = mlm;
+}
+
+function copyLink(){
+
+ navigator.clipboard.writeText(link);
+
+ alert('Lien copié');
+
+}
+
+</script>
+
+</body>
+</html>
