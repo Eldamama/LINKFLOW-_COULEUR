@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Point Focal</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="manifest" href="manifest.json">
+</head>
+<body>
+
+<div class="container center">
+
+<img src="images/logo.png" class="logo">
+
+<h1>POINT FOCAL</h1>
+
+<p class="description">
+Choisissez votre langue
+</p>
+
+<div class="language-buttons">
+<button onclick="setLanguage('fr')">Français</button>
+<button onclick="setLanguage('en')">English</button>
+<button onclick="setLanguage('es')">Español</button>
+<button onclick="setLanguage('pt')">Português</button>
+</div>
+
+</div>
+
+<script>
+function setLanguage(lang){
+ localStorage.setItem('language',lang);
+ window.location.href='login.html';
+}
+</script>
+
+</body>
+</html>
